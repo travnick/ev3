@@ -20,7 +20,20 @@ public:
   }  
   
   void add(const std::string & elt) {push_back(elt);}
+    std::string toString() const
+  {
+    std::stringstream oss;
+    oss << "[";
+    for (unsigned long i = 0; i < size(); ++i)
+    {
+      if (i>0) oss << ",";
+      oss << (*this)[i];
+    }
+    oss << "]";
+    
   
+    return oss.str();
+  }
 };
 
 
@@ -169,7 +182,7 @@ public:
     int nerr = 0;
     Ev3::Expression ev3Expression;
     Ev3::ExpressionParser ev3Parser;
-    try {
+//     try {
         
         for (unsigned long i = 0; i < inputSize; ++i)
           ev3Parser.SetVariableID(inputVariables_[i], i);
@@ -180,10 +193,10 @@ public:
           Ev3::Expression derivative = Ev3::Diff(ev3Expression, i);
           gradient_[i] = derivative->ToString();
         }
-      }
-      catch (Ev3::ErrBase & exc) {
-        throw std::exception();
-      }
+//       }
+//       catch (Ev3::ErrBase & exc) {
+//         throw std::exception();
+//       }
       
     
   }
@@ -191,7 +204,7 @@ public:
   
   NumericalPoint eval(const NumericalPoint & inP)
   {
-    mu::Parser parser;
+    AnalyticalParser parser;
     unsigned long inputSize = inputVariables_.size();
     NumericalPoint buf(inP);
     for (int i = 0; i < inputSize; ++i) {
@@ -208,7 +221,7 @@ public:
 
     NumericalPoint result(inputSize);
     for (int i = 0; i < inputSize; ++i) {
-      mu::Parser parser;
+      AnalyticalParser parser;
       for (int j = 0; j < inputSize; ++j) {
         parser.DefineVar(inputVariables_[j].c_str(), &buf[j]);
       }
@@ -279,19 +292,19 @@ std::string randFunc() {
     elementaryFunctions.add("log10");
     elementaryFunctions.add("log");
     elementaryFunctions.add("ln");
-    elementaryFunctions.add("lngamma");
-    elementaryFunctions.add("gamma");
+//     elementaryFunctions.add("lngamma");
+//     elementaryFunctions.add("gamma");
     elementaryFunctions.add("exp");
     elementaryFunctions.add("erf");
     elementaryFunctions.add("erfc");
     elementaryFunctions.add("sqrt");
     elementaryFunctions.add("cbrt");
-//     elementaryFunctions.add("besselJ0");
-//     elementaryFunctions.add("besselJ1");
-//     elementaryFunctions.add("besselY0");
-//     elementaryFunctions.add("besselY1");
-    elementaryFunctions.add("sign");
-    elementaryFunctions.add("rint");
+    elementaryFunctions.add("besselJ0");
+    elementaryFunctions.add("besselJ1");
+    elementaryFunctions.add("besselY0");
+    elementaryFunctions.add("besselY1");
+//     elementaryFunctions.add("sign");
+//     elementaryFunctions.add("rint");
     elementaryFunctions.add("abs");
     
   unsigned long index = rand() % elementaryFunctions.size();
@@ -322,7 +335,7 @@ std::string randOp2()
 std::string randCoef()
 {
   std::stringstream oss;
-  oss << (rand()%8) - 3;
+  oss << (rand()%12) - 5;
   return oss.str();
 }
 
@@ -333,10 +346,10 @@ std::string randExp(int n, int dim)
     else {
         int n1 = rand() % n;
         std::string exp1 = randExp(n1, dim);
-        int t = rand() % 3;
-        if( t==0)
+        int t = rand() % 10;
+        if (t<3)
             return "("+randCoef()+"*"+exp1+")";
-        else if (t==1)
+        else if (t<7)
             return randFunc()+"("+exp1+")";
         else {
             int n2 = rand() %n;
@@ -355,7 +368,7 @@ int main()
   
   unsigned long dimension = 2;
   Description inputVars(dimension);
-  NumericalPoint x(1, 0.4);
+  NumericalPoint x(dimension, 0.4);
   
   for (unsigned long i = 0; i < dimension; ++i) {
     std::stringstream oss;
@@ -363,22 +376,36 @@ int main()
     inputVars[i] = oss.str();
   }
   
-  for (unsigned long j = 0; j < 100; ++ j) 
+  for (unsigned long j = 0; j < 100000; ++ j) 
   {
-    Description formulas(1, randExp(2,2));
-  //   Description formulas(1, "sin(x1)");
-    Function function(inputVars, formulas);
-    std::cout << function.toString()<<std::endl;
-    double df = function.grad(x)[0];
-    double df2 = function.grad_fd(x)[0];
-    double err_g = 0.;
-    if (abs(df) > 1e-5)
-      err_g = abs(df2/df-1.);
-    else
-      err_g = abs(df - df2);
-    if (err_g > 1e-5) {
-      std::cout << "XXXXXXXXX df="<<df<<" df2="<<df2<<" err="<<err_g<<std::endl;
-      throw std::exception();
+    try {
+      Description formulas(1, randExp(3,2));
+//       formulas = Description(1,"log2(((x1)+(x2))*(erf(x2)))");
+      formulas = Description(1,"(x2)/(((x1)*(x1))+((-2*x1)))");
+      Function function(inputVars, formulas);
+      std::cout << function.toString()<<std::endl;
+      double df = function.grad(x)[0];
+      
+      if(isnan(df))
+        continue;
+      double df2 = function.grad_fd(x)[0];
+      double err_g = 0.;
+      if (abs(df) > 1e-5)
+        err_g = abs(df2/df-1.);
+      else
+        err_g = abs(df - df2);
+      if (err_g > 1e-5) {
+        std::cout << "XXXXXXXXX df="<<df<<" df2="<<df2<<" err="<<err_g<<std::endl;
+        throw std::exception();
+      }
+      
+    } catch (mu::ParserError & ex)
+    {
+      continue;
+    }    
+    catch (Ev3::ErrBase & ex)
+    {
+      continue;
     }
   }
 

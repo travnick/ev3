@@ -1,5 +1,5 @@
 set (src/headers src/auxiliary.h src/common.h src/exceptions.h  src/expression.h src/parser.h)
-set(sources src/expression.cxx src/parser.cxx src/tree.cxx)
+set(sources src/expression.cxx src/parser.cxx )
 
 add_library(ev3 ${sources})
 if (MINGW AND BUILD_SHARED_LIBS)

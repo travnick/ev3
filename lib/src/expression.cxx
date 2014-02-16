@@ -6640,7 +6640,7 @@ bool SimplifyRecursive(Expression* a)
             {
               if ((*a)->GetNode(0)->IsEqualTo((*a)->GetNode(1)->GetNode(j)))
               {
-                (*a)->GetNode(0).SetTo(one);
+                *((*a)->GetNodePtr(0)) = Pointer<BasicExpression>(one);
                 (*a)->GetNode(1)->DeleteNode(j);
                 ret = true;
                 sz = 0;
