@@ -4498,6 +4498,9 @@ Expression AsinhLink(Expression a)
 
 Expression AcoshLink(Expression a)
 {
+  if (a->IsLessThan(1.0))
+    throw ErrNotPermitted(0, "Expression Building", "AcoshLink", "value < 1", "acosh(<1) is undefined", HELPURL);
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4730,6 +4733,9 @@ Expression LnLink(Expression a) throw(ErrNotPermitted)
 
 Expression LngammaLink(Expression a)
 {
+  if (a->IsLessThan(0.0))
+    throw ErrNotPermitted(0, "Expression Building", "LngammaLink", "value < 1", "lngamma(<0) is undefined", HELPURL);
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
