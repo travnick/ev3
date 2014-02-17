@@ -4856,7 +4856,7 @@ Expression SqrtLink(Expression a) throw(ErrNotPermitted)
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
     double t = a->GetValue();
-    assert(t >= 0);
+    assert(t>=0.);
     a->SetCoeff(1.0);
     a->SetValue(sqrt(t));
     a->SetExponent(1.0);
@@ -6403,8 +6403,11 @@ bool SimplifyRecursive(Expression* a)
     double preexpon = 0;
     double c = 0;
     int prevarindex = -1;
+    int prevarpowindex = -1;
     int varindex = -1;
+    int varpowindex = -1;
     int firstvarindex = -1;
+    int firstvarpowindex = -1;
     int firstconstindex = -1;
     int sz = (*a)->GetSize();
     Expression one(1.0);
@@ -6496,19 +6499,19 @@ bool SimplifyRecursive(Expression* a)
           else if (status == 2)
           {
             // variable raised to power
-            varindex = (*a)->GetNode(i)->GetVarIndex();
+            varpowindex = (*a)->GetNode(i)->GetVarIndex();
             expon = (*a)->GetNode(i)->GetExponent();
             c = (*a)->GetNode(i)->GetCoeff();
-            if (expon != preexpon || varindex != prevarindex)
+            if (expon != preexpon || varpowindex != prevarpowindex)
             {
-              firstvarindex = i;
+              firstvarpowindex = i;
               consolidated[status] = c;
               i++;
             }
             else
             {
               consolidated[status] += c;
-              (*a)->GetNode(firstvarindex)->SetCoeff(consolidated[status]);
+              (*a)->GetNode(firstvarpowindex)->SetCoeff(consolidated[status]);
               ret = true;
               (*a)->DeleteNode(i);
               sz--;
@@ -6520,7 +6523,7 @@ bool SimplifyRecursive(Expression* a)
               }
             }
             preexpon = expon;
-            prevarindex = varindex;
+            prevarpowindex = varpowindex;
           }
           else if (status == 3)
           {

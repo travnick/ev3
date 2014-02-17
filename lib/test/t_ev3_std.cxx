@@ -381,7 +381,10 @@ int main()
     try {
       Description formulas(1, randExp(3,2));
 //       formulas = Description(1,"log2(((x1)+(x2))*(erf(x2)))");
-      formulas = Description(1,"(x2)/(((x1)*(x1))+((-2*x1)))");
+//       formulas = Description(1,"(x2)/(((x1)*(x1))+((-2*x1)))");
+      formulas = Description(1,"sqrt(acosh((x1)-(x1)))");
+      std::cout << "formula="<<formulas.toString()<<std::endl;
+
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;
       double df = function.grad(x)[0];
