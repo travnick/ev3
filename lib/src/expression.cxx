@@ -6044,8 +6044,10 @@ bool SimplifyConstant(Expression* a)
   Expression zero(0.0);
   if ((*a)->GetExponent() == 0)
   {
+    double c = (*a)->GetCoeff();
     RecursiveDestroy(a);
     a->SetTo(one);
+    (*a)->SetCoeff(c);
     ret = true;
   }
   else if ((*a)->GetCoeff() == 0)
