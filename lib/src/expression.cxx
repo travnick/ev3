@@ -4281,8 +4281,8 @@ Expression SinLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(sin(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4303,8 +4303,8 @@ Expression CosLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(cos(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4325,8 +4325,8 @@ Expression TanLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(tan(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4347,8 +4347,8 @@ Expression AsinLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(asin(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4369,8 +4369,8 @@ Expression AcosLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(acos(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4391,8 +4391,8 @@ Expression AtanLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(atan(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4413,8 +4413,8 @@ Expression SinhLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(sinh(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4435,8 +4435,8 @@ Expression CoshLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(cosh(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4457,8 +4457,8 @@ Expression TanhLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(tanh(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4479,8 +4479,8 @@ Expression AsinhLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(asinh(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4504,8 +4504,8 @@ Expression AcoshLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(acosh(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4526,8 +4526,8 @@ Expression AtanhLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(atanh(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4739,8 +4739,8 @@ Expression LngammaLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(lgamma(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4761,8 +4761,8 @@ Expression GammaLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(exp(lgamma(a->GetValue())));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4783,8 +4783,8 @@ Expression ExpLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(exp(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4805,8 +4805,8 @@ Expression ErfLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(erf(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4827,8 +4827,8 @@ Expression ErfcLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(erfc(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4885,8 +4885,8 @@ Expression CbrtLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(cbrt(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4907,8 +4907,8 @@ Expression BesselJ0Link(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(j0(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4929,8 +4929,8 @@ Expression BesselJ1Link(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(j1(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4951,8 +4951,8 @@ Expression BesselY0Link(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(y0(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4973,8 +4973,8 @@ Expression BesselY1Link(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(y1(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -4995,9 +4995,9 @@ Expression SignLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     double tmp(a->GetValue());
     a->SetValue((tmp < 0) ? -1.0 : (tmp > 0) ? 1.0 : 0.0);
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -5018,8 +5018,8 @@ Expression RintLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(floor(0.5 + a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
@@ -5040,8 +5040,8 @@ Expression AbsLink(Expression a)
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetCoeff(1.0);
     a->SetValue(fabs(a->GetValue()));
+    a->SetCoeff(1.0);
     a->SetExponent(1.0);
     a->SetOpType(CONST);
     return a;
