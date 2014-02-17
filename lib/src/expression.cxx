@@ -729,7 +729,7 @@ std::string BasicExpression::ToString(void) const
 bool BasicExpression::IsEqualTo(const Expression& t) const
 {
   //Just in case constant value not consolidated in coeff
-  if (GetOpType() == CONST || t->GetOpType() == CONST)
+  if (GetOpType() == CONST && t->GetOpType() == CONST)
   {
     if (GetValue() == t->GetValue())
     {
