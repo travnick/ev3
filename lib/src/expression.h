@@ -22,7 +22,7 @@
 #include <map>
 
 #include "common.h"
-#include "tree.cxx"
+#include "tree.hxx"
 #include "exceptions.h"
 
 namespace Ev3

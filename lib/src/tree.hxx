@@ -1,6 +1,6 @@
 /**********************************************************************
  * Author:      Leo Liberti                                            *
- * Name:        tree.cxx                                               *
+ * Name:        tree.hxx                                               *
  * Source:      GNU C++                                                *
  * Purpose:     template for tree construction                         *
  * History:     010517 0.0 work started                                *
