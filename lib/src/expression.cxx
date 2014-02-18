@@ -6725,11 +6725,12 @@ bool SimplifyRecursive(Expression* a)
         {
           // case var^const, transform in variable with an exponent
           expon = (*a)->GetNode(1)->GetValue();
-          c = (*a)->GetNode(0)->GetCoeff();
+          c = (*a)->GetCoeff();
+          double c0 = (*a)->GetNode(0)->GetCoeff();
           (*a)->GetNode(0)->SetExponent(expon);
           (*a)->DeleteNode(1);
           a->SetTo((*a)->GetNode(0));
-          (*a)->SetCoeff((*a)->GetCoeff() * pow(c, expon));
+          (*a)->SetCoeff(c * pow(c0, expon));
         }
         break;
       default:
