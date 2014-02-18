@@ -390,6 +390,8 @@ int main()
 //       formulas = Description(1,"2*log(x1)*log(x1)");
 //       formulas = Description(1,"erf((x2)-((x2)+(x1)))");
 //       formulas = Description(1,"1/(((x2)-(x1))-(x2))");
+//       formulas = Description(1,"log(x1)+x1-log(x1)");
+      formulas = Description(1,"x1*x2*log(x1*x1)");
       std::cout << "formula="<<formulas.toString()<<std::endl;
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;

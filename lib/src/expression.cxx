@@ -6546,6 +6546,7 @@ bool SimplifyRecursive(Expression* a)
             {
               if ((*a)->GetNode(i)->IsEqualToNoCoeff((*a)->GetNode(j)))
               {
+                c = (*a)->GetNode(j)->GetCoeff();
                 consolidated[status] += c;
                 ret = true;
                 (*a)->GetNode(firstvarindex)->SetCoeff(consolidated[status]);
