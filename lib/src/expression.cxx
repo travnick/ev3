@@ -3761,8 +3761,10 @@ Expression ProductLink(Expression a,
   if (!(a->IsConstant() && t->IsConstant()) && a->IsEqualToNoCoeff(t))
   {
     Expression two(2.0);
+    double c = a->GetCoeff();
+    a->SetCoeff(1.);
     Expression power2(a ^ two);
-    power2->SetCoeff(a->GetCoeff() * t->GetCoeff());
+    power2->SetCoeff(c * t->GetCoeff());
     return power2;
   }
   // go for it
