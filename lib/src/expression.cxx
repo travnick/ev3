@@ -6729,7 +6729,7 @@ bool SimplifyRecursive(Expression* a)
           (*a)->GetNode(0)->SetExponent(expon);
           (*a)->DeleteNode(1);
           a->SetTo((*a)->GetNode(0));
-          (*a)->SetCoeff(pow(c, expon));
+          (*a)->SetCoeff((*a)->GetCoeff() * pow(c, expon));
         }
         break;
       default:
