@@ -8,8 +8,8 @@
                Common Public License.
 ***********************************************************************/
 
-#ifndef __EV3TREECXX__
-#define __EV3TREECXX__
+#ifndef __EV3TREEHXX__
+#define __EV3TREEHXX__
 
 #define RCS7 "$Id: tree.cxx,v 1.13 2005/09/08 23:37:23 liberti Exp liberti $"
 
@@ -329,4 +329,4 @@ public:
 };
 
 } /* namespace Ev3 */
-#endif /* __EV3TREECXX__ */
+#endif /* __EV3TREEHXX__ */
