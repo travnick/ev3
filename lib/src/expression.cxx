@@ -6102,7 +6102,7 @@ bool SimplifyConstant(Expression* a)
               sz--;
               if (sz == 1)
               {
-                a->SetTo((*a)->GetNode(0));
+                a->SetTo((*a)->GetNode(1-i));
                 i = 0;
                 sz = (*a)->GetSize();
               }
