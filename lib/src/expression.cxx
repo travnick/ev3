@@ -4259,7 +4259,7 @@ Expression PowerLink(Expression a,
     a->SetExponent(1.0);
     return a;
   }
-  else if ((a->GetCoeff() == 1.0) && a->IsLeaf() && (a->GetOpType() == VAR) &&
+  else if ((fabs(a->GetCoeff()) == 1.0) && a->IsLeaf() && (a->GetOpType() == VAR) &&
            t->IsLeaf() && (t->GetOpType() == CONST))
   {
     // variable to constant
