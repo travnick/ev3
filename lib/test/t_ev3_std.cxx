@@ -394,7 +394,7 @@ int main()
 //       formulas = Description(1,"x1*x2*log(x1*x1)");
 //       formulas = Description(1,"log2(x1)/abs(log(x1))");
 //       formulas = Description(1,"(4*x1)^(1/2)");
-      formulas = Description(1,"(x1)^(((1)/(1))/(log10(x1)))");
+//       formulas = Description(1,"(x1)^(1/log10(x1))");
       std::cout << "formula="<<formulas.toString()<<std::endl;
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;
@@ -410,7 +410,7 @@ int main()
       if( isnan(df2)|| isinf(df2) || (df2==0))
         continue;
       double err_g = 0.;
-      if (fabs(df)>1e5)
+      if (fabs(df)>1e5||fabs(df2)<1e-10)
         continue;
       if (fabs(df) > 1e-5)
         err_g = fabs(df2/df-1.);
