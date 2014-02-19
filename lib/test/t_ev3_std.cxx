@@ -391,7 +391,10 @@ int main()
 //       formulas = Description(1,"erf((x2)-((x2)+(x1)))");
 //       formulas = Description(1,"1/(((x2)-(x1))-(x2))");
 //       formulas = Description(1,"log(x1)+x1-log(x1)");
-      formulas = Description(1,"x1*x2*log(x1*x1)");
+//       formulas = Description(1,"x1*x2*log(x1*x1)");
+//       formulas = Description(1,"log2(x1)/abs(log(x1))");
+//       formulas = Description(1,"(4*x1)^(1/2)");
+      formulas = Description(1,"(x1)^(((1)/(1))/(log10(x1)))");
       std::cout << "formula="<<formulas.toString()<<std::endl;
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;
@@ -404,7 +407,7 @@ int main()
         continue;
 
       double df2 = function.grad_fd(x)[0];
-      if( isnan(df2)|| isinf(df2))
+      if( isnan(df2)|| isinf(df2) || (df2==0))
         continue;
       double err_g = 0.;
       if (fabs(df)>1e5)

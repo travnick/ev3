@@ -4259,8 +4259,8 @@ Expression PowerLink(Expression a,
     a->SetExponent(1.0);
     return a;
   }
-  else if (a->IsLeaf() && a->GetOpType() == VAR &&
-           t->IsLeaf() && t->GetOpType() == CONST)
+  else if ((a->GetCoeff() == 1.0) && a->IsLeaf() && (a->GetOpType() == VAR) &&
+           t->IsLeaf() && (t->GetOpType() == CONST))
   {
     // variable to constant
     a->SetExponent(a->GetExponent() * t->GetValue());
@@ -5181,7 +5181,6 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           Expression ret(a.Copy());
           ret->SetExponent(expon - 1);
           ret->SetCoeff(ret->GetCoeff() * expon);
-
           return ret;
         }
       }
@@ -6117,7 +6116,7 @@ bool SimplifyConstant(Expression* a)
               sz--;
               if (sz == 1)
               {
-                a->SetTo((*a)->GetNode(0));
+                a->SetTo((*a)->GetNode(1-i));
                 i = 0;
                 sz = (*a)->GetSize();
               }
