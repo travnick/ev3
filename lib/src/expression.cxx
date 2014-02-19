@@ -5883,10 +5883,15 @@ bool TrigSimp(Expression a)
         cospossimple = i;
       }
     }
+
     if (sinpos != -1 && cospos != -1)
     {
+      double coscoeff = a->GetNode(sinpos)->GetCoeff();
+      double sincoeff = a->GetNode(cospos)->GetCoeff();
+      
       // found both, check their arguments
-      if (a->GetNode(sinpos)->GetNode(0)->GetNode(0)->IsEqualTo
+      if ((coscoeff == sincoeff) &&
+          a->GetNode(sinpos)->GetNode(0)->GetNode(0)->IsEqualTo
           (a->GetNode(cospos)->GetNode(0)->GetNode(0)))
       {
         ret++; // augment simplification counter
@@ -5901,6 +5906,7 @@ bool TrigSimp(Expression a)
         {
           // there aren't any, set a to one
           a->One();
+          a->SetCoeff(coscoeff);
         }
         else
         {
@@ -5920,7 +5926,7 @@ bool TrigSimp(Expression a)
           if (!addflag)
           {
             // no there wasn't, add it as a symbolic node
-            Expression one(1.0);
+            Expression one(coscoeff);
             a->AddNode(one);
           }
           // check that there is more than just one node
@@ -5934,7 +5940,11 @@ bool TrigSimp(Expression a)
     }
     if (sinpossimple != -1 && cospossimple != -1)
     {
-      if (a->GetNode(sinpossimple)->GetNode(0)->IsEqualTo
+      double coscoeff = a->GetNode(sinpossimple)->GetCoeff();
+      double sincoeff = a->GetNode(cospossimple)->GetCoeff();
+      
+      if ((coscoeff == sincoeff) &&
+          a->GetNode(sinpossimple)->GetNode(0)->IsEqualTo
           (a->GetNode(cospossimple)->GetNode(0)))
       {
         ret++;
@@ -5949,6 +5959,7 @@ bool TrigSimp(Expression a)
         {
           // there aren't any, set a to one
           a->One();
+          a->SetCoeff(coscoeff);
         }
         else
         {
@@ -5968,7 +5979,7 @@ bool TrigSimp(Expression a)
           if (!addflag)
           {
             // no there wasn't, add it as a symbolic node
-            Expression one(1.0);
+            Expression one(coscoeff);
             a->AddNode(one);
           }
           // check that there is more than just one node

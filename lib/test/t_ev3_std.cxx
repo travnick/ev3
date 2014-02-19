@@ -379,7 +379,7 @@ int main()
   for (unsigned long j = 0; j < 100000; ++ j) 
   {
     try {
-      Description formulas(1, randExp(4,2));
+      Description formulas(1, randExp(5,2));
 //       formulas = Description(1,"log2(((x1)+(x2))*(erf(x2)))");
 //       formulas = Description(1,"(x2)/(((x1)*(x1))+((-2*x1)))");
 //       formulas = Description(1,"sqrt(acosh((x1)-(x1)))");
@@ -395,6 +395,8 @@ int main()
 //       formulas = Description(1,"log2(x1)/abs(log(x1))");
 //       formulas = Description(1,"(4*x1)^(1/2)");
 //       formulas = Description(1,"(x1)^(1/log10(x1))");
+//       formulas = Description(1,"cos(x1)*sin(x1)");
+      formulas = Description(1,"((x2)*(x1))^(((x2)*(x1))/((-4*x2)))");
       std::cout << "formula="<<formulas.toString()<<std::endl;
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;
