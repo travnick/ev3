@@ -5926,8 +5926,8 @@ bool TrigSimp(Expression a)
           if (!addflag)
           {
             // no there wasn't, add it as a symbolic node
-            Expression one(coscoeff);
-            a->AddNode(one);
+            Expression coeffexpr(coscoeff);
+            a->AddNode(coeffexpr);
           }
           // check that there is more than just one node
           if (a->GetSize() == 1)
@@ -5979,8 +5979,8 @@ bool TrigSimp(Expression a)
           if (!addflag)
           {
             // no there wasn't, add it as a symbolic node
-            Expression one(coscoeff);
-            a->AddNode(one);
+            Expression coeffexpr(coscoeff);
+            a->AddNode(coeffexpr);
           }
           // check that there is more than just one node
           if (a->GetSize() == 1)

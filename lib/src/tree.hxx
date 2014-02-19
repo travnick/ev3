@@ -11,7 +11,7 @@
 #ifndef __EV3TREEHXX__
 #define __EV3TREEHXX__
 
-#define RCS7 "$Id: tree.cxx,v 1.13 2005/09/08 23:37:23 liberti Exp liberti $"
+#define RCS7 "$Id: tree.hxx,v 1.13 2005/09/08 23:37:23 liberti Exp liberti $"
 
 #include <iostream>
 #include <vector>
