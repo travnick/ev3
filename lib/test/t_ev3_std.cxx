@@ -396,7 +396,7 @@ int main()
 //       formulas = Description(1,"(4*x1)^(1/2)");
 //       formulas = Description(1,"(x1)^(1/log10(x1))");
 //       formulas = Description(1,"cos(x1)*sin(x1)");
-      formulas = Description(1,"x1^(0.5*(x1*x2)/(x2))");
+//       formulas = Description(1,"x1^(0.5*(x1*x2)/(x2))");
       std::cout << "formula="<<formulas.toString()<<std::endl;
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;

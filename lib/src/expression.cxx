@@ -6633,8 +6633,9 @@ bool SimplifyRecursive(Expression* a)
         if ((*a)->GetNode(0)->IsEqualTo((*a)->GetNode(1)))
         {
           // f(x)/f(x)
+          c = (*a)->GetCoeff();
           RecursiveDestroy(a);
-          a->SetTo(one);
+          a->SetTo(Expression(c));
           ret = true;
           sz = 0;
         }
