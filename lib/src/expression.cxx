@@ -6833,12 +6833,16 @@ bool CompactLinearPartRecursive(Expression* a)
       if ((*a)->GetNode(i)->GetOpType() == SUM)
       {
         ret = true;
+        double ci = (*a)->GetNode(i)->GetCoeff();
         for(j = 0; j < (*a)->GetNode(i)->GetSize(); j++)
         {
-          (*a)->AddNode((*a)->GetNode(i)->GetNode(j));
+          Expression nodej((*a)->GetNode(i)->GetNode(j));
+          nodej->SetCoeff(nodej->GetCoeff() * ci);
+          (*a)->AddNode(nodej);
+          ++ sz;// we added a node
         }
         (*a)->DeleteNode(i);
-        sz--; // we have deleted a node
+        -- sz; // we have deleted a node
         // we don't need to increase i, since we have deleted the i-th node
         // the next node is still the i-th node
         if (sz == 1)
