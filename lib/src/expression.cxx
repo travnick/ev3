@@ -5878,7 +5878,6 @@ bool Simplify(Expression* a)
     (*a)->ConsolidateProductCoeffs();
     (*a)->DistributeCoeffOverSum();
     ret = DifferenceToSum(a);
-    std::cout << "Simplify"<<std::endl;
     if (ret)
     {
       changedflag = true;
