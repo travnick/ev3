@@ -376,7 +376,7 @@ int main()
     inputVars[i] = oss.str();
   }
   
-  for (unsigned long j = 0; j < 100000; ++ j) 
+  for (unsigned long j = 0; j < 1000000; ++ j) 
   {
     try {
       Description formulas(1, randExp(4,2));
@@ -398,6 +398,7 @@ int main()
 //       formulas = Description(1,"cos(x1)*sin(x1)");
 //       formulas = Description(1,"x1^(0.5*(x1*x2)/(x2))");
 //       formulas = Description(1,"exp(-x1^2/2)");
+      formulas = Description(1,"((-1*tanh((x1)*(x1))))/((-1*x1))");
       std::cout << "formula="<<formulas.toString()<<std::endl;
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;

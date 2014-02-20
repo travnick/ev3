@@ -2094,83 +2094,66 @@ Expression operator * (Expression a,
   if (a->GetCoeff() == 0 || t->GetCoeff() == 0 ||
       a->HasValue(0) || t->HasValue(0))
   {
-    // std::cerr << "case one factor is zero" << std::endl;
     Expression zero(0.0);
-    // std::cerr << "return zero" << std::endl;
     return zero;
   }
   if (a->HasValue(1))
   {
-    // std::cerr << "case left factor is 1" << std::endl;
-    // std::cerr << "return t" << std::endl;
     return t;
   }
   if (t->HasValue(1))
   {
-    // std::cerr << "case right factor is 1" << std::endl;
-    // std::cerr << "return a" << std::endl;
     return a;
   }
   if (!(a->IsConstant() && t->IsConstant()) && a->IsEqualToNoCoeff(t))
   {
-    // std::cerr << "case one factor is not constant and in fact share the same core" << std::endl;
     Expression two(2.0);
     ret.SetToCopyOf(a);
     ret->SetCoeff(1.0);
     ret = ret ^ two;
     ret->SetCoeff(a->GetCoeff() * t->GetCoeff());
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST &&
       t->IsLeaf() && t->GetOpType() == CONST)
   {
-    // std::cerr << "case two factors are leaf and are const" << std::endl;
     // a, t are numbers - multiply them
     ret.SetToCopyOf(a);
     ret->SetValue(a->GetValue() * t->GetValue());
     ret->SetCoeff(1.0);
     ret->SetExponent(1.0);
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   else if (a->IsLeaf() && a->GetOpType() == VAR &&
            t->IsLeaf() && t->GetOpType() == VAR &&
            a->GetVarIndex() == t->GetVarIndex())
   {
-    // std::cerr << "case two factors are leaf and are vars" << std::endl;
     // a, t are the same variable - multiply coefficients
     // and add exponents
     ret.SetToCopyOf(a);
     ret->SetCoeff(a->GetCoeff() * t->GetCoeff());
     ret->SetExponent(a->GetExponent() + t->GetExponent());
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   else if (t->IsConstant())
   {
-    // std::cerr << "case right factor is constant" << std::endl;
     // t is constant, set coeff of a
     ret.SetToCopyOf(a);
     ret->SetCoeff(a->GetCoeff() * t->GetValue());
     ret->DistributeCoeffOverSum();
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   else if (a->IsConstant())
   {
-    // std::cerr << "case left factor is constant" << std::endl;
     // a is constant, set coeff of t
     ret.SetToCopyOf(t);
     ret->SetCoeff(t->GetCoeff() * a->GetValue());
     ret->DistributeCoeffOverSum();
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   else if (a->GetOpType() == PRODUCT && t->GetOpType() != PRODUCT)
   {
-    // std::cerr << "case left factor is a product and not the right factor" << std::endl;
     // a is a product and t isn't - just multiply the term t
     ret.SetToCopyOf(a);
     Int i = 0;
@@ -2201,27 +2184,18 @@ Expression operator * (Expression a,
       // either could not simplify in steps above, or t is an operator
       ret->AddCopyOfNode(t);
     }
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   else if (a->GetOpType() == PRODUCT && t->GetOpType() == PRODUCT)
   {
-    // std::cerr << "case both factors are products" << std::endl;
     // a, t are products - multiply terms of t to a
-    // std::cerr << "a=" << a->ToString() << ", t=" << t->ToString() << std::endl;
     t->DistributeCoeffOverProduct();
-    // std::cerr << "After t->DistributeCoeffOverProduct(), t=" << t->ToString() << std::endl;
     ret.SetToCopyOf(a);
-    // std::cerr << "ret.SetToCopyOf(a), ret=" << ret->ToString() << std::endl;
     Int s = t->GetSize();
-    // std::cerr << "s=" << s << std::endl;
     for (Int i = 0; i < s; i++)
     {
-      // std::cerr << "i=" << i << ", t->GetNode(i)=" << t->GetNode(i)->ToString() << std::endl;
       ret = ret * t->GetNode(i);
-      // std::cerr << "ret=" << ret->ToString() << std::endl;
     }
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   else if (a->GetOpType() != PRODUCT && t->GetOpType() == PRODUCT)
@@ -2230,19 +2204,16 @@ Expression operator * (Expression a,
     // a is not a products but t is - transform this into a product
     ret.SetToCopyOf(t);
     ret = ret * a;
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
   else
   {
-    // std::cerr << "General case: no node to recycle" << std::endl;
     // all other cases - make new node on top of the addends
     ret->SetCoeff(1.0);
     ret->SetExponent(1.0);
     ret->SetOpType(PRODUCT);
     ret->AddCopyOfNode(a);
     ret->AddCopyOfNode(t);
-    // std::cerr << "return ret=" << ret->ToString() << std::endl;
     return ret;
   }
 }
@@ -4368,6 +4339,9 @@ Expression AsinLink(Expression a)
 
 Expression AcosLink(Expression a)
 {
+  if (a->IsLessThan(-1.0)||a->IsGreaterThan(1.0))
+    throw ErrNotPermitted(0, "Expression Building", "AcosLink", "value <-1|>1", "acos(<-1|>1) is undefined", HELPURL); 
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4525,6 +4499,9 @@ Expression AcoshLink(Expression a)
 
 Expression AtanhLink(Expression a)
 {
+  if (a->IsLessThan(-1.0)||a->IsGreaterThan(1.0))
+    throw ErrNotPermitted(0, "Expression Building", "AtanhLink", "value <-1|>1", "atanh(<-1|>1) is undefined", HELPURL); 
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -5205,40 +5182,28 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
       switch(op)
       {
         case SUM:
-          // std::cerr << "\nin case SUM\na=" << a->ToString() << std::endl;
           ret = Diff(a->GetNode(0), vi); // f_0'
-          // std::cerr << "Diff(a->GetNode(0), vi)=" << ret->ToString() << std::endl;
           for(i = 1; i < sz; i++)
           {
             tmp = Diff(a->GetNode(i), vi);
-            // std::cerr << "i=" << i << ", sz=" << sz << ", Diff(a->GetNode(i), vi)=" << tmp->ToString() << std::endl;
             if (!tmp->IsZero())
             {
               ret = ret + tmp; // ... + g_i'
-              // std::cerr << "ret=" << ret->ToString() << std::endl;
             }
           }
-          // std::cerr << "\nret=" << ret->ToString() << std::endl;
-          // std::cerr << "\nout case SUM\n" << std::endl;
           break;
         case DIFFERENCE:
-          // std::cerr << "\nin case DIFFERENCE\na=" << a->ToString() << std::endl;
           ret = Diff(a->GetNode(0), vi);  // f_0'
-          // std::cerr << "Diff(a->GetNode(0), vi)=" << ret->ToString() << std::endl;
           for(i = 1; i < sz; i++)
           {
             tmp = Diff(a->GetNode(i), vi);
-            // std::cerr << "i=" << i << ", sz=" << sz << ", Diff(a->GetNode(i), vi)=" << tmp->ToString() << std::endl;
             if (!tmp->IsZero())
             {
               ret = ret - tmp;  // ... - g_i'
-              // std::cerr << "ret=" << ret->ToString() << std::endl;
             }
           }
-          // std::cerr << "\nout case DIFFERENCE\n=" << std::endl;
           break;
         case PRODUCT:
-          // std::cerr << "\nin case PRODUCT\na=" << a->ToString() << std::endl;
           if (sz == 1)
           {
             // warn about product with one operand
@@ -5246,46 +5211,34 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                       << "should not occur\n";
           }
           ret = Diff(a->GetNode(0), vi);  // f_0'
-          // std::cerr << "Diff(a->GetNode(0), vi)=" << ret->ToString() << std::endl;
           if (!ret->IsZero())
           {
             for(j = 1; j < sz; j++)
             {
-              // std::cerr << "j=" << j << ", sz=" << sz << ", a->GetCopyOfNode(j)=" << a->GetCopyOfNode(j)->ToString() << std::endl;
               // get copies, not references
               ret = ret * a->GetCopyOfNode(j); // ... * f_i[i!=0]
-              // std::cerr << "ret=" << ret->ToString() << std::endl;
             }
           }
-          // std::cerr << "first diff, ret=" << ret->ToString() << std::endl;
           tmp->One(); // reset temporary to 1.0
-          // std::cerr << "after tmp->One(), ret=" << ret->ToString() << std::endl;
           for(i = 1; i < sz; i++)
           {
             tmp = Diff(a->GetNode(i), vi); // tmp = f_i'
-            // std::cerr << "i=" << i << ", sz=" << sz << ", Diff(a->GetNode(i), vi)=" << tmp->ToString() << ", ret=" << ret->ToString() << std::endl;
             if (!tmp->IsZero())
             {
               for(j = 0; j < sz; j++)
               {
                 if (j != i)
                 {
-                  // std::cerr << "j=" << j << ", sz=" << sz << ", a->GetNode(j)=" << a->GetNode(j)->ToString() << ", ret=" << ret->ToString() << std::endl;
                   // get references, and copy later (in sum)
                   tmp = tmp * a->GetNode(j); // ... * f_j[i!=i]
-                  // std::cerr << "j=" << j << ", sz=" << sz << ", tmp=" << tmp->ToString() << ", ret=" << ret->ToString() << std::endl;
                 }
               }
               ret = ret + tmp.Copy();  // ... + tmp
-              // std::cerr << "i=" << i << ", sz=" << sz << ", ret=" << ret->ToString() << std::endl;
               tmp->One(); // reset temporary to 1.0
             }
           }
-          // std::cerr << "return ret=" << ret->ToString() << std::endl;
-          // std::cerr << "\nout case PRODUCT\n" << std::endl;
           break;
         case FRACTION:
-          // std::cerr << "\nin case FRACTION\na=" << a->ToString() << std::endl;
           if (sz != 2)
           {
             // check that there are exactly two operands
@@ -5301,36 +5254,19 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   "cannot divide by zero", HELPURL,
                                   a->GetNode(1)->ToString());
           }
-          // std::cerr << "vi=" << vi << std::endl;
-          // std::cerr << "a=" << a->ToString() << std::endl;
-          // std::cerr << "a.node(0)=" << (a->GetNode(0))->ToString() << std::endl;
-          // std::cerr << "a.node(1)=" << (a->GetNode(1))->ToString() << std::endl;
           tmp->One();
-          // std::cerr << "tmp->One();" << std::endl;
-          // std::cerr << "tmp=" << tmp->ToString() << std::endl;
           ret = Diff(a->GetNode(0), vi); // f'
-          // std::cerr << "ret = Diff(a->GetNode(0), vi); // f'" << std::endl;
-          // std::cerr << "ret=" << ret->ToString() << std::endl;
           if (!ret->IsZero())
           {
             ret = ret / a->GetCopyOfNode(1);  // f'/g
-            // std::cerr << "ret = ret / a->GetCopyOfNode(1);  // f'/g" << std::endl;
-            // std::cerr << "ret=" << ret->ToString() << std::endl;
           }
           // can dispense from using GetCopyOf because tmp gets copied anyway
           tmp = a->GetNode(0);           // tmp = f
-          // std::cerr << "tmp = a->GetNode(0);           // tmp = f" << std::endl;
-          // std::cerr << "tmp=" << tmp->ToString() << std::endl;
           tmp2 = Diff(a->GetNode(1), vi);
-          // std::cerr << "Diff(a->GetNode(1), vi)=" << tmp2->ToString() << std::endl;
           if (!tmp2->IsZero())
           {
             tmp = tmp * tmp2;  // tmp = fg'
-            // std::cerr << "tmp = tmp * Diff(a->GetNode(1), vi);  // tmp = fg'" << std::endl;
-            // std::cerr << "tmp=" << tmp->ToString() << std::endl;
             ret = ret - tmp.Copy() / (a->GetCopyOfNode(1) ^ two);  // f'/g - fg'/g^2
-            // std::cerr << "ret = ret - tmp.Copy() / (a->GetCopyOfNode(1)^two);    // f'g - fg'/g^2" << std::endl;
-            // std::cerr << "ret=" << ret->ToString() << std::endl;
           }
           // can dispense from using copy here - tmp is not used thereafter
           // and when tmp is deleted, its subnodes are not automatically
@@ -5338,7 +5274,6 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           // std::cerr << "\nout case FRACTION\n" << std::endl;
           break;
         case POWER:
-          // std::cerr << "\nin case POWER\na=" << a->ToString() << std::endl;
           if (sz != 2)
           {
             // check that there are exactly two operands
@@ -5403,10 +5338,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
               ret = ret * tmp;        // (g'log(f) + gf'/f)(f^g)
             }
           }
-          // std::cerr << "\nout case POWER\n" << std::endl;
           break;
         case MINUS:
-          // std::cerr << "\nin case MINUS\na=" << a->ToString() << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5415,13 +5348,9 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = Diff(a->GetNode(0), vi);
-          // std::cerr << "Diff(a->GetNode(0), vi)=" << ret->ToString() << std::endl;
           ret->SetCoeff(- ret->GetCoeff());
-          // std::cerr << "ret=" << ret->ToString() << std::endl;
-          // std::cerr << "\nout case MINUS\n" << std::endl;
           break;
         case SIN:
-          // std::cerr << "\nin case SIN\na=" << a->ToString() << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5430,10 +5359,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = Diff(a->GetNode(0), vi) * Cos(a->GetCopyOfNode(0));  // f' cos(f)
-          // std::cerr << "\nout case SIN\n" << std::endl;
           break;
         case COS:
-          // std::cerr << "\nin case COS\na=" << a->ToString() << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5442,10 +5369,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = -Diff(a->GetNode(0), vi) * Sin(a->GetCopyOfNode(0)); // -f'sin(f)
-          // std::cerr << "\nout case COS\n" << std::endl;
           break;
         case TAN:
-          // std::cerr << "\nin case TAN\na=" << a->ToString() << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5455,18 +5380,12 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           }
           ret = a.Copy();  // tan(f)
           ret->SetCoeff(1.0);
-          // std::cerr << ret->ToString() << std::endl;
           ret = ret ^ two;      // tan(f)^2
-          // std::cerr << ret->ToString() << std::endl;
           c->One();
           ret = ret + c;         // tan(f)^2 + 1
-          // std::cerr << ret->ToString() << std::endl;
           ret = ret * Diff(a->GetNode(0), vi);    // f' * (tan(f)^2 + 1)
-          // std::cerr << ret->ToString() << std::endl;
-          // std::cerr << "\nout case TAN\n" << std::endl;
           break;
         case ASIN:
-          // std::cerr << "\nin case ASIN\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5479,10 +5398,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           c->One();
           ret = c - ret;
           ret = Diff(a->GetNode(0), vi) / Sqrt(ret); // f' / sqrt(1 - f^2)
-          // std::cerr << "\nout case ASIN\n" << std::endl;
           break;
         case ACOS:
-          // std::cerr << "\nin case ACOS\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5495,10 +5412,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           c->One();
           ret = c - ret;
           ret = -Diff(a->GetNode(0), vi) / Sqrt(ret); // -f' / sqrt(1 - f^2)
-          // std::cerr << "\nout case ACOS\n" << std::endl;
           break;
         case ATAN:
-          // std::cerr << "\nin case ATAN\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5511,10 +5426,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           c->One();
           ret = ret + c;
           ret = Diff(a->GetNode(0), vi) / ret; // f' / (f^2 + 1)
-          // std::cerr << "\nout case ATAN\n" << std::endl;
           break;
         case SINH:
-          // std::cerr << "\nin case SINH\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5525,7 +5438,6 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           ret = Diff(a->GetNode(0), vi) * Cosh(a->GetCopyOfNode(0));  // f' cosh(f)
           break;
         case COSH:
-          // std::cerr << "\nin case COSH\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5534,10 +5446,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = Diff(a->GetNode(0), vi) * Sinh(a->GetCopyOfNode(0)); // f'sinh(f)
-          // std::cerr << "\nout case COSH\n" << std::endl;
           break;
         case TANH:
-          // std::cerr << "\nin case TANH\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5551,10 +5461,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           c->One();
           ret = c - ret;
           ret = ret * Diff(a->GetNode(0), vi);    // f' * (1 - tan(f)^2)
-          // std::cerr << "\nout case TANH\n" << std::endl;
           break;
         case ASINH:
-          // std::cerr << "\nin case ASINH\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5567,10 +5475,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           c->One();
           ret = c + ret;
           ret = Diff(a->GetNode(0), vi) / Sqrt(ret); // f' / sqrt(1 + f^2)
-          // std::cerr << "\nout case ASINH\n" << std::endl;
           break;
         case ACOSH:
-          // std::cerr << "\nin case ACOSH\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5583,10 +5489,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           c->One();
           ret = ret - c;
           ret = Diff(a->GetNode(0), vi) / Sqrt(ret); // f' / sqrt(f^2 - 1)
-          // std::cerr << "\nout case ACOSH\n" << std::endl;
           break;
         case ATANH:
-          // std::cerr << "\nin case ATANH\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5599,10 +5503,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           c->One();
           ret = c - ret;
           ret = Diff(a->GetNode(0), vi) / ret;    // f' / (1 - tan(f)^2)
-          // std::cerr << "\nout case ATANH\n" << std::endl;
           break;
         case LOG2:
-          // std::cerr << "\nin case LOG2\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5618,10 +5520,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           }
           ret = Diff(a->GetNode(0), vi);
           ret = ret / (M_LN2 * a->GetCopyOfNode(0));  // f'/(log(2)f)
-          // std::cerr << "\nout case LOG2\n" << std::endl;
           break;
         case LOG10:
-          // std::cerr << "\nin case LOG10\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5637,12 +5537,9 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           }
           ret = Diff(a->GetNode(0), vi);
           ret = ret / (M_LN10 * a->GetCopyOfNode(0));  // f'/(log(10)f)
-          // std::cerr << "\nout case LOG10\n" << std::endl;
           break;
         case LOG:
-          // std::cerr << "\nin case LOG\n" << std::endl;
         case LN:
-          // std::cerr << "\nin case LN\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5658,10 +5555,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           }
           ret = Diff(a->GetNode(0), vi);
           ret = ret / a->GetCopyOfNode(0);  // f'/f
-          // std::cerr << "\nout case LN\n" << std::endl;
           break;
         case EXP:
-          // std::cerr << "\nin case EXP\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5670,10 +5565,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = Diff(a->GetNode(0), vi) * Exp(a->GetCopyOfNode(0));  // f'exp(f)
-          // std::cerr << "\nout case EXP\n" << std::endl;
           break;
         case ERF:
-          // std::cerr << "\nin case ERF\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5682,10 +5575,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = M_2_SQRTPI * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
-          // std::cerr << "\nout case ERF\n" << std::endl;
           break;
         case ERFC:
-          // std::cerr << "\nin case ERFC\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5694,10 +5585,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = -M_2_SQRTPI * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
-          // std::cerr << "\nout case ERFC\n" << std::endl;
           break;
         case SQRT:
-          // std::cerr << "\nin case SQRT\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5712,10 +5601,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = 0.5 * Diff(a->GetNode(0), vi) / Sqrt(a->GetCopyOfNode(0)); // 1/2 * f' / sqrt(f)
-          // std::cerr << "\nout case SQRT\n" << std::endl;
           break;
         case CBRT:
-          // std::cerr << "\nin case CBRT\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5724,10 +5611,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = (1.0 / 3.0) * Diff(a->GetNode(0), vi) / (a->GetCopyOfNode(0) ^ (2.0 / 3.0)); // (1/3) f' / f^(2/3)
-          // std::cerr << "\nout case CBRT\n" << std::endl;
           break;
         case BESSELJ0:
-          // std::cerr << "\nin case BESSELJ0\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5736,10 +5621,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = -Diff(a->GetNode(0), vi) * BesselJ1(a->GetCopyOfNode(0)); // -f'besselJ1(f)
-          // std::cerr << "\nout case BESSELJ0\n" << std::endl;
           break;
         case BESSELJ1:
-          // std::cerr << "\nin case BESSELJ1\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5750,10 +5633,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           ret = a->GetCopyOfNode(0);
           ret = BesselJ0(ret) - BesselJ1(ret) / ret;
           ret = Diff(a->GetNode(0), vi) * ret; // f'(besselJ0(f) - besselJ1(f) / f)
-          // std::cerr << "\nout case BESSELJ1\n" << std::endl;
           break;
         case BESSELY0:
-          // std::cerr << "\nin case BESSELY0\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5762,10 +5643,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = -Diff(a->GetNode(0), vi) * BesselY1(a->GetCopyOfNode(0)); // -f'besselY1(f)
-          // std::cerr << "\nout case BESSELY0\n" << std::endl;
           break;
         case BESSELY1:
-          // std::cerr << "\nin case BESSELY1\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5776,12 +5655,9 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           ret = a->GetCopyOfNode(0);
           ret = BesselY0(ret) - BesselY1(ret) / ret;
           ret = Diff(a->GetNode(0), vi) * ret; // f'(besselY0(f) - besselY1(f) / f)
-          // std::cerr << "\nout case BESSELY1\n" << std::endl;
           break;
         case SIGN:
-          // std::cerr << "\nin case SIGN\n" << std::endl;
         case RINT:
-          // std::cerr << "\nin case RINT\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5790,10 +5666,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = zero; // 0
-          // std::cerr << "\nout case RINT\n" << std::endl;
           break;
         case ABS:
-          // std::cerr << "\nin case ABS\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5802,10 +5676,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = Diff(a->GetNode(0), vi) * Sign(a->GetCopyOfNode(0)); // f'sign(f)
-          // std::cerr << "\nout case ABS\n" << std::endl;
           break;
         default:
-          // std::cerr << "\nin case default\n" << std::endl;
           if (sz != 1)
           {
             // check that there is exactly one operand
@@ -5816,12 +5688,9 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           throw ErrNotPermitted(16, "Expression", "Diff", "not implemented",
                                 "The derivative of the function is not implemented.",
                                 HELPURL);
-          // std::cerr << "\nout case default\n" << std::endl;
           break;
       }
       ret->SetCoeff(ret->GetCoeff() * opcoeff);
-      // std::cerr << "\nreturn ret=" << ret->ToString() << std::endl;
-
       return ret;
     }
   }

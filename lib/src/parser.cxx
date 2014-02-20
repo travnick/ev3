@@ -130,15 +130,12 @@ Expression ExpressionParser::Parse(const char* buf,
 double ExpressionParser::error(const std::string & s)
 {
   ++no_of_errors_;
-  //std::cerr << "error: " << s << std::endl;
   return 0;
 }
 double ExpressionParser::error(const std::string & s,
                                const Token_value tk)
 {
   ++no_of_errors_;
-  //char tks = tk;
-  //std::cerr << "error: " << s << " " << tk << ":" << tks << std::endl;
   return 0;
 }
 
@@ -365,7 +362,6 @@ Token_value ExpressionParser::get_token()
         input_->putback(ch);
         return curr_tok_ = PEV3NAME;
       }
-      //std::cerr << "ch=" << ch << std::endl;
       error("bad token");
       return curr_tok_ = PEV3PRINT;
   }
