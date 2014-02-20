@@ -6435,7 +6435,7 @@ bool SimplifyRecursive(Expression* a)
                 if (sz == 1)
                 {
                   a->SetTo((*a)->GetNode(0));
-                  j = 0;
+                  j = i + 1;
                   sz = (*a)->GetSize();
                 }
               }
