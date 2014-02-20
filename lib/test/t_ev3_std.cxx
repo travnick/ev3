@@ -399,7 +399,7 @@ int main()
 //       formulas = Description(1,"x1^(0.5*(x1*x2)/(x2))");
 //       formulas = Description(1,"exp(-x1^2/2)");
 //       formulas = Description(1,"((-1*tanh((x1)*(x1))))/((-1*x1))");
-      formulas = Description(1,"(-3*((x2)*(x1))*(((x1)+(x2))-(x2)))");
+      formulas = Description(1,"(x2*x1)*(x1+x2-x2)");
 
       std::cout << "formula="<<formulas.toString()<<std::endl;
       Function function(inputVars, formulas);
