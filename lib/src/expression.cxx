@@ -180,7 +180,7 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
   {
     // leaf node, use Operand::ToString()
     outbuf << Operand(expr);
-    
+
   }
   else
   {
@@ -3700,7 +3700,7 @@ throw(ErrDivideByZero)
     // denominator
     if (fabs(t->GetCoeff()) < Ev3NearZero())
       throw ErrDivideByZero(21, "Expression Building", "FractionLink", "t->GetCoeff()", "Divisor cannot be zero", HELPURL, NONE);
-    
+
     if (fabs(a->GetCoeff()) < Ev3NearZero())
     {
       Expression zero(0.0);
@@ -3967,9 +3967,9 @@ Expression AsinLink(Expression a)
 
 Expression AcosLink(Expression a)
 {
-  if (a->IsLessThan(-1.0)||a->IsGreaterThan(1.0))
-    throw ErrNotPermitted(0, "Expression Building", "AcosLink", "value <-1|>1", "acos(<-1|>1) is undefined", HELPURL); 
-  
+  if (a->IsLessThan(-1.0) || a->IsGreaterThan(1.0))
+    throw ErrNotPermitted(0, "Expression Building", "AcosLink", "value <-1|>1", "acos(<-1|>1) is undefined", HELPURL);
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4104,7 +4104,7 @@ Expression AcoshLink(Expression a)
 {
   if (a->IsLessThan(1.0))
     throw ErrNotPermitted(0, "Expression Building", "AcoshLink", "value < 1", "acosh(<1) is undefined", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4127,9 +4127,9 @@ Expression AcoshLink(Expression a)
 
 Expression AtanhLink(Expression a)
 {
-  if (a->IsLessThan(-1.0)||a->IsGreaterThan(1.0))
-    throw ErrNotPermitted(0, "Expression Building", "AtanhLink", "value <-1|>1", "atanh(<-1|>1) is undefined", HELPURL); 
-  
+  if (a->IsLessThan(-1.0) || a->IsGreaterThan(1.0))
+    throw ErrNotPermitted(0, "Expression Building", "AtanhLink", "value <-1|>1", "atanh(<-1|>1) is undefined", HELPURL);
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4155,10 +4155,10 @@ Expression Log2Link(Expression a) throw(ErrNotPermitted)
   // make a preliminary check
   if (a->IsZero())
     throw ErrNotPermitted(0, "Expression Building", "Log2Link", "IsZero()", "log2(0) is undefined", HELPURL);
-  
+
   if (a->IsLessThan(0))
     throw ErrNotPermitted(0, "Expression Building", "Log2Link", "value <= 0", "log2(<=0) is undefined", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4186,10 +4186,10 @@ Expression Log10Link(Expression a) throw(ErrNotPermitted)
   // make a preliminary check
   if (a->IsZero())
     throw ErrNotPermitted(0, "Expression Building", "Log10Link", "IsZero()", "log10(0) is undefined", HELPURL);
-  
+
   if (a->IsLessThan(0))
     throw ErrNotPermitted(0, "Expression Building", "Log10Link", "value <= 0", "log10(<=0) is undefined", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4248,10 +4248,10 @@ Expression LnLink(Expression a) throw(ErrNotPermitted)
   // make a preliminary check
   if (a->IsZero())
     throw ErrNotPermitted(0, "Expression Building", "LnLink", "IsZero()", "ln(0) is undefined", HELPURL);
-  
+
   if (a->IsLessThan(0))
     throw ErrNotPermitted(0, "Expression Building", "LnLink", "value <= 0", "ln(<=0) is undefined", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4278,7 +4278,7 @@ Expression LngammaLink(Expression a)
 {
   if (a->IsLessThan(0.0))
     throw ErrNotPermitted(0, "Expression Building", "LngammaLink", "value < 0", "lngamma(<0) is undefined", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4392,12 +4392,12 @@ Expression SqrtLink(Expression a) throw(ErrNotPermitted)
   // make a preliminary check
   if (a->IsLessThan(0) && !a->HasValue(0))
     throw ErrNotPermitted(0, "Expression Building", "SqrtLink", "value < 0", "sqrt(<0) is complex, can't do", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
     double t = a->GetValue();
-    assert(t>=0.);
+    assert(t >= 0.);
     a->SetCoeff(1.0);
     a->SetValue(sqrt(t));
     a->SetExponent(1.0);
@@ -4597,7 +4597,7 @@ Expression CotLink(Expression a)  throw(ErrNotPermitted)
   // make a preliminary check
   if (a->IsZero())
     throw ErrNotPermitted(0, "Expression Building", "CotLink", "IsZero()", "cot(0) is undefined", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4625,7 +4625,7 @@ Expression CothLink(Expression a)  throw(ErrNotPermitted)
   // make a preliminary check
   if (a->IsZero())
     throw ErrNotPermitted(0, "Expression Building", "CothLink", "IsZero()", "coth(0) is undefined", HELPURL);
-  
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -5296,7 +5296,7 @@ bool TrigSimp(Expression a)
     {
       double coscoeff = a->GetNode(sinpos)->GetCoeff();
       double sincoeff = a->GetNode(cospos)->GetCoeff();
-      
+
       // found both, check their arguments
       if ((coscoeff == sincoeff) &&
           a->GetNode(sinpos)->GetNode(0)->GetNode(0)->IsEqualTo
@@ -5350,7 +5350,7 @@ bool TrigSimp(Expression a)
     {
       double coscoeff = a->GetNode(sinpossimple)->GetCoeff();
       double sincoeff = a->GetNode(cospossimple)->GetCoeff();
-      
+
       if ((coscoeff == sincoeff) &&
           a->GetNode(sinpossimple)->GetNode(0)->IsEqualTo
           (a->GetNode(cospossimple)->GetNode(0)))
@@ -5510,7 +5510,7 @@ bool SimplifyConstant(Expression* a)
               sz--;
               if (sz == 1)
               {
-                a->SetTo((*a)->GetNode(1-i));
+                a->SetTo((*a)->GetNode(1 - i));
                 i = 0;
                 sz = (*a)->GetSize();
               }
@@ -5535,7 +5535,7 @@ bool SimplifyConstant(Expression* a)
               sz--;
               if (sz == 1)
               {
-                a->SetTo((*a)->GetNode(1-i));
+                a->SetTo((*a)->GetNode(1 - i));
                 i = 0;
                 sz = (*a)->GetSize();
               }

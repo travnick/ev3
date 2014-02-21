@@ -13,8 +13,9 @@
 
 #include "operand.h"
 
-namespace Ev3 {
-  
+namespace Ev3
+{
+
 // constructors
 Operand::Operand() :
   oplabel_(CONST),
@@ -155,7 +156,7 @@ std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
         else
         {
           outbuf  << operand.GetCoeff() << "*" << NOTVARNAME << "^"
-                 << operand.GetExponent();
+                  << operand.GetExponent();
         }
       } // vi == NOVARIABLE
       else

@@ -8,10 +8,11 @@
                Common Public License.
 ***********************************************************************/
 
-namespace Ev3 {
-  bool is_integer(const double);
-  bool is_even(const double);
-  bool is_odd(const double);
-  double Ev3NearZero(void);
-  double Ev3Infinity(void);
+namespace Ev3
+{
+bool is_integer(const double);
+bool is_even(const double);
+bool is_odd(const double);
+double Ev3NearZero(void);
+double Ev3Infinity(void);
 } /* namespace Ev3 */

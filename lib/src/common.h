@@ -15,25 +15,27 @@
 #define LARGE 1E10
 #define NOTVARNAME "_var_not_found_"
 
-namespace Ev3 {
-  typedef int Int;
+namespace Ev3
+{
+typedef int Int;
 
-  // various operator types
-  enum OperatorType {
-    SUM, DIFFERENCE, PRODUCT, FRACTION, POWER,
-    PLUS, MINUS, SIN, COS, TAN, ASIN, ACOS,
-    ATAN, SINH, COSH, TANH, ASINH, ACOSH,
-    ATANH, LOG2, LOG10, LOG, LN, LNGAMMA,
-    GAMMA, EXP, ERF, ERFC, SQRT, CBRT,
-    BESSELJ0, BESSELJ1, BESSELY0, BESSELY1,
-    SIGN, RINT, ABS, COT, COTH,
-    VAR, CONST,
-    ERROR
-  };
+// various operator types
+enum OperatorType
+{
+  SUM, DIFFERENCE, PRODUCT, FRACTION, POWER,
+  PLUS, MINUS, SIN, COS, TAN, ASIN, ACOS,
+  ATAN, SINH, COSH, TANH, ASINH, ACOSH,
+  ATANH, LOG2, LOG10, LOG, LN, LNGAMMA,
+  GAMMA, EXP, ERF, ERFC, SQRT, CBRT,
+  BESSELJ0, BESSELJ1, BESSELY0, BESSELY1,
+  SIGN, RINT, ABS, COT, COTH,
+  VAR, CONST,
+  ERROR
+};
 
-  // utility functions
-  extern double Ev3NearZero(void);
-  extern double Ev3Infinity(void);
+// utility functions
+extern double Ev3NearZero(void);
+extern double Ev3Infinity(void);
 
 } /* namespace Ev3 */
 #endif /* __EV3COMMONH__ */

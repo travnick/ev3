@@ -15,7 +15,7 @@ Common Public License.
 
 namespace Ev3
 {
-  
+
 ExpressionParser::ExpressionParser()
 {
   isinitialized_ = false;
