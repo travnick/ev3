@@ -2200,7 +2200,6 @@ Expression operator * (Expression a,
   }
   else if (a->GetOpType() != PRODUCT && t->GetOpType() == PRODUCT)
   {
-    // std::cerr << "case right factor is a product and not the left factor" << std::endl;
     // a is not a products but t is - transform this into a product
     ret.SetToCopyOf(t);
     ret = ret * a;
@@ -4062,17 +4061,8 @@ throw(ErrDivideByZero)
     t->ConsolidateProductCoeffs();
     // denominator
     if (fabs(t->GetCoeff()) < Ev3NearZero())
-    {
-      // divide by zero
-      unsigned long mycode(21);
-      std::string myif("Expression Building");
-      std::string myscope("FractionLink");
-      std::string myop("t->GetCoeff()");
-      std::string mydesc("Divisor cannot be zero");
-      std::string myinfo(HELPURL);
-      std::string mydiv(NONE);
-      throw ErrDivideByZero(mycode, myif, myscope, myop, mydesc, myinfo, mydiv);
-    }
+      throw ErrDivideByZero(21, "Expression Building", "FractionLink", "t->GetCoeff()", "Divisor cannot be zero", HELPURL, NONE);
+    
     if (fabs(a->GetCoeff()) < Ev3NearZero())
     {
       Expression zero(0.0);
@@ -4526,27 +4516,11 @@ Expression Log2Link(Expression a) throw(ErrNotPermitted)
 {
   // make a preliminary check
   if (a->IsZero())
-  {
-    // *this is zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("Log2Link");
-    std::string myop("IsZero()");
-    std::string mydesc("log2(0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "Log2Link", "IsZero()", "log2(0) is undefined", HELPURL);
+  
   if (a->IsLessThan(0))
-  {
-    // argument is < zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("Log2Link");
-    std::string myop("value <= 0");
-    std::string mydesc("log2(<=0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "Log2Link", "value <= 0", "log2(<=0) is undefined", HELPURL);
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4573,27 +4547,11 @@ Expression Log10Link(Expression a) throw(ErrNotPermitted)
 {
   // make a preliminary check
   if (a->IsZero())
-  {
-    // *this is zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("Log10Link");
-    std::string myop("IsZero()");
-    std::string mydesc("log10(0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "Log10Link", "IsZero()", "log10(0) is undefined", HELPURL);
+  
   if (a->IsLessThan(0))
-  {
-    // argument is < zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("Log10Link");
-    std::string myop("value <= 0");
-    std::string mydesc("log10(<=0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "Log10Link", "value <= 0", "log10(<=0) is undefined", HELPURL);
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4620,27 +4578,11 @@ Expression LogLink(Expression a) throw(ErrNotPermitted)
 {
   // make a preliminary check
   if (a->IsZero())
-  {
-    // *this is zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("LogLink");
-    std::string myop("IsZero()");
-    std::string mydesc("log(0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "LogLink", "IsZero()", "log(0) is undefined", HELPURL);
+
   if (a->IsLessThan(0))
-  {
-    // argument is < zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("LogLink");
-    std::string myop("value <= 0");
-    std::string mydesc("log(<=0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "LogLink", "value <= 0", "log(<=0) is undefined", HELPURL);
+
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4667,27 +4609,11 @@ Expression LnLink(Expression a) throw(ErrNotPermitted)
 {
   // make a preliminary check
   if (a->IsZero())
-  {
-    // *this is zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("LnLink");
-    std::string myop("IsZero()");
-    std::string mydesc("ln(0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "LnLink", "IsZero()", "ln(0) is undefined", HELPURL);
+  
   if (a->IsLessThan(0))
-  {
-    // argument is < zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("LnLink");
-    std::string myop("value <= 0");
-    std::string mydesc("ln(<=0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "LnLink", "value <= 0", "ln(<=0) is undefined", HELPURL);
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -4713,7 +4639,7 @@ Expression LnLink(Expression a) throw(ErrNotPermitted)
 Expression LngammaLink(Expression a)
 {
   if (a->IsLessThan(0.0))
-    throw ErrNotPermitted(0, "Expression Building", "LngammaLink", "value < 1", "lngamma(<0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "LngammaLink", "value < 0", "lngamma(<0) is undefined", HELPURL);
   
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4827,16 +4753,8 @@ Expression SqrtLink(Expression a) throw(ErrNotPermitted)
 {
   // make a preliminary check
   if (a->IsLessThan(0) && !a->HasValue(0))
-  {
-    // argument is < zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("SqrtLink");
-    std::string myop("value < 0");
-    std::string mydesc("sqrt(<0) is complex, can't do");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "SqrtLink", "value < 0", "sqrt(<0) is complex, can't do", HELPURL);
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -5040,16 +4958,8 @@ Expression CotLink(Expression a)  throw(ErrNotPermitted)
 {
   // make a preliminary check
   if (a->IsZero())
-  {
-    // *this is zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("CotLink");
-    std::string myop("IsZero()");
-    std::string mydesc("cot(0) is undefined");
-    std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
-  }
+    throw ErrNotPermitted(0, "Expression Building", "CotLink", "IsZero()", "cot(0) is undefined", HELPURL);
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
@@ -5084,7 +4994,7 @@ Expression CothLink(Expression a)  throw(ErrNotPermitted)
     std::string myop("IsZero()");
     std::string mydesc("coth(0) is undefined");
     std::string myinfo(HELPURL);
-    throw ErrNotPermitted(mycode, myif, myscope, myop, mydesc, myinfo);
+    throw ErrNotPermitted(0, "Expression Building", "CothLink", "IsZero()", "coth(0) is undefined", HELPURL);
   }
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -5271,7 +5181,6 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           // can dispense from using copy here - tmp is not used thereafter
           // and when tmp is deleted, its subnodes are not automatically
           // deleted unless reference counter is zero - which won't be.
-          // std::cerr << "\nout case FRACTION\n" << std::endl;
           break;
         case POWER:
           if (sz != 2)

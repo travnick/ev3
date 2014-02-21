@@ -379,29 +379,35 @@ int main()
   for (unsigned long j = 0; j < 1000000; ++ j) 
   {
     try {
-      Description formulas(1, randExp(4,2));
-//       formulas = Description(1,"log2(((x1)+(x2))*(erf(x2)))");
-//       formulas = Description(1,"(x2)/(((x1)*(x1))+((-2*x1)))");
-//       formulas = Description(1,"sqrt(acosh((x1)-(x1)))");
-//       formulas = Description(1,"1./(1.-5*x1-1.)");
-//       formulas = Description(1,"x1*sinh(-3*x2/x2)");
-//       formulas = Description(1,"x1-tan(x1)+log(x1)");
-//      formulas = Description(1,"erf(x2-(x1-x2))");
-//       formulas = Description(1,"2*log(x1)*log(x1)");
-//       formulas = Description(1,"erf((x2)-((x2)+(x1)))");
-//       formulas = Description(1,"1/(((x2)-(x1))-(x2))");
-//       formulas = Description(1,"log(x1)+x1-log(x1)");
-//       formulas = Description(1,"x1*x2*log(x1*x1)");
-//       formulas = Description(1,"log2(x1)/abs(log(x1))");
-//       formulas = Description(1,"(4*x1)^(1/2)");
-//       formulas = Description(1,"(x1)^(1/log10(x1))");
-//       formulas = Description(1,"cos(x1)*sin(x1)");
-//       formulas = Description(1,"x1^(0.5*(x1*x2)/(x2))");
-//       formulas = Description(1,"exp(-x1^2/2)");
-//       formulas = Description(1,"((-1*tanh((x1)*(x1))))/((-1*x1))");
-//       formulas = Description(1,"(x2*x1)*(x1+x2-x2)");
-       formulas = Description(1,"(4*(3*x1))/log10(exp(x1))");
-      std::cout << "formula="<<formulas.toString()<<std::endl;
+      Description formulas;
+      formulas.add("log2(((x1)+(x2))*(erf(x2)))");
+      formulas.add("(x2)/(((x1)*(x1))+((-2*x1)))");
+      formulas.add("sqrt(acosh((x1)-(x1)))");
+      formulas.add("1./(1.-5*x1-1.)");
+      formulas.add("x1*sinh(-3*x2/x2)");
+      formulas.add("x1-tan(x1)+log(x1)");
+      formulas.add("erf(x2-(x1-x2))");
+      formulas.add("2*log(x1)*log(x1)");
+      formulas.add("erf((x2)-((x2)+(x1)))");
+      formulas.add("1/(((x2)-(x1))-(x2))");
+      formulas.add("log(x1)+x1-log(x1)");
+      formulas.add("x1*x2*log(x1*x1)");
+      formulas.add("log2(x1)/abs(log(x1))");
+      formulas.add("(4*x1)^(1/2)");
+      formulas.add("(x1)^(1/log10(x1))");
+      formulas.add("cos(x1)*sin(x1)");
+      formulas.add("x1^(0.5*(x1*x2)/(x2))");
+      formulas.add("exp(-x1^2/2)");
+      formulas.add("((-1*tanh((x1)*(x1))))/((-1*x1))");
+      formulas.add("(x2*x1)*(x1+x2-x2)");
+      formulas.add("(4*(3*x1))/log10(exp(x1))");
+      
+      if (j < formulas.size())
+        formulas = Description(1, formulas[j]);
+      else
+        formulas = Description(1, randExp(4,2));
+        
+      std::cout << "formula=" << formulas.toString() << std::endl;
       Function function(inputVars, formulas);
       std::cout << function.toString()<<std::endl;
       double df = function.grad(x)[0];
