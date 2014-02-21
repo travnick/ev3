@@ -1,6 +1,7 @@
 language: cpp
+before_install: sudo apt-get install libmuparser-dev
 compiler:
   - gcc
   - clang
 # Change this to your needs
-script: mkdir build && cd build && cmake .. && make
+script: mkdir build && cd build && cmake .. && make && ./lib/test/t_ev3_std
