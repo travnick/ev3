@@ -11,14 +11,11 @@ Common Public License.
 */
 
 #include "parser.h"
-#include <cstring>
-
-#define NOTVARNAME "_var_not_found_"
-
-#define RCS10 "$Id: parser.cxx,v 1.11 2006/07/30 05:36:43 liberti Exp liberti $"
+#include "common.h"
 
 namespace Ev3
 {
+  
 ExpressionParser::ExpressionParser()
 {
   isinitialized_ = false;

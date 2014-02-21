@@ -8,14 +8,11 @@
                Common Public License.
 ***********************************************************************/
 
-#ifndef __EV3TREEHXX__
-#define __EV3TREEHXX__
-
-#define RCS7 "$Id: tree.hxx,v 1.13 2005/09/08 23:37:23 liberti Exp liberti $"
+#ifndef __EV3TREEH__
+#define __EV3TREEH__
 
 #include <iostream>
 #include <vector>
-#include <string>
 
 #include "common.h"
 #include "exceptions.h"
@@ -329,4 +326,5 @@ public:
 };
 
 } /* namespace Ev3 */
+
 #endif /* __EV3TREEHXX__ */

@@ -13,14 +13,10 @@ Common Public License.
 #ifndef __EV3PARSERH__
 #define __EV3PARSERH__
 
-#define RCS9 "$Id: parser.h,v 1.7 2006/07/30 05:36:42 liberti Exp liberti $"
-
 // includes
 #include <iostream>  // I/O
-#include <sstream>
 #include <string>    // strings
 #include <map>       // map
-#include <cctype>    // isalpha(), etc.
 #include <cmath>
 
 #include "expression.h"
@@ -113,6 +109,8 @@ namespace Ev3 {
     int currentvid_;
 
   }; // end class ExpressionParser
+  
 } /* namespace Ev3 */
+
 #endif /* __EV3PARSERH__ */
 

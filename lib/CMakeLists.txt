@@ -1,16 +1,17 @@
-set (src/headers src/auxiliary.h src/common.h src/exceptions.h  src/expression.h src/parser.h)
-set(sources src/expression.cxx src/parser.cxx )
 
-add_library(ev3 ${sources})
-if (MINGW AND BUILD_SHARED_LIBS)
-  set_target_properties(ev3 PROPERTIES SUFFIX "-1.dll")
-endif()
+set ( headers src/auxiliary.h src/common.h src/exceptions.h  src/expression.h src/parser.h )
+set ( sources src/parser.cxx src/expression.cxx src/operand.cxx )
 
-install (TARGETS ev3 RUNTIME DESTINATION bin
-                          LIBRARY DESTINATION lib${LIB_SUFFIX}
-                          ARCHIVE DESTINATION lib${LIB_SUFFIX})
+add_library ( ev3 ${sources} )
+if ( MINGW AND BUILD_SHARED_LIBS )
+  set_target_properties ( ev3 PROPERTIES SUFFIX "-1.dll" )
+endif ()
 
-install (FILES ${headers} DESTINATION include)
+install ( TARGETS ev3
+          RUNTIME DESTINATION bin
+          LIBRARY DESTINATION lib${LIB_SUFFIX}
+          ARCHIVE DESTINATION lib${LIB_SUFFIX} )
 
+install ( FILES ${headers} DESTINATION include )
 
-add_subdirectory(test)
+add_subdirectory( test )

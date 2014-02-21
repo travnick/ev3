@@ -11,21 +11,9 @@
 #ifndef __EV3COMMONH__
 #define __EV3COMMONH__
 
-#define RCS12 "$Id: common.h,v 1.2 2006/07/30 05:36:44 liberti Exp liberti $"
-
 #define NOVARIABLE -1
 #define LARGE 1E10
-
-#include <cassert>
-
-#ifdef WIN32
-/* windows.h define a huge numbre of macro... */
-#undef DIFFERENCE
-#undef CONST
-#undef ERROR
-#undef interface
-#undef NONE
-#endif
+#define NOTVARNAME "_var_not_found_"
 
 namespace Ev3 {
   typedef int Int;
