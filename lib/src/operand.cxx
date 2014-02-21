@@ -183,7 +183,7 @@ std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
 std::string Operand::ToString(void) const
 {
   std::stringstream outbuf;
-  outbuf << std::setprecision(12) << *this;
+  outbuf << *this;
   return outbuf.str();
 }
 

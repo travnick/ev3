@@ -236,6 +236,7 @@ namespace Ev3
   };
   
   std::ostream & operator<< (std::ostream & out, const BasicExpression & expr);
+  std::ostream & operator<< (std::ostream & out, const Expression & expr);
 
   // All these functions contain tricks to simplify the operands. This
   // means that both the operands may be changed, and indeed that the

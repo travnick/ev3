@@ -179,7 +179,8 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
   if (expr.IsLeaf())
   {
     // leaf node, use Operand::ToString()
-    outbuf << expr.Operand::ToString();
+    outbuf << Operand(expr);
+    
   }
   else
   {
@@ -193,11 +194,9 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
     s =  expr.GetSize();
     if (s > 1)
     {
-      std::string t;
       for (i = 0; i < s; i++)
       {
-        t = expr.GetNode(i)->ToString();
-        outbuf << "(" << t << ")";
+        outbuf << "(" << expr.GetNode(i) << ")";
         if (i < s - 1)
         {
           switch( expr.GetOpType())
@@ -334,8 +333,7 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
       }
       if (s == 1)
       {
-        std::string t( expr.GetNode(0)->ToString());
-        outbuf << "(" << t << ")";
+        outbuf << "(" << expr.GetNode(0) << ")";
       }
       else
       {
@@ -355,10 +353,15 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
 std::string BasicExpression::ToString(void) const
 {
   std::stringstream outbuf;
-  outbuf << std::setprecision(12) << *this;
+  outbuf << *this;
   return outbuf.str();
 }
 
+std::ostream & operator<< (std::ostream & outbuf, const Expression & expr)
+{
+  outbuf << expr.GetPointee();
+  return outbuf;
+}
 
 // is expression this == expression t?
 bool BasicExpression::IsEqualTo(const Expression& t) const
@@ -4621,16 +4624,8 @@ Expression CothLink(Expression a)  throw(ErrNotPermitted)
 {
   // make a preliminary check
   if (a->IsZero())
-  {
-    // *this is zero, can't do
-    unsigned long mycode(0);
-    std::string myif("Expression Building");
-    std::string myscope("CothLink");
-    std::string myop("IsZero()");
-    std::string mydesc("coth(0) is undefined");
-    std::string myinfo(HELPURL);
     throw ErrNotPermitted(0, "Expression Building", "CothLink", "IsZero()", "coth(0) is undefined", HELPURL);
-  }
+  
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {

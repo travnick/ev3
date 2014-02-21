@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <iomanip>
+#include <iostream>
 
 #include "expression.h"
 #include "parser.h"
@@ -192,7 +194,9 @@ public:
         
         for (unsigned long i = 0; i < inputVariables_.size(); ++i) {
           Ev3::Expression derivative = Ev3::Diff(ev3Expression, i);
-          gradient_[i] = derivative->ToString();
+          std::stringstream oss;
+          oss << std::setprecision(12) << derivative;
+          gradient_[i] = oss.str();
         }
 //       }
 //       catch (Ev3::ErrBase & exc) {
