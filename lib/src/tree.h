@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 #include "common.h"
 #include "exceptions.h"
