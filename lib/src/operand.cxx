@@ -100,76 +100,75 @@ Operand::Operand(const double c,
 
 // Operand class methods:
 
-std::string Operand::ToString(void) const
+std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
 {
-  std::stringstream outbuf;
   std::string vn;
-  if (GetCoeff() == 0)
+  if (operand.GetCoeff() == 0)
   {
     // coefficient is 0
     outbuf << 0;
   } // GetCoeff() == 0
-  else if (GetOpType() == CONST)
+  else if (operand.GetOpType() == CONST)
   {
     // constant
-    outbuf << std::setprecision(12) << GetValue();
+    outbuf << operand.GetValue();
   } // GetOpType() == CONST
-  else if (GetOpType() == VAR)
+  else if (operand.GetOpType() == VAR)
   {
     // variable
-    if (GetCoeff() == 1)
+    if (operand.GetCoeff() == 1)
     {
-      int vi = GetVarIndex();
+      int vi = operand.GetVarIndex();
       if (vi == NOVARIABLE)
       {
-        if (GetExponent() == 1)
+        if (operand.GetExponent() == 1)
         {
           outbuf << NOTVARNAME;
         } // GetExponent() == 1
         else
         {
-          outbuf << NOTVARNAME << "^" << GetExponent();
+          outbuf << NOTVARNAME << "^" << operand.GetExponent();
         } // GetExponent() != 1
       } // vi == NOVARIABLE
       else
       {
-        vn = GetVarName();
-        if (GetExponent() == 1)
+        vn = operand.GetVarName();
+        if (operand.GetExponent() == 1)
         {
           outbuf << vn;// << VNAMEIDXCHAR << vi;
         } // GetExponent() == 1
         else
         {
-          outbuf << vn/* << VNAMEIDXCHAR << vi*/ << "^" << GetExponent();
+          outbuf << vn/* << VNAMEIDXCHAR << vi*/ << "^" << operand.GetExponent();
         } // GetExponent() != 1
       } // vi != NOVARIABLE
     } // GetCoeff() == 1
     else
     {
-      int vi = GetVarIndex();
+      int vi = operand.GetVarIndex();
       if (vi == NOVARIABLE)
       {
-        if (GetExponent() == 1)
+        if (operand.GetExponent() == 1)
         {
-          outbuf  << std::setprecision(12) << GetCoeff() << "*_" << NOTVARNAME;
+          outbuf  << operand.GetCoeff() << "*_" << NOTVARNAME;
         }
         else
         {
-          outbuf  << std::setprecision(12) << GetCoeff() << "*" << NOTVARNAME << "^"
-                 << GetExponent();
+          outbuf  << operand.GetCoeff() << "*" << NOTVARNAME << "^"
+                 << operand.GetExponent();
         }
       } // vi == NOVARIABLE
       else
       {
-        vn = GetVarName();
-        if (GetExponent() == 1)
+        vn = operand.GetVarName();
+        if (operand.GetExponent() == 1)
         {
-          outbuf << std::setprecision(12) << GetCoeff() << "*" << vn;// << VNAMEIDXCHAR << vi;
+          outbuf << operand.GetCoeff() << "*" << vn;// << VNAMEIDXCHAR << vi;
         } // GetExponent() == 1
         else
         {
-          outbuf << std::setprecision(12) << GetCoeff() << "*" << vn/* << VNAMEIDXCHAR << vi*/ << "^"
-                 << GetExponent();
+          outbuf << operand.GetCoeff() << "*" << vn/* << VNAMEIDXCHAR << vi*/ << "^"
+                 << operand.GetExponent();
         } // GetExponent() != 1
       } // vi != NOVARIABLE
     } // GetCoeff() != 1
@@ -177,8 +176,14 @@ std::string Operand::ToString(void) const
   else
   {
     // operand, don't print anything
-    ;
   }
+  return outbuf;
+}
+
+std::string Operand::ToString(void) const
+{
+  std::stringstream outbuf;
+  outbuf << std::setprecision(12) << *this;
   return outbuf.str();
 }
 

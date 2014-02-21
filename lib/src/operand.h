@@ -154,6 +154,8 @@ namespace Ev3
                                         const double c);
 
   };
+  
+  std::ostream & operator<< (std::ostream & out, const Operand & operand);
 
 } /* namespace Ev3 */
 

@@ -377,7 +377,7 @@ int main()
     inputVars[i] = oss.str();
   }
   
-  for (unsigned long j = 0; j < 1000000; ++ j) 
+  for (unsigned long j = 0; j < 10000; ++ j) 
   {
     try {
       Description formulas;

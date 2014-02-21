@@ -172,35 +172,35 @@ std::string BasicExpression::PrintTree(const int blanks,
   return outbuf.str();
 }
 
-std::string BasicExpression::ToString(void) const
+
+std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
 {
-  std::stringstream outbuf;
   Int i, s;
-  if (IsLeaf())
+  if (expr.IsLeaf())
   {
     // leaf node, use Operand::ToString()
-    return Operand::ToString();
+    outbuf << expr.Operand::ToString();
   }
   else
   {
-    double tc(GetCoeff());
+    double tc( expr.GetCoeff());
     // operator node
     if (tc != 1)
     {
-      if (tc != -1) outbuf << "(" << std::setprecision(12) << tc << "*(";
+      if (tc != -1) outbuf << "(" << tc << "*(";
       else outbuf << "(-(";
     }
-    s = GetSize();
+    s =  expr.GetSize();
     if (s > 1)
     {
       std::string t;
       for (i = 0; i < s; i++)
       {
-        t = GetNode(i)->ToString();
+        t = expr.GetNode(i)->ToString();
         outbuf << "(" << t << ")";
         if (i < s - 1)
         {
-          switch(GetOpType())
+          switch( expr.GetOpType())
           {
             case SUM:
               outbuf << "+";
@@ -226,7 +226,7 @@ std::string BasicExpression::ToString(void) const
     }
     else
     {
-      switch(GetOpType())
+      switch( expr.GetOpType())
       {
         case PLUS:
           break;
@@ -334,7 +334,7 @@ std::string BasicExpression::ToString(void) const
       }
       if (s == 1)
       {
-        std::string t(GetNode(0)->ToString());
+        std::string t( expr.GetNode(0)->ToString());
         outbuf << "(" << t << ")";
       }
       else
@@ -343,13 +343,22 @@ std::string BasicExpression::ToString(void) const
         outbuf << "(NOARG)";
       }
     }
-    if (GetCoeff() != 1)
+    if ( expr.GetCoeff() != 1)
     {
       outbuf << "))";
     }
-    return outbuf.str();
   }
+  return outbuf;
 }
+
+
+std::string BasicExpression::ToString(void) const
+{
+  std::stringstream outbuf;
+  outbuf << std::setprecision(12) << *this;
+  return outbuf.str();
+}
+
 
 // is expression this == expression t?
 bool BasicExpression::IsEqualTo(const Expression& t) const
