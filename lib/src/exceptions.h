@@ -14,8 +14,6 @@
 #include <string>
 #include <iostream>
 
-#define RCS8 "$Id: exceptions.h,v 1.5 2003/10/08 11:13:58 liberti Exp liberti $"
-
 #define HELPURL "http://liberti.dhs.org/"
 #define NONE "[none]"
 #define STDACTION //std::cerr << interface_ << "::" << scope_ << ": in [" << operation_ << "]: " << description_ << ", code = " << code_ << ", see " << moreinfo_ << std::endl
