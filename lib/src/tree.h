@@ -77,8 +77,8 @@ public:
       Destroy();
       node = t.node;
       ncount = t.ncount;
+      (*ncount)++;
     }
-    (*ncount)++;
   }
   Pointer(const Pointer<NodeType>& t)
   {

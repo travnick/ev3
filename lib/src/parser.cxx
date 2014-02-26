@@ -17,6 +17,7 @@ namespace Ev3
 {
 
 ExpressionParser::ExpressionParser()
+: input_(0)
 {
   isinitialized_ = false;
   currentvid_ = 1;
@@ -119,6 +120,7 @@ Expression ExpressionParser::Parse(const char* buf,
     } // switch(curr_tok_)
   } // while (*input)
   delete input_;
+  input_ = 0;
   nerrors = no_of_errors_;
   return ret;
 }
