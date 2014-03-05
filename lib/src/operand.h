@@ -60,8 +60,8 @@ public:
 
   // constructors
   Operand();
-  Operand(const double t);
-  Operand(const Int t);
+  explicit Operand(const double t);
+  explicit Operand(const Int t);
   Operand(const Int t,
           const bool isvar);
   // create a variable leaf and set coefficient

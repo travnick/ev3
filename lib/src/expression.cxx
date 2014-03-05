@@ -117,6 +117,7 @@ BasicExpression::~BasicExpression() { }
 
 // BasicExpression class methods:
 
+
 void BasicExpression::Debug (void) const
 {
   Int s = GetSize();
@@ -1940,7 +1941,7 @@ Expression operator / (Expression a,
     if (fabs(te) < Ev3NearZero())
     {
       Expression c(tc);
-      return tc;
+      return c;
     }
     ret->SetCoeff(tc);
     ret->SetExponent(te);
@@ -3551,7 +3552,7 @@ throw(ErrDivideByZero)
     if (fabs(te) < Ev3NearZero())
     {
       Expression c(tc);
-      return tc;
+      return c;
     }
     a->SetCoeff(tc);
     a->SetExponent(te);
@@ -5058,7 +5059,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = Diff(a->GetNode(0), vi);
-          ret = ret / (M_LN2 * a->GetCopyOfNode(0));  // f'/(log(2)f)
+          ret = ret / (Expression(M_LN2) * a->GetCopyOfNode(0));  // f'/(log(2)f)
           break;
         case LOG10:
           if (sz != 1)
@@ -5075,7 +5076,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   HELPURL);
           }
           ret = Diff(a->GetNode(0), vi);
-          ret = ret / (M_LN10 * a->GetCopyOfNode(0));  // f'/(log(10)f)
+          ret = ret / (Expression(M_LN10) * a->GetCopyOfNode(0));  // f'/(log(10)f)
           break;
         case LOG:
         case LN:
@@ -5113,7 +5114,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   "erf must have exactly 1 operand",
                                   HELPURL);
           }
-          ret = M_2_SQRTPI * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
+          ret = Expression(M_2_SQRTPI) * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
           break;
         case ERFC:
           if (sz != 1)
@@ -5123,7 +5124,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   "erfc must have exactly 1 operand",
                                   HELPURL);
           }
-          ret = -M_2_SQRTPI * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
+          ret = Expression(-M_2_SQRTPI) * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
           break;
         case SQRT:
           if (sz != 1)
@@ -5139,7 +5140,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   "sqrt argument must be symbolic or positive",
                                   HELPURL);
           }
-          ret = 0.5 * Diff(a->GetNode(0), vi) / Sqrt(a->GetCopyOfNode(0)); // 1/2 * f' / sqrt(f)
+          ret = Expression(0.5) * Diff(a->GetNode(0), vi) / Sqrt(a->GetCopyOfNode(0)); // 1/2 * f' / sqrt(f)
           break;
         case CBRT:
           if (sz != 1)
@@ -5149,7 +5150,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
                                   "cbrt must have exactly 1 operand",
                                   HELPURL);
           }
-          ret = (1.0 / 3.0) * Diff(a->GetNode(0), vi) / (a->GetCopyOfNode(0) ^ (2.0 / 3.0)); // (1/3) f' / f^(2/3)
+          ret = Expression(1.0 / 3.0) * Diff(a->GetNode(0), vi) / (a->GetCopyOfNode(0) ^ Expression(2.0 / 3.0)); // (1/3) f' / f^(2/3)
           break;
         case BESSELJ0:
           if (sz != 1)
@@ -6470,5 +6471,6 @@ void RecursiveDestroy(Expression* a)
   }
   a->Destroy();
 }
+
 
 } /* namespace Ev3 */

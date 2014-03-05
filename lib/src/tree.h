@@ -45,7 +45,7 @@ public:
     node = new NodeType(n);
     ncount = new Int(1);
   }
-  Pointer(double v)
+  explicit Pointer(double v)
   {
     node = new NodeType(v);
     ncount = new Int(1);
@@ -55,7 +55,7 @@ public:
     node = new NodeType(c, vi, vn);
     ncount = new Int(1);
   }
-  Pointer(bool notinitialized)
+  explicit Pointer(bool notinitialized)
   {
     if (!notinitialized)
     {

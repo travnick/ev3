@@ -17,7 +17,7 @@ namespace Ev3
 {
 
 ExpressionParser::ExpressionParser()
-: input_(0)
+  : input_(0)
 {
   isinitialized_ = false;
   currentvid_ = 1;
@@ -148,7 +148,7 @@ Expression ExpressionParser::prim(const bool get)
   {
     case PEV3NUMBER:
     {
-      ret = number_value_;
+      ret = Expression(number_value_);
       get_token();
     }
     break;
@@ -159,7 +159,7 @@ Expression ExpressionParser::prim(const bool get)
       double v = table_[string_value_];
       if (v != 0)
       {
-        ret = v;
+        ret = Expression(v);
         get_token();
       }
       else if (vid == PEV3UNKNOWNVAR && !isinitialized_)

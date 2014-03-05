@@ -40,10 +40,10 @@ public:
   BasicExpression();
 
   // create a constant leaf
-  BasicExpression(const double t);
+  explicit BasicExpression(const double t);
 
   // create a constant (integer-valued) leaf
-  BasicExpression(const Int t);
+  explicit BasicExpression(const Int t);
 
   // create an (empty) operator or a variable leaf
   BasicExpression(const Int t,
