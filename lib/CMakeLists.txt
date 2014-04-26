@@ -13,5 +13,3 @@ install ( TARGETS ev3
           ARCHIVE DESTINATION lib${LIB_SUFFIX} )
 
 install ( FILES ${headers} DESTINATION include )
-
-add_subdirectory( test )

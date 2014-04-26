@@ -38,4 +38,13 @@ extern double Ev3NearZero(void);
 extern double Ev3Infinity(void);
 
 } /* namespace Ev3 */
+
+#ifdef _MSC_VER
+template <typename T>
+T log2(T arg)
+{
+  return log(arg) / log(2);
+}
+#endif
+
 #endif /* __EV3COMMONH__ */

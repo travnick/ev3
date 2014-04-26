@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
@@ -5,10 +7,13 @@
 #include <iomanip>
 #include <iostream>
 
+#include <boost/math/special_functions.hpp>
+
 #include "expression.h"
 #include "parser.h"
 #include "muParser.h"
 
+using namespace boost::math;
 
 class Description : public std::vector<std::string>
 {
@@ -168,7 +173,7 @@ static double Y1(double v)
 }
 static double Rint(double v)
 {
-  return rint(v);
+  return round(v);
 }
 
 
