@@ -3,5 +3,13 @@ before_install: sudo apt-get install libmuparser-dev
 compiler:
   - gcc
   - clang
+
 # Change this to your needs
-script: mkdir build && cd build && cmake .. && make && ./lib/test/t_ev3_std
+before_script:
+  - mkdir build && cd build
+
+script:
+  - cmake -DCMAKE_BUILD_TYPE:STRING=Release .. && make
+
+after_success:
+  - ./Release/bin/t_ev3_std
