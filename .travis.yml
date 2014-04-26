@@ -9,7 +9,4 @@ before_script:
   - mkdir build && cd build
 
 script:
-  - cmake -DCMAKE_BUILD_TYPE:STRING=Release .. && make
-
-after_success:
-  - ./Release/bin/t_ev3_std
+  - cmake -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_TESTS:BOOL=ON .. && make && ./Release/bin/t_ev3_std
