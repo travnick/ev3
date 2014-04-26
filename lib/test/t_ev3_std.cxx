@@ -7,13 +7,9 @@
 #include <iomanip>
 #include <iostream>
 
-#include <boost/math/special_functions.hpp>
-
 #include "expression.h"
 #include "parser.h"
 #include "muParser.h"
-
-using namespace boost::math;
 
 class Description : public std::vector<std::string>
 {
@@ -425,11 +421,11 @@ int main()
         continue;
        if(formulas[0]== std::string("(((x1)-(x1))^((x1)-(x2)))*(x1)"))
         continue;
-            if(isnan(df) || isinf(df))
+            if(std::isnan(df) || std::isinf(df))
         continue;
 
       double df2 = function.grad_fd(x)[0];
-      if( isnan(df2)|| isinf(df2) || (df2==0))
+      if( std::isnan(df2)|| std::isinf(df2) || (df2==0))
         continue;
       double err_g = 0.;
       if (fabs(df)>1e5||fabs(df2)<1e-10)
