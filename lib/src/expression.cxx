@@ -1874,7 +1874,7 @@ Expression operator * (Expression a,
 
 // fractions:
 Expression operator / (Expression a,
-                       Expression t) throw(ErrDivideByZero)
+                       Expression t)
 {
   Expression ret;
   // make a preliminary check
@@ -2603,7 +2603,7 @@ Expression Atanh(Expression a)
   }
 }
 
-Expression Log2(Expression a) throw(ErrNotPermitted)
+Expression Log2(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -2652,7 +2652,7 @@ Expression Log2(Expression a) throw(ErrNotPermitted)
   }
 }
 
-Expression Log10(Expression a) throw(ErrNotPermitted)
+Expression Log10(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -2701,7 +2701,7 @@ Expression Log10(Expression a) throw(ErrNotPermitted)
   }
 }
 
-Expression Log(Expression a) throw(ErrNotPermitted)
+Expression Log(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -2750,7 +2750,7 @@ Expression Log(Expression a) throw(ErrNotPermitted)
   }
 }
 
-Expression Ln(Expression a) throw(ErrNotPermitted)
+Expression Ln(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -2919,7 +2919,7 @@ Expression Erfc(Expression a)
   }
 }
 
-Expression Sqrt(Expression a) throw(ErrNotPermitted)
+Expression Sqrt(Expression a)
 {
   // make a preliminary check
   if (a->IsLessThan(0) && !a->HasValue(0))
@@ -3150,7 +3150,7 @@ Expression Abs(Expression a)
   }
 }
 
-Expression Cot(Expression a)  throw(ErrNotPermitted)
+Expression Cot(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -3188,7 +3188,7 @@ Expression Cot(Expression a)  throw(ErrNotPermitted)
   }
 }
 
-Expression Coth(Expression a)  throw(ErrNotPermitted)
+Expression Coth(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -3493,7 +3493,6 @@ Expression ProductLink(Expression a,
 // fractions:
 Expression FractionLink(Expression a,
                         Expression t)
-throw(ErrDivideByZero)
 {
   // make a preliminary check
   if (t->GetCoeff() == 0)
@@ -4167,7 +4166,7 @@ Expression AtanhLink(Expression a)
   }
 }
 
-Expression Log2Link(Expression a) throw(ErrNotPermitted)
+Expression Log2Link(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -4198,7 +4197,7 @@ Expression Log2Link(Expression a) throw(ErrNotPermitted)
   }
 }
 
-Expression Log10Link(Expression a) throw(ErrNotPermitted)
+Expression Log10Link(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -4229,7 +4228,7 @@ Expression Log10Link(Expression a) throw(ErrNotPermitted)
   }
 }
 
-Expression LogLink(Expression a) throw(ErrNotPermitted)
+Expression LogLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -4260,7 +4259,7 @@ Expression LogLink(Expression a) throw(ErrNotPermitted)
   }
 }
 
-Expression LnLink(Expression a) throw(ErrNotPermitted)
+Expression LnLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -4404,7 +4403,7 @@ Expression ErfcLink(Expression a)
   }
 }
 
-Expression SqrtLink(Expression a) throw(ErrNotPermitted)
+Expression SqrtLink(Expression a)
 {
   // make a preliminary check
   if (a->IsLessThan(0) && !a->HasValue(0))
@@ -4609,7 +4608,7 @@ Expression AbsLink(Expression a)
   }
 }
 
-Expression CotLink(Expression a)  throw(ErrNotPermitted)
+Expression CotLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
@@ -4637,7 +4636,7 @@ Expression CotLink(Expression a)  throw(ErrNotPermitted)
   }
 }
 
-Expression CothLink(Expression a)  throw(ErrNotPermitted)
+Expression CothLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())

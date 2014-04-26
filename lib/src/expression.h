@@ -256,7 +256,7 @@ Expression ProductLink(Expression a,
                        Expression b);
 // divide a by a link of b, return link of a
 Expression FractionLink(Expression a,
-                        Expression b) throw(ErrDivideByZero);
+                        Expression b);
 // raise a to power b, return link of a
 Expression PowerLink(Expression a,
                      Expression b);
@@ -275,16 +275,16 @@ Expression TanhLink(Expression a);
 Expression AsinhLink(Expression a);
 Expression AcoshLink(Expression a);
 Expression AtanhLink(Expression a);
-Expression Log2Link(Expression a) throw(ErrNotPermitted);
-Expression Log10Link(Expression a) throw(ErrNotPermitted);
-Expression LogLink(Expression a) throw(ErrNotPermitted);
-Expression LnLink(Expression a) throw(ErrNotPermitted);
+Expression Log2Link(Expression a);
+Expression Log10Link(Expression a);
+Expression LogLink(Expression a);
+Expression LnLink(Expression a);
 Expression LngammaLink(Expression a);
 Expression GammaLink(Expression a);
 Expression ExpLink(Expression a);
 Expression ErfLink(Expression a);
 Expression ErfcLink(Expression a);
-Expression SqrtLink(Expression a) throw(ErrNotPermitted);
+Expression SqrtLink(Expression a);
 Expression CbrtLink(Expression a);
 Expression BesselJ0Link(Expression a);
 Expression BesselJ1Link(Expression a);
@@ -293,8 +293,8 @@ Expression BesselY1Link(Expression a);
 Expression SignLink(Expression a);
 Expression RintLink(Expression a);
 Expression AbsLink(Expression a);
-Expression CotLink(Expression a) throw(ErrNotPermitted);
-Expression CothLink(Expression a) throw(ErrNotPermitted);
+Expression CotLink(Expression a);
+Expression CothLink(Expression a);
 
 // these are equivalent to the above but they don't change the arguments
 Expression operator + (Expression a,
@@ -304,7 +304,7 @@ Expression operator - (Expression a,
 Expression operator * (Expression a,
                        Expression b);
 Expression operator / (Expression a,
-                       Expression b) throw(ErrDivideByZero);
+                       Expression b);
 Expression operator ^ (Expression a,
                        Expression b);
 Expression operator - (Expression a);
@@ -320,16 +320,16 @@ Expression Tanh(Expression a);
 Expression Asinh(Expression a);
 Expression Acosh(Expression a);
 Expression Atanh(Expression a);
-Expression Log2(Expression a) throw(ErrNotPermitted);
-Expression Log10(Expression a) throw(ErrNotPermitted);
-Expression Log(Expression a) throw(ErrNotPermitted);
-Expression Ln(Expression a) throw(ErrNotPermitted);
+Expression Log2(Expression a);
+Expression Log10(Expression a);
+Expression Log(Expression a);
+Expression Ln(Expression a);
 Expression Lngamma(Expression a);
 Expression Gamma(Expression a);
 Expression Exp(Expression a);
 Expression Erf(Expression a);
 Expression Erfc(Expression a);
-Expression Sqrt(Expression a) throw(ErrNotPermitted);
+Expression Sqrt(Expression a);
 Expression Cbrt(Expression a);
 Expression BesselJ0(Expression a);
 Expression BesselJ1(Expression a);
@@ -338,8 +338,8 @@ Expression BesselY1(Expression a);
 Expression Sign(Expression a);
 Expression Rint(Expression a);
 Expression Abs(Expression a);
-Expression Cot(Expression a) throw(ErrNotPermitted);
-Expression Coth(Expression a) throw(ErrNotPermitted);
+Expression Cot(Expression a);
+Expression Coth(Expression a);
 
 // symbolic differentiation of a w.r.t. variable with index vi,
 // return the created expression (a is not changed)
