@@ -24,7 +24,7 @@ endif()
 option(BUILD_SHARED_LIBS "shared/static" ON)
 set(BUILD_TESTS OFF CACHE BOOL "Build test project?")
 
-find_package(boost REQUIRED)
+find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 add_subdirectory(lib)
