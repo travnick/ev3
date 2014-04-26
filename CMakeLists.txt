@@ -24,8 +24,10 @@ endif()
 option(BUILD_SHARED_LIBS "shared/static" ON)
 set(BUILD_TESTS OFF CACHE BOOL "Build test project?")
 
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
+if(MSVC)
+	find_package(Boost REQUIRED)
+	include_directories(${Boost_INCLUDE_DIRS})
+endif()
 
 add_subdirectory(lib)
 
