@@ -8,6 +8,8 @@
                Common Public License.
 ***********************************************************************/
 
+#pragma once
+
 namespace Ev3
 {
 bool is_integer(const double);

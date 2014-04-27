@@ -8,8 +8,7 @@
                Common Public License.
 ***********************************************************************/
 
-#ifndef __EV3EXPRESSIONH__
-#define __EV3EXPRESSIONH__
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -46,17 +45,13 @@ public:
   explicit BasicExpression(const Int t);
 
   // create an (empty) operator or a variable leaf
-  BasicExpression(const Int t,
-                  const bool isvar);
+  BasicExpression(const Int t, const bool isvar);
 
   // create a variable leaf and set coefficient
-  BasicExpression(const double c,
-                  const Int t,
-                  const std::string & vn);
+  BasicExpression(const double c, const Int t, const std::string & vn);
 
   // user-defined copy constructor with two options (to make a copy)
-  BasicExpression(const Expression & t,
-                  const bool iscopy);
+  BasicExpression(const Expression & t, const bool iscopy);
 
   // copy constructor
   BasicExpression(const BasicExpression & t);
@@ -65,14 +60,13 @@ public:
   ~BasicExpression();
 
   // BasicExpression class methods:
-  void Debug () const;
+  void Debug() const;
 
   // prints to a string
   std::string ToString() const;
 
   // output is a tree
-  std::string PrintTree(const int blanks,
-                        const int tabs) const;
+  std::string PrintTree(const int blanks, const int tabs) const;
 
   // sets an expression to zero (deleting all existing subnodes)
   void Zero();
@@ -85,7 +79,7 @@ public:
   //  but I couldn't think of any other convenient way to fit in
   //  the operand data in == and still use the Tree's ==)
   bool IsEqualTo(const Expression & t) const;
-  bool operator == (const BasicExpression & t) const;
+  bool operator ==(const BasicExpression & t) const;
 
   // other comparison operators
   bool IsEqualTo(const double t) const;
@@ -129,13 +123,10 @@ public:
   void EnforceDependency();
 
   // substitute a variable with a constant
-  void VariableToConstant(const int varindex,
-                          const double c);
+  void VariableToConstant(const int varindex, const double c);
 
   // replace variable indexed v1 with variable indexed v2 (with varname vn)
-  void ReplaceVariable(const int v1,
-                       const int v2,
-                       const std::string & vn);
+  void ReplaceVariable(const int v1, const int v2, const std::string & vn);
   void ReplaceVariable(const int v1,
                        const int v2,
                        const std::string & vn,
@@ -170,9 +161,7 @@ public:
   void ReplaceWithExpression(const Expression & replace);
 
   // reset all names of variables having IDs between lid, uid to vn
-  void ResetVarNames(const std::string & vn,
-                     int lid,
-                     int uid);
+  void ResetVarNames(const std::string & vn, int lid, int uid);
 
   // distribute products over sums - returns true if changed
   // (re-call until false)
@@ -235,8 +224,8 @@ public:
   double RemoveAdditiveConstant();
 };
 
-std::ostream & operator<< (std::ostream & out, const BasicExpression & expr);
-std::ostream & operator<< (std::ostream & out, const Expression & expr);
+std::ostream & operator<<(std::ostream & out, const BasicExpression & expr);
+std::ostream & operator<<(std::ostream & out, const Expression & expr);
 
 // All these functions contain tricks to simplify the operands. This
 // means that both the operands may be changed, and indeed that the
@@ -246,20 +235,15 @@ std::ostream & operator<< (std::ostream & out, const Expression & expr);
 // in order not to touch the argument expressions.
 
 // add a link of b to a, return link to created expression
-Expression SumLink(Expression a,
-                   Expression b);
+Expression SumLink(Expression a, Expression b);
 // add a link of b to a with coeff -1, return link of a
-Expression DifferenceLink(Expression a,
-                          Expression b);
+Expression DifferenceLink(Expression a, Expression b);
 // multiply a by a link of b, return link of a
-Expression ProductLink(Expression a,
-                       Expression b);
+Expression ProductLink(Expression a, Expression b);
 // divide a by a link of b, return link of a
-Expression FractionLink(Expression a,
-                        Expression b);
+Expression FractionLink(Expression a, Expression b);
 // raise a to power b, return link of a
-Expression PowerLink(Expression a,
-                     Expression b);
+Expression PowerLink(Expression a, Expression b);
 // change sign to coeff of a, return link of a
 Expression MinusLink(Expression a);
 // other unary functions (of a):
@@ -297,17 +281,12 @@ Expression CotLink(Expression a);
 Expression CothLink(Expression a);
 
 // these are equivalent to the above but they don't change the arguments
-Expression operator + (Expression a,
-                       Expression b);
-Expression operator - (Expression a,
-                       Expression b);
-Expression operator * (Expression a,
-                       Expression b);
-Expression operator / (Expression a,
-                       Expression b);
-Expression operator ^ (Expression a,
-                       Expression b);
-Expression operator - (Expression a);
+Expression operator +(Expression a, Expression b);
+Expression operator -(Expression a, Expression b);
+Expression operator *(Expression a, Expression b);
+Expression operator /(Expression a, Expression b);
+Expression operator ^(Expression a, Expression b);
+Expression operator -(Expression a);
 Expression Sin(Expression a);
 Expression Cos(Expression a);
 Expression Tan(Expression a);
@@ -343,10 +322,8 @@ Expression Coth(Expression a);
 
 // symbolic differentiation of a w.r.t. variable with index vi,
 // return the created expression (a is not changed)
-Expression Diff(const Expression & a,
-                Int vi);
-Expression DiffNoSimplify(const Expression & ac,
-                          Int vi);
+Expression Diff(const Expression & a, Int vi);
+Expression DiffNoSimplify(const Expression & ac, Int vi);
 
 // SIMPLIFICATIONS - all simplifications return true if they were
 // effective or false if they weren't
@@ -371,5 +348,3 @@ void RecursiveDestroy(Expression* a);
 Expression SimplifyCopy(Expression* a, bool& ischanged);
 
 } /* namespace Ev3 */
-
-#endif /* __EV3EXPRESSIONH__ */

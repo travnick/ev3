@@ -10,8 +10,7 @@
 Common Public License.
 */
 
-#ifndef __EV3PARSERH__
-#define __EV3PARSERH__
+#pragma once
 
 #define _USE_MATH_DEFINES
 
@@ -28,9 +27,19 @@ namespace Ev3
 
 enum Token_value
 {
-  PEV3NAME, PEV3NUMBER, PEV3END, PEV3PLUS = '+', PEV3NLPLUS = '|',
-  PEV3MINUS = '-', PEV3MUL = '*', PEV3DIV = '/', PEV3POWER = '^',
-  PEV3PRINT = ';', PEV3ASSIGN = '=', PEV3LP = '(', PEV3RP = ')'
+  PEV3NAME,
+  PEV3NUMBER,
+  PEV3END,
+  PEV3PLUS = '+',
+  PEV3NLPLUS = '|',
+  PEV3MINUS = '-',
+  PEV3MUL = '*',
+  PEV3DIV = '/',
+  PEV3POWER = '^',
+  PEV3PRINT = ';',
+  PEV3ASSIGN = '=',
+  PEV3LP = '(',
+  PEV3RP = ')'
 };
 
 // constants
@@ -67,8 +76,7 @@ public:
   ExpressionParser();
 
   // set variable ID
-  void SetVariableID(const std::string & vname,
-                     const int vid);
+  void SetVariableID(const std::string & vname, const int vid);
 
   // get variable ID
   int GetVariableID(const std::string & vname);
@@ -77,14 +85,12 @@ public:
   std::string GetVariableName(const int vid);
 
   // driver evaluating routine (public method)
-  Expression Parse(const char* buf,
-                   int& nerrors);
+  Expression Parse(const char* buf, int& nerrors);
 
 private:
   // parser: report error (private method)
   double error(const std::string& s);
-  double error(const std::string& s,
-               const Token_value tk);
+  double error(const std::string& s, const Token_value tk);
 
   // parser: primary expressions (private method)
   Expression prim(const bool get);
@@ -102,8 +108,7 @@ private:
   Token_value get_token();
 
   // set variable ID (for internal use - doesn't set isinitialized)
-  void InternalSetVariableID(const std::string & vname,
-                             const int vid);
+  void InternalSetVariableID(const std::string & vname, const int vid);
 
   // check whether a string is a function name or an unknown variable
   bool IsVariableName(const std::string & vname);
@@ -111,9 +116,7 @@ private:
   // progressive vid
   int currentvid_;
 
-}; // end class ExpressionParser
+};
+// end class ExpressionParser
 
 } /* namespace Ev3 */
-
-#endif /* __EV3PARSERH__ */
-

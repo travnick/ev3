@@ -28,7 +28,8 @@ Operand::Operand() :
   depcoefficient_(NULL),
   exponent_(1),
   depexponent_(NULL)
-{ }
+{
+}
 
 Operand::Operand(double t) :
   oplabel_(CONST),
@@ -41,7 +42,8 @@ Operand::Operand(double t) :
   depcoefficient_(NULL),
   exponent_(1),
   depexponent_(NULL)
-{ }
+{
+}
 
 Operand::Operand(const Int t) :
   oplabel_(CONST),
@@ -54,10 +56,10 @@ Operand::Operand(const Int t) :
   depcoefficient_(NULL),
   exponent_(1),
   depexponent_(NULL)
-{ }
+{
+}
 
-Operand::Operand(const Int t,
-                 const bool isvar) :
+Operand::Operand(const Int t, const bool isvar) :
   dependency_(0),
   depconstant_(NULL),
   coefficient_(1),
@@ -75,16 +77,14 @@ Operand::Operand(const Int t,
   else
   {
     // make it an operator label
-    oplabel_ = static_cast< int > (t);
+    oplabel_ = static_cast<int>(t);
     constant_ = 0;
     varindex_ = NOVARIABLE;
   }
 }
 
 // create an (empty) operator or a variable leaf and set coefficient
-Operand::Operand(const double c,
-                 const Int t,
-                 const std::string & vn) :
+Operand::Operand(const double c, const Int t, const std::string & vn) :
   coefficient_(c),
   exponent_(1)
 {
@@ -101,7 +101,7 @@ Operand::Operand(const double c,
 
 // Operand class methods:
 
-std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
+std::ostream & operator<<(std::ostream & outbuf, const Operand & operand)
 {
   std::string vn;
   if (operand.GetCoeff() == 0)
@@ -136,11 +136,11 @@ std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
         vn = operand.GetVarName();
         if (operand.GetExponent() == 1)
         {
-          outbuf << vn;// << VNAMEIDXCHAR << vi;
+          outbuf << vn; // << VNAMEIDXCHAR << vi;
         } // GetExponent() == 1
         else
         {
-          outbuf << vn/* << VNAMEIDXCHAR << vi*/ << "^" << operand.GetExponent();
+          outbuf << vn/* << VNAMEIDXCHAR << vi*/<< "^" << operand.GetExponent();
         } // GetExponent() != 1
       } // vi != NOVARIABLE
     } // GetCoeff() == 1
@@ -151,12 +151,12 @@ std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
       {
         if (operand.GetExponent() == 1)
         {
-          outbuf  << operand.GetCoeff() << "*_" << NOTVARNAME;
+          outbuf << operand.GetCoeff() << "*_" << NOTVARNAME;
         }
         else
         {
-          outbuf  << operand.GetCoeff() << "*" << NOTVARNAME << "^"
-                  << operand.GetExponent();
+          outbuf << operand.GetCoeff() << "*" << NOTVARNAME << "^"
+            << operand.GetExponent();
         }
       } // vi == NOVARIABLE
       else
@@ -164,12 +164,12 @@ std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
         vn = operand.GetVarName();
         if (operand.GetExponent() == 1)
         {
-          outbuf << operand.GetCoeff() << "*" << vn;// << VNAMEIDXCHAR << vi;
+          outbuf << operand.GetCoeff() << "*" << vn; // << VNAMEIDXCHAR << vi;
         } // GetExponent() == 1
         else
         {
-          outbuf << operand.GetCoeff() << "*" << vn/* << VNAMEIDXCHAR << vi*/ << "^"
-                 << operand.GetExponent();
+          outbuf << operand.GetCoeff() << "*" << vn
+            /* << VNAMEIDXCHAR << vi*/<< "^" << operand.GetExponent();
         } // GetExponent() != 1
       } // vi != NOVARIABLE
     } // GetCoeff() != 1
@@ -200,18 +200,24 @@ double Operand::GetValue() const
 {
   if ((oplabel_ == CONST) && (dependency_ == 0))
   {
-    if (exponent_ == 1) return coefficient_ * constant_;
-    else if (exponent_ == 2) return coefficient_ * constant_ * constant_;
-    else return coefficient_ * pow(constant_, exponent_);
+    if (exponent_ == 1)
+      return coefficient_ * constant_;
+    else if (exponent_ == 2)
+      return coefficient_ * constant_ * constant_;
+    else
+      return coefficient_ * pow(constant_, exponent_);
   }
-  else if ((oplabel_ == CONST) && (dependency_ == 1) && depconstant_) return *depconstant_;
-  else return constant_;
+  else if ((oplabel_ == CONST) && (dependency_ == 1) && depconstant_)
+    return *depconstant_;
+  else
+    return constant_;
 }
 
 // just get the value in any case
 double Operand::GetSimpleValue() const
 {
-  if ((dependency_ == 1) && depconstant_) return *depconstant_;
+  if ((dependency_ == 1) && depconstant_)
+    return *depconstant_;
   return constant_;
 }
 
@@ -279,8 +285,10 @@ void Operand::SetCoeff(const double coeff)
 
 double Operand::GetCoeff() const
 {
-  if ((dependency_ == 2) && depcoefficient_) return *depcoefficient_;
-  else return coefficient_;
+  if ((dependency_ == 2) && depcoefficient_)
+    return *depcoefficient_;
+  else
+    return coefficient_;
 }
 
 void Operand::SetExponent(const double expon)
@@ -290,15 +298,16 @@ void Operand::SetExponent(const double expon)
 
 double Operand::GetExponent() const
 {
-  if ((dependency_ == 3) && depexponent_) return *depexponent_;
-  else return exponent_;
+  if ((dependency_ == 3) && depexponent_)
+    return *depexponent_;
+  else
+    return exponent_;
 }
 
-void Operand::SetDependencyOnOperand(const int whichconstant,
-                                     double** depvalue)
+void Operand::SetDependencyOnOperand(const int whichconstant, double** depvalue)
 {
   dependency_ = whichconstant + 1;
-  switch(dependency_)
+  switch (dependency_)
   {
     case 1:
       depconstant_ = *depvalue;
@@ -314,7 +323,7 @@ void Operand::SetDependencyOnOperand(const int whichconstant,
 
 void Operand::EnforceDependencyOnOperand()
 {
-  switch(dependency_)
+  switch (dependency_)
   {
     case 1:
       constant_ = *depconstant_;
@@ -338,45 +347,47 @@ void Operand::ConsolidateValue()
 // is operand a zero constant?
 bool Operand::IsZero() const
 {
-  if (GetOpType() == CONST) return (fabs(GetValue()) < Ev3NearZero());
+  if (GetOpType() == CONST)
+    return (fabs(GetValue()) < Ev3NearZero());
   return false;
 }
 
 // is operand a constant having value v?
 bool Operand::HasValue(const double v) const
 {
-  if (GetOpType() == CONST) return (fabs(v - GetValue()) < Ev3NearZero());
+  if (GetOpType() == CONST)
+    return (fabs(v - GetValue()) < Ev3NearZero());
   return false;
 }
 
 // is operand a negative constant?
 bool Operand::IsLessThan(const double v) const
 {
-  if (GetOpType() == CONST) return (GetValue() < v + Ev3NearZero());
+  if (GetOpType() == CONST)
+    return (GetValue() < v + Ev3NearZero());
   return false;
 }
 
 // is operand a negative constant?
 bool Operand::IsGreaterThan(const double v) const
 {
-  if (GetOpType() == CONST) return (GetValue() > v - Ev3NearZero());
+  if (GetOpType() == CONST)
+    return (GetValue() > v - Ev3NearZero());
   return false;
 }
 
-
 // is operand this == operand t?
-bool Operand::operator == (const Operand & t)
+bool Operand::operator ==(const Operand & t)
 {
-  if (this == &t) return true;
+  if (this == &t)
+    return true;
   // not the same operand - check data fields
-  return (GetOpType() == t.GetOpType() &&
-          GetValue() == t.GetValue() &&
-          GetVarIndex() == t.GetVarIndex());
+  return (GetOpType() == t.GetOpType() && GetValue() == t.GetValue()
+    && GetVarIndex() == t.GetVarIndex());
 }
 
 // substitute a variable with a constant
-void Operand::SubstituteVariableWithConstant(const int varindex,
-    const double c)
+void Operand::SubstituteVariableWithConstant(const int varindex, const double c)
 {
   if ((GetOpType() == VAR) && (GetVarIndex() == varindex))
   {

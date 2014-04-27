@@ -7,8 +7,7 @@
  * License:    Code published under the Common Public License.         *
 ***********************************************************************/
 
-#ifndef __EV3OPERANDH__
-#define __EV3OPERANDH__
+#pragma once
 
 #include <sstream>
 
@@ -62,12 +61,9 @@ public:
   Operand();
   explicit Operand(const double t);
   explicit Operand(const Int t);
-  Operand(const Int t,
-          const bool isvar);
+  Operand(const Int t, const bool isvar);
   // create a variable leaf and set coefficient
-  Operand(const double c,
-          const Int t,
-          const std::string & vn);
+  Operand(const double c, const Int t, const std::string & vn);
 
   // Operand class methods:
 
@@ -116,8 +112,7 @@ public:
   void SetCoeff(const double coeff);
 
   // set constant dependencies (added for MORON - see ../PROGNOTES)
-  void SetDependencyOnOperand(const int whichconstant,
-                              double** depvalue);
+  void SetDependencyOnOperand(const int whichconstant, double** depvalue);
 
   // is operand a constant?
   bool IsConstant() const;
@@ -147,16 +142,13 @@ public:
   void EnforceDependencyOnOperand();
 
   // is operand this == operand t?
-  bool operator == (const Operand & t);
+  bool operator ==(const Operand & t);
 
   // substitute a variable with a constant
-  void SubstituteVariableWithConstant(const int varindex,
-                                      const double c);
+  void SubstituteVariableWithConstant(const int varindex, const double c);
 
 };
 
-std::ostream & operator<< (std::ostream & out, const Operand & operand);
+std::ostream & operator<<(std::ostream & out, const Operand & operand);
 
 } /* namespace Ev3 */
-
-#endif /* __EV3OPERANDHXX__ */

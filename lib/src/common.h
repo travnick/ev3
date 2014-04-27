@@ -8,8 +8,7 @@
                Common Public License.
 ***********************************************************************/
 
-#ifndef __EV3COMMONH__
-#define __EV3COMMONH__
+#pragma once
 
 #define NOVARIABLE -1
 #define LARGE 1E10
@@ -22,14 +21,47 @@ typedef int Int;
 // various operator types
 enum OperatorType
 {
-  SUM, DIFFERENCE, PRODUCT, FRACTION, POWER,
-  PLUS, MINUS, SIN, COS, TAN, ASIN, ACOS,
-  ATAN, SINH, COSH, TANH, ASINH, ACOSH,
-  ATANH, LOG2, LOG10, LOG, LN, LNGAMMA,
-  GAMMA, EXP, ERF, ERFC, SQRT, CBRT,
-  BESSELJ0, BESSELJ1, BESSELY0, BESSELY1,
-  SIGN, RINT, ABS, COT, COTH,
-  VAR, CONST,
+  SUM,
+  DIFFERENCE,
+  PRODUCT,
+  FRACTION,
+  POWER,
+  PLUS,
+  MINUS,
+  SIN,
+  COS,
+  TAN,
+  ASIN,
+  ACOS,
+  ATAN,
+  SINH,
+  COSH,
+  TANH,
+  ASINH,
+  ACOSH,
+  ATANH,
+  LOG2,
+  LOG10,
+  LOG,
+  LN,
+  LNGAMMA,
+  GAMMA,
+  EXP,
+  ERF,
+  ERFC,
+  SQRT,
+  CBRT,
+  BESSELJ0,
+  BESSELJ1,
+  BESSELY0,
+  BESSELY1,
+  SIGN,
+  RINT,
+  ABS,
+  COT,
+  COTH,
+  VAR,
+  CONST,
   ERROR
 };
 
@@ -46,5 +78,3 @@ T log2(T arg)
   return log(arg) / log(2);
 }
 #endif
-
-#endif /* __EV3COMMONH__ */

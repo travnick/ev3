@@ -8,8 +8,7 @@
                Common Public License.
 ***********************************************************************/
 
-#ifndef __EV3EXCEPTIONSH__
-#define __EV3EXCEPTIONSH__
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -29,6 +28,7 @@ public:
   std::string operation_;
   std::string description_;
   std::string moreinfo_;
+
   ErrBase() :
     code_(0),
     interface_(NONE),
@@ -39,6 +39,7 @@ public:
   {
     STDACTION;
   }
+
   ErrBase(const unsigned long mycode,
           const std::string & myif,
           const std::string & myscope,
@@ -90,6 +91,7 @@ class ErrDivideByZero : public ErrBase
 {
 public:
   std::string dividend;
+
   ErrDivideByZero(const unsigned long mycode,
                   const std::string & myif,
                   const std::string & myscope,
@@ -104,4 +106,3 @@ public:
   }
 };
 } /* namespace Ev3 */
-#endif /* __EV3EXCEPTIONSH__ */

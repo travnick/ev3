@@ -16,16 +16,15 @@ Common Public License.
 namespace Ev3
 {
 
-ExpressionParser::ExpressionParser()
-  : input_(0)
+ExpressionParser::ExpressionParser() :
+  input_(0)
 {
   isinitialized_ = false;
   currentvid_ = 1;
 }
 
 // set variable ID
-void ExpressionParser::SetVariableID(const std::string & vname,
-                                     const int vid)
+void ExpressionParser::SetVariableID(const std::string & vname, const int vid)
 {
   isinitialized_ = true;
   variable_[vname] = vid;
@@ -34,7 +33,7 @@ void ExpressionParser::SetVariableID(const std::string & vname,
 
 // set variable ID for internal use
 void ExpressionParser::InternalSetVariableID(const std::string & vname,
-    const int vid)
+                                             const int vid)
 {
   variable_[vname] = vid;
   varname_[vid] = vname;
@@ -43,14 +42,17 @@ void ExpressionParser::InternalSetVariableID(const std::string & vname,
 // get variable ID
 int ExpressionParser::GetVariableID(const std::string & vname)
 {
-  if (variable_.find(vname) != variable_.end()) return variable_[vname];
-  else return (IsVariableName(vname) ? PEV3UNKNOWNVAR : PEV3NOVARIABLE);
+  if (variable_.find(vname) != variable_.end())
+    return variable_[vname];
+  else
+    return (IsVariableName(vname) ? PEV3UNKNOWNVAR : PEV3NOVARIABLE);
 }
 
 // get variable name
 std::string ExpressionParser::GetVariableName(const int vid)
 {
-  if (varname_.find(vid) != varname_.end()) return varname_[vid];
+  if (varname_.find(vid) != varname_.end())
+    return varname_[vid];
   return NOTVARNAME;
 }
 
@@ -89,8 +91,7 @@ bool ExpressionParser::IsVariableName(const std::string & vname)
 }
 
 // driver evaluating routine (public method)
-Expression ExpressionParser::Parse(const char* buf,
-                                   int & nerrors)
+Expression ExpressionParser::Parse(const char* buf, int & nerrors)
 {
   curr_tok_ = PEV3PRINT;
   Expression ret;
@@ -104,15 +105,17 @@ Expression ExpressionParser::Parse(const char* buf,
   while (*input_)
   {
     get_token();
-    switch(curr_tok_)
+    switch (curr_tok_)
     {
       case PEV3END:
         break;
       case PEV3PRINT:
         continue;
       case PEV3RP:
-        if (no_of_functions_ == 0) error("primary expected, found", curr_tok_);
-        else --no_of_functions_;
+        if (no_of_functions_ == 0)
+          error("primary expected, found", curr_tok_);
+        else
+          --no_of_functions_;
         continue;
       default:
         ret = expr(false);
@@ -130,8 +133,7 @@ double ExpressionParser::error(const std::string & s)
   ++no_of_errors_;
   return 0;
 }
-double ExpressionParser::error(const std::string & s,
-                               const Token_value tk)
+double ExpressionParser::error(const std::string & s, const Token_value tk)
 {
   ++no_of_errors_;
   return 0;
@@ -141,7 +143,8 @@ double ExpressionParser::error(const std::string & s,
 Expression ExpressionParser::prim(const bool get)
 {
   Expression ret;
-  if (get) get_token();
+  if (get)
+    get_token();
 
   switch (curr_tok_)
   {
@@ -150,7 +153,7 @@ Expression ExpressionParser::prim(const bool get)
       ret = Expression(number_value_);
       get_token();
     }
-    break;
+      break;
     case PEV3NAME:
     {
       int vid = GetVariableID(string_value_);
@@ -185,38 +188,70 @@ Expression ExpressionParser::prim(const bool get)
           std::string s(string_value_);
           ++no_of_functions_;
           ret = expr(true);
-          if (s == "sin") ret = SinLink(ret);
-          else if (s == "cos") ret = CosLink(ret);
-          else if (s == "tan") ret = TanLink(ret);
-          else if (s == "acos") ret = AcosLink(ret);
-          else if (s == "asin") ret = AsinLink(ret);
-          else if (s == "atan") ret = AtanLink(ret);
-          else if (s == "sinh") ret = SinhLink(ret);
-          else if (s == "cosh") ret = CoshLink(ret);
-          else if (s == "tanh") ret = TanhLink(ret);
-          else if (s == "asinh") ret = AsinhLink(ret);
-          else if (s == "acosh") ret = AcoshLink(ret);
-          else if (s == "atanh") ret = AtanhLink(ret);
-          else if (s == "log2") ret = Log2Link(ret);
-          else if (s == "log10") ret = Log10Link(ret);
-          else if (s == "log") ret = LogLink(ret);
-          else if (s == "ln") ret = LogLink(ret);
-          else if (s == "lngamma") ret = LngammaLink(ret);
-          else if (s == "gamma") ret = GammaLink(ret);
-          else if (s == "exp") ret = ExpLink(ret);
-          else if (s == "erf") ret = ErfLink(ret);
-          else if (s == "erfc") ret = ErfcLink(ret);
-          else if (s == "sqrt") ret = SqrtLink(ret);
-          else if (s == "cbrt") ret = CbrtLink(ret);
-          else if (s == "besselJ0") ret = BesselJ0Link(ret);
-          else if (s == "besselJ1") ret = BesselJ1Link(ret);
-          else if (s == "besselY0") ret = BesselY0Link(ret);
-          else if (s == "besselY1") ret = BesselY1Link(ret);
-          else if (s == "sign") ret = SignLink(ret);
-          else if (s == "rint") ret = RintLink(ret);
-          else if (s == "abs") ret = AbsLink(ret);
-          else error("unknown function");
-          if (curr_tok_ != PEV3RP) error("bracket ) expected for end-of-function");
+          if (s == "sin")
+            ret = SinLink(ret);
+          else if (s == "cos")
+            ret = CosLink(ret);
+          else if (s == "tan")
+            ret = TanLink(ret);
+          else if (s == "acos")
+            ret = AcosLink(ret);
+          else if (s == "asin")
+            ret = AsinLink(ret);
+          else if (s == "atan")
+            ret = AtanLink(ret);
+          else if (s == "sinh")
+            ret = SinhLink(ret);
+          else if (s == "cosh")
+            ret = CoshLink(ret);
+          else if (s == "tanh")
+            ret = TanhLink(ret);
+          else if (s == "asinh")
+            ret = AsinhLink(ret);
+          else if (s == "acosh")
+            ret = AcoshLink(ret);
+          else if (s == "atanh")
+            ret = AtanhLink(ret);
+          else if (s == "log2")
+            ret = Log2Link(ret);
+          else if (s == "log10")
+            ret = Log10Link(ret);
+          else if (s == "log")
+            ret = LogLink(ret);
+          else if (s == "ln")
+            ret = LogLink(ret);
+          else if (s == "lngamma")
+            ret = LngammaLink(ret);
+          else if (s == "gamma")
+            ret = GammaLink(ret);
+          else if (s == "exp")
+            ret = ExpLink(ret);
+          else if (s == "erf")
+            ret = ErfLink(ret);
+          else if (s == "erfc")
+            ret = ErfcLink(ret);
+          else if (s == "sqrt")
+            ret = SqrtLink(ret);
+          else if (s == "cbrt")
+            ret = CbrtLink(ret);
+          else if (s == "besselJ0")
+            ret = BesselJ0Link(ret);
+          else if (s == "besselJ1")
+            ret = BesselJ1Link(ret);
+          else if (s == "besselY0")
+            ret = BesselY0Link(ret);
+          else if (s == "besselY1")
+            ret = BesselY1Link(ret);
+          else if (s == "sign")
+            ret = SignLink(ret);
+          else if (s == "rint")
+            ret = RintLink(ret);
+          else if (s == "abs")
+            ret = AbsLink(ret);
+          else
+            error("unknown function");
+          if (curr_tok_ != PEV3RP)
+            error("bracket ) expected for end-of-function");
           else
           {
             --no_of_functions_;
@@ -225,17 +260,19 @@ Expression ExpressionParser::prim(const bool get)
         } // if (tk == PEV3LP)
       }
     } // case PEV3NAME:
-    break;
+      break;
     case PEV3MINUS:
       ret = MinusLink(prim(true));
       break;
     case PEV3LP:
     {
       ret = expr(true);
-      if (curr_tok_ != PEV3RP) error("bracket ) expected");
-      else get_token();
+      if (curr_tok_ != PEV3RP)
+        error("bracket ) expected");
+      else
+        get_token();
     }
-    break;
+      break;
     default:
       error("primary expected, found", curr_tok_);
   }
@@ -314,7 +351,7 @@ Token_value ExpressionParser::get_token()
       return curr_tok_ = PEV3END;
   }
   while (ch != '\n' && isspace(ch));
-  switch(ch)
+  switch (ch)
   {
     case ';':
     case '\n':

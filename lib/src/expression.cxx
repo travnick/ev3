@@ -84,70 +84,90 @@ double Ev3Infinity()
 }
 
 // create empty
-BasicExpression::BasicExpression() { }
+BasicExpression::BasicExpression()
+{
+}
 
 // create a constant leaf
-BasicExpression::BasicExpression(const double t) : Operand(t) { }
+BasicExpression::BasicExpression(const double t) :
+  Operand(t)
+{
+}
 
 // create a constant (integer-valued) leaf
-BasicExpression::BasicExpression(const Int t) : Operand(t) { }
+BasicExpression::BasicExpression(const Int t) :
+  Operand(t)
+{
+}
 
 // create an (empty) operator or a variable leaf
-BasicExpression::BasicExpression(const Int t,
-                                 const bool isvar) :
-  Operand(t, isvar) { }
+BasicExpression::BasicExpression(const Int t, const bool isvar) :
+  Operand(t, isvar)
+{
+}
 
 // create a variable leaf and set coefficient
 BasicExpression::BasicExpression(const double c,
                                  const Int t,
                                  const std::string & vn) :
-  Operand(c, t, vn) { }
+  Operand(c, t, vn)
+{
+}
 
 // user-defined copy constructor with two options
-BasicExpression::BasicExpression(const Expression & t,
-                                 const bool iscopy) :
+BasicExpression::BasicExpression(const Expression & t, const bool iscopy) :
   Operand(t.GetPointee())
 {
   const Int s = t->GetSize();
   // create a _copy_ of t, subnode by subnode
-  if (iscopy) for (int i = 0; i < s; i++) nodes.push_back(t->GetCopyOfNode(i));
+  if (iscopy)
+    for (int i = 0; i < s; i++)
+      nodes.push_back(t->GetCopyOfNode(i));
   // create a copy of the pointers in t
-  else for (int i = 0; i < s; i++) nodes.push_back(t->GetNode(i));
+  else
+    for (int i = 0; i < s; i++)
+      nodes.push_back(t->GetNode(i));
 }
 
 // copy constructor
-BasicExpression::BasicExpression(const BasicExpression & t) : Operand(t)
+BasicExpression::BasicExpression(const BasicExpression & t) :
+  Operand(t)
 {
   const Int s = t.GetSize();
   // necessary for constructs "(BasicExpression) e =" where e already
   // existed prior to assignment
   // -- segvs (?)
-  for(int i = 0; i < GetSize(); i++) RecursiveDestroy(GetNodePtr(i));
+  for (int i = 0; i < GetSize(); i++)
+    RecursiveDestroy(GetNodePtr(i));
   DeleteAllNodes();
   // create a copy of the subnode pointers in t
-  for (int i = 0; i < s; i++) nodes.push_back(t.GetNode(i));
+  for (int i = 0; i < s; i++)
+    nodes.push_back(t.GetNode(i));
 }
 
 // destructor
-BasicExpression::~BasicExpression() { }
+BasicExpression::~BasicExpression()
+{
+}
 
 // BasicExpression class methods:
 
-
-void BasicExpression::Debug () const
+void BasicExpression::Debug() const
 {
   Int s = GetSize();
   std::cerr << "BasicExpression: Debug:\n";
   std::cerr << "\tthis   = " << this << std::endl;
   std::cerr << "\toptype = " << GetOpType() << std::endl;
   std::cerr << "\tnodes  = " << s << std::endl;
-  for (Int i = 0; i < s; i++) std::cerr << "\tnode " << i << ": " << GetNode(i)->GetOpType() << std::endl;
+  for (Int i = 0; i < s; i++)
+    std::cerr << "\tnode " << i << ": " << GetNode(i)->GetOpType() << std::endl;
 }
 
 void BasicExpression::Zero()
 {
   // -- segvs (?)
-  for(int i = 0; i < GetSize(); i++) RecursiveDestroy(GetNodePtr(i));
+  for (int i = 0; i < GetSize(); i++)
+    RecursiveDestroy(GetNodePtr(i));
   DeleteAllNodes();
   SetCoeff(1.0);
   SetExponent(1.0);
@@ -158,7 +178,8 @@ void BasicExpression::Zero()
 void BasicExpression::One()
 {
   // -- segvs (?)
-  for(int i = 0; i < GetSize(); i++) RecursiveDestroy(GetNodePtr(i));
+  for (int i = 0; i < GetSize(); i++)
+    RecursiveDestroy(GetNodePtr(i));
   DeleteAllNodes();
   SetCoeff(1.0);
   SetExponent(1.0);
@@ -166,16 +187,16 @@ void BasicExpression::One()
   SetOpType(CONST);
 }
 
-std::string BasicExpression::PrintTree(const int blanks,
-                                       const int tabs) const
+std::string BasicExpression::PrintTree(const int blanks, const int tabs) const
 {
   std::stringstream outbuf;
   std::string b(blanks, ' ');
-  if (IsLeaf()) outbuf << b << Operand::ToString();
+  if (IsLeaf())
+    outbuf << b << Operand::ToString();
   else
   {
     outbuf << b << "OP[" << GetOpType() << "](" << std::endl;
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       outbuf << GetNode(i)->PrintTree(blanks + tabs, tabs);
       if (i < GetSize() - 1)
@@ -189,8 +210,7 @@ std::string BasicExpression::PrintTree(const int blanks,
   return outbuf.str();
 }
 
-
-std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
+std::ostream & operator<<(std::ostream & outbuf, const BasicExpression & expr)
 {
   Int i, s;
   if (expr.IsLeaf())
@@ -201,14 +221,16 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
   }
   else
   {
-    double tc( expr.GetCoeff());
+    double tc(expr.GetCoeff());
     // operator node
     if (tc != 1)
     {
-      if (tc != -1) outbuf << "(" << tc << "*(";
-      else outbuf << "(-(";
+      if (tc != -1)
+        outbuf << "(" << tc << "*(";
+      else
+        outbuf << "(-(";
     }
-    s =  expr.GetSize();
+    s = expr.GetSize();
     if (s > 1)
     {
       for (i = 0; i < s; i++)
@@ -216,7 +238,7 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
         outbuf << "(" << expr.GetNode(i) << ")";
         if (i < s - 1)
         {
-          switch( expr.GetOpType())
+          switch (expr.GetOpType())
           {
             case SUM:
               outbuf << "+";
@@ -242,7 +264,7 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
     }
     else
     {
-      switch( expr.GetOpType())
+      switch (expr.GetOpType())
       {
         case PLUS:
           break;
@@ -358,14 +380,13 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
         outbuf << "(NOARG)";
       }
     }
-    if ( expr.GetCoeff() != 1)
+    if (expr.GetCoeff() != 1)
     {
       outbuf << "))";
     }
   }
   return outbuf;
 }
-
 
 std::string BasicExpression::ToString() const
 {
@@ -374,7 +395,7 @@ std::string BasicExpression::ToString() const
   return outbuf.str();
 }
 
-std::ostream & operator<< (std::ostream & outbuf, const Expression & expr)
+std::ostream & operator<<(std::ostream & outbuf, const Expression & expr)
 {
   outbuf << expr.GetPointee();
   return outbuf;
@@ -407,7 +428,7 @@ bool BasicExpression::IsEqualTo(const Expression& t) const
     return false;
 }
 
-bool BasicExpression::operator == (const BasicExpression& t) const
+bool BasicExpression::operator ==(const BasicExpression& t) const
 {
   // fast checks
   if (IsLeaf() && t.IsLeaf())
@@ -419,8 +440,8 @@ bool BasicExpression::operator == (const BasicExpression& t) const
         // if both are constants, they're always equal up to coefficient
         return true;
       }
-      else if (GetOpType() == VAR && GetVarIndex() == t.GetVarIndex() &&
-               GetExponent() == t.GetExponent())
+      else if (GetOpType() == VAR && GetVarIndex() == t.GetVarIndex()
+        && GetExponent() == t.GetExponent())
         return true;
       else
         return false;
@@ -481,7 +502,7 @@ int BasicExpression::NumberOfVariables(int& maxvi) const
   }
   else if (!IsLeaf())
   {
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       newvi = GetNode(i)->NumberOfVariables(maxvi);
       if (newvi > maxvi)
@@ -496,7 +517,6 @@ int BasicExpression::NumberOfVariables(int& maxvi) const
     return 0;
   }
 }
-
 
 // taken and adapted from operator ==
 bool BasicExpression::IsEqualToNoCoeff(const Expression & t) const
@@ -513,21 +533,22 @@ bool BasicExpression::IsEqualToNoCoeff(const Expression & t) const
       }
       else
       {
-        if (GetOpType() == VAR && GetVarIndex() == t->GetVarIndex() &&
-            GetExponent() == t->GetExponent())
+        if (GetOpType() == VAR && GetVarIndex() == t->GetVarIndex()
+          && GetExponent() == t->GetExponent())
           return true;
         else
           return false;
       }
     }
-    else return false;
+    else
+      return false;
   }
   else if ((!IsLeaf()) && (!t->IsLeaf()))
   {
     // both BasicExpressions are not leaves, recurse using PRECISE
     // (i.e. not up to coefficient) form
-    if (GetSize() != t->GetSize() || GetOpType() != t->GetOpType() ||
-        GetExponent() != t->GetExponent())
+    if (GetSize() != t->GetSize() || GetOpType() != t->GetOpType()
+      || GetExponent() != t->GetExponent())
     {
       return false;
     }
@@ -555,8 +576,7 @@ bool BasicExpression::IsEqualBySchema(const Expression& t) const
 {
   if (IsLeaf() && t->IsLeaf())
   {
-    if (GetOpType() == t->GetOpType() &&
-        IsLinear() == t->IsLinear())
+    if (GetOpType() == t->GetOpType() && IsLinear() == t->IsLinear())
     {
       return true;
     }
@@ -664,10 +684,10 @@ int BasicExpression::DependsLinearlyOnVariable(Int vi) const
     int d;
     bool dependsatall = false;
     // if node is linear:
-    if (GetOpType() == SUM || GetOpType() == DIFFERENCE ||
-        GetOpType() == PLUS || GetOpType() == MINUS)
+    if (GetOpType() == SUM || GetOpType() == DIFFERENCE || GetOpType() == PLUS
+      || GetOpType() == MINUS)
     {
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         d = GetNode(i)->DependsLinearlyOnVariable(vi);
         if (d == 0)
@@ -735,7 +755,7 @@ void BasicExpression::DistributeCoeffOverSum()
     {
       SetCoeff(1.0);
       Int i;
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         GetNode(i)->SetCoeff(tc * GetNode(i)->GetCoeff());
         GetNode(i)->DistributeCoeffOverSum();
@@ -778,8 +798,7 @@ void BasicExpression::EnforceDependency()
 }
 
 // substitute a variable with a constant
-void BasicExpression::VariableToConstant(int varindex,
-    double c)
+void BasicExpression::VariableToConstant(int varindex, double c)
 {
   if (IsLeaf())
   {
@@ -798,9 +817,7 @@ void BasicExpression::VariableToConstant(int varindex,
 }
 
 // replace variable indexed v1 with variable indexed v2
-void BasicExpression::ReplaceVariable(int v1,
-                                      int v2,
-                                      const std::string & vn)
+void BasicExpression::ReplaceVariable(int v1, int v2, const std::string & vn)
 {
   if (DependsOnVariable(v1))
   {
@@ -812,7 +829,7 @@ void BasicExpression::ReplaceVariable(int v1,
     else
     {
       int i;
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         GetNode(i)->ReplaceVariable(v1, v2, vn);
       }
@@ -835,7 +852,7 @@ void BasicExpression::ReplaceVariable(int v1,
     else
     {
       int i;
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         GetNode(i)->ReplaceVariable(v1, v2, vn, c2);
       }
@@ -846,8 +863,8 @@ void BasicExpression::ReplaceVariable(int v1,
 // replace with a variable the deepest node conforming to schema and
 // return replaced term or zero expression if no replacement occurs
 Expression BasicExpression::ReplaceBySchema(int vi,
-    const std::string & vn,
-    const Expression & schema)
+                                            const std::string & vn,
+                                            const Expression & schema)
 {
   Expression ret(0.0);
   ret = ReplaceBySchemaRecursive(vi, vn, schema);
@@ -861,7 +878,7 @@ Expression BasicExpression::ReplaceBySchema(int vi,
       ret.SetToCopyOf(*this);
       // replace with w_vi
       // -- segvs (?)
-      for(int i = 0; i < GetSize(); i++)
+      for (int i = 0; i < GetSize(); i++)
       {
         RecursiveDestroy(GetNodePtr(i));
       }
@@ -878,12 +895,12 @@ Expression BasicExpression::ReplaceBySchema(int vi,
 
 // recursive version - works on subnodes, not on current node
 Expression BasicExpression::ReplaceBySchemaRecursive(int vi,
-    const std::string & vn,
-    const Expression & schema)
+                                                     const std::string & vn,
+                                                     const Expression & schema)
 {
   bool done = false;
   Expression ret(0.0);
-  for(int i = 0; i < GetSize(); i++)
+  for (int i = 0; i < GetSize(); i++)
   {
     if (!GetNode(i)->IsLeaf())
     {
@@ -912,8 +929,8 @@ Expression BasicExpression::ReplaceBySchemaRecursive(int vi,
 // replace with a variable the deepest node with given operator label
 // return replaced term or zero expression if no replacement occurs
 Expression BasicExpression::ReplaceByOperator(int vi,
-    const std::string & vn,
-    int theoplabel)
+                                              const std::string & vn,
+                                              int theoplabel)
 {
   Expression ret(0.0);
   ret = ReplaceByOperatorRecursive(vi, vn, theoplabel);
@@ -927,7 +944,7 @@ Expression BasicExpression::ReplaceByOperator(int vi,
       ret.SetToCopyOf(*this);
       // replace with w_vi
       // -- segvs
-      for(int i = 0; i < GetSize(); i++)
+      for (int i = 0; i < GetSize(); i++)
       {
         RecursiveDestroy(GetNodePtr(i));
       }
@@ -944,12 +961,12 @@ Expression BasicExpression::ReplaceByOperator(int vi,
 
 // recursive version - works on subnodes, not on current node
 Expression BasicExpression::ReplaceByOperatorRecursive(int vi,
-    const std::string & vn,
-    int theoplabel)
+                                                       const std::string & vn,
+                                                       int theoplabel)
 {
   bool done = false;
   Expression ret(0.0);
-  for(int i = 0; i < GetSize(); i++)
+  for (int i = 0; i < GetSize(); i++)
   {
     if (!GetNode(i)->IsLeaf())
     {
@@ -979,10 +996,10 @@ Expression BasicExpression::ReplaceByOperatorRecursive(int vi,
 void BasicExpression::ReplaceWithExpression(const Expression & replace)
 {
   /* // -- segvs (?)
-     for(int i = 0; i < GetSize(); i++) {
-     RecursiveDestroy(GetNodePtr(i));
-     }
-  */
+   for(int i = 0; i < GetSize(); i++) {
+   RecursiveDestroy(GetNodePtr(i));
+   }
+   */
   DeleteAllNodes();
   if (replace->GetOpType() == VAR)
   {
@@ -1007,15 +1024,14 @@ void BasicExpression::ReplaceWithExpression(const Expression & replace)
   }
 }
 
-
 int BasicExpression::ReplaceSubexpression(const Expression & needle,
-    const Expression & replace)
+                                          const Expression & replace)
 {
   int ret = 0;
   if (!IsLeaf())
   {
     // recurse
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       ret += GetNode(i)->ReplaceSubexpression(needle, replace);
     }
@@ -1029,14 +1045,12 @@ int BasicExpression::ReplaceSubexpression(const Expression & needle,
   return ret;
 }
 
-void BasicExpression::ResetVarNames(const std::string & vn,
-                                    int lid,
-                                    int uid)
+void BasicExpression::ResetVarNames(const std::string & vn, int lid, int uid)
 {
   // set all variable names in the expression to vn
   if (!IsLeaf())
   {
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       GetNode(i)->ResetVarNames(vn, lid, uid);
     }
@@ -1054,14 +1068,13 @@ void BasicExpression::ResetVarNames(const std::string & vn,
   }
 }
 
-
 bool BasicExpression::DistributeProductsOverSums()
 {
   // recursive part
   bool ret = false;
   if (!IsLeaf())
   {
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       bool haschanged = GetNode(i)->DistributeProductsOverSums();
       if (haschanged)
@@ -1074,7 +1087,7 @@ bool BasicExpression::DistributeProductsOverSums()
   Expression e(0.0);
   if (GetOpType() == PRODUCT)
   {
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       if (GetNode(i)->GetOpType() == SUM)
       {
@@ -1082,7 +1095,7 @@ bool BasicExpression::DistributeProductsOverSums()
         ret = true;
         Expression f = (*this) / GetNode(i);
         Simplify(&f);
-        for(int j = 0; j < GetNode(i)->GetSize(); j++)
+        for (int j = 0; j < GetNode(i)->GetSize(); j++)
         {
           e = e + f * GetNode(i)->GetNode(j);
         }
@@ -1098,7 +1111,7 @@ void BasicExpression::GetVarIndices(std::vector<int> & vidx)
 {
   if (!IsLeaf())
   {
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       GetNode(i)->GetVarIndices(vidx);
     }
@@ -1114,12 +1127,12 @@ void BasicExpression::GetVarIndices(std::vector<int> & vidx)
 }
 
 void BasicExpression::GetVarIndicesInSchema(std::vector<int> & vidx,
-    const Expression & schema)
+                                            const Expression & schema)
 {
   // recurse
   if (!IsLeaf())
   {
-    for(int i = 0; i < GetSize(); i++)
+    for (int i = 0; i < GetSize(); i++)
     {
       GetNode(i)->GetVarIndicesInSchema(vidx, schema);
     }
@@ -1149,7 +1162,7 @@ std::string BasicExpression::FindVariableName(int vi)
   else
   {
     int i;
-    for(i = 0; i < GetSize(); i++)
+    for (i = 0; i < GetSize(); i++)
     {
       vn = GetNode(i)->FindVariableName(vi);
       if (vn.length() > 0)
@@ -1179,10 +1192,10 @@ bool BasicExpression::IsLinear() const
   {
     return true;
   }
-  if(GetOpType() == SUM || GetOpType() == DIFFERENCE)
+  if (GetOpType() == SUM || GetOpType() == DIFFERENCE)
   {
     int i;
-    for(i = 0; i < GetSize(); i++)
+    for (i = 0; i < GetSize(); i++)
     {
       if (!GetNode(i)->IsLinear())
       {
@@ -1201,13 +1214,19 @@ bool BasicExpression::IsLinear() const
 bool BasicExpression::IsQuadratic(int& prodtype) const
 {
   bool ret = false;
-  if ((GetOpType() == PRODUCT &&
-       GetNode(0)->GetOpType() == VAR && GetNode(1)->GetOpType() == VAR) ||
-      (GetOpType() == POWER &&
-       GetNode(0)->GetOpType() == VAR && GetNode(1)->GetValue() == 2) ||
-      (GetOpType() == VAR && GetExponent() == 2))
+  int node0OpType = GetNode(0)->GetOpType();
+  int node1OpType = GetNode(1)->GetOpType();
+  int node1Value = GetNode(1)->GetValue();
+  int opType = GetOpType();
+
+  bool firstPart = opType == PRODUCT && node0OpType == VAR
+    && node1OpType == VAR;
+  bool secondPart = opType == POWER && node0OpType == VAR && node1Value == 2;
+  bool thirdPart = opType == VAR && GetExponent() == 2;
+
+  if (firstPart || secondPart || thirdPart)
   {
-    prodtype = GetOpType();
+    prodtype = opType;
     ret = true;
   }
   return ret;
@@ -1262,7 +1281,7 @@ bool BasicExpression::GetLinearInfo(std::vector<double> & lincoeff,
     {
       int i, vi;
       c = 0;
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         if (GetNode(i)->IsConstant())
         {
@@ -1273,8 +1292,7 @@ bool BasicExpression::GetLinearInfo(std::vector<double> & lincoeff,
           }
           c += GetNode(i)->GetValue();
         }
-        else if (GetNode(i)->IsVariable() &&
-                 GetNode(i)->GetExponent() == 1)
+        else if (GetNode(i)->IsVariable() && GetNode(i)->GetExponent() == 1)
         {
           vi = GetNode(i)->GetVarIndex();
           if (!nl->DependsOnVariable(vi))
@@ -1338,7 +1356,7 @@ bool BasicExpression::GetPureLinearInfo(std::vector<double> & lincoeff,
     {
       int vi;
       c = 0;
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         if (GetNode(i)->IsConstant())
         {
@@ -1349,8 +1367,7 @@ bool BasicExpression::GetPureLinearInfo(std::vector<double> & lincoeff,
           }
           c += GetNode(i)->GetValue();
         }
-        else if (GetNode(i)->IsVariable() &&
-                 GetNode(i)->GetExponent() == 1)
+        else if (GetNode(i)->IsVariable() && GetNode(i)->GetExponent() == 1)
         {
           vi = GetNode(i)->GetVarIndex();
           linvi.push_back(vi);
@@ -1385,7 +1402,7 @@ Expression BasicExpression::GetLinearPart()
     if (lincoeff.size() > 1)
     {
       Expression addend(1.0, -1, NOTVARNAME);
-      for(i = 1; i < (int) lincoeff.size(); i++)
+      for (i = 1; i < (int) lincoeff.size(); i++)
       {
         addend->SetVarIndex(linvi[i]);
         addend->SetCoeff(lincoeff[i]);
@@ -1416,7 +1433,7 @@ Expression BasicExpression::GetPureLinearPart()
     ret->SetExponent(1.0);
     if (lincoeff.size() > 1)
     {
-      for(i = 1; i < (int) lincoeff.size(); i++)
+      for (i = 1; i < (int) lincoeff.size(); i++)
       {
         Expression addend(lincoeff[i], linvi[i], linvn[i]);
         ret = SumLink(ret, addend);
@@ -1438,7 +1455,7 @@ Expression BasicExpression::GetNonlinearPart()
   int i;
   Expression addend(1.0, -1, NOTVARNAME);
   // we cycle backwards to keep the order of addends in ret
-  for(i = linidx.size() - 1; i >= 0 ; i--)
+  for (i = linidx.size() - 1; i >= 0; i--)
   {
     if (ret->DependsOnVariable(linidx[i]))
     {
@@ -1452,7 +1469,6 @@ Expression BasicExpression::GetNonlinearPart()
   return ret;
 }
 
-
 // get the purely nonlinear part - e.g. only y^2 in x+y+y^2
 Expression BasicExpression::GetPureNonlinearPart()
 {
@@ -1462,7 +1478,7 @@ Expression BasicExpression::GetPureNonlinearPart()
     if (GetOpType() == SUM)
     {
       int i;
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         if (!GetNode(i)->IsLinear())
         {
@@ -1473,7 +1489,7 @@ Expression BasicExpression::GetPureNonlinearPart()
     else if (GetOpType() == DIFFERENCE)
     {
       int i;
-      for(i = 0; i < GetSize(); i++)
+      for (i = 0; i < GetSize(); i++)
       {
         if (!GetNode(i)->IsLinear())
         {
@@ -1521,7 +1537,7 @@ double BasicExpression::GetConstantPart()
     {
       int i = 0;
       int sz = GetSize();
-      while(i < sz)
+      while (i < sz)
       {
         if (GetNode(i)->IsConstant())
         {
@@ -1557,7 +1573,7 @@ double BasicExpression::RemoveAdditiveConstant()
     {
       int i = 0;
       int sz = GetSize();
-      while(i < sz)
+      while (i < sz)
       {
         if (GetNode(i)->IsConstant())
         {
@@ -1586,10 +1602,8 @@ double BasicExpression::RemoveAdditiveConstant()
 
 // BIG FAT WARNING: when you change these operators, also please
 // change their "-Link" counterparts!
-
 // sums:
-Expression operator + (Expression a,
-                       Expression b)
+Expression operator +(Expression a, Expression b)
 {
   Expression ret;
   // make a preliminary check
@@ -1619,8 +1633,8 @@ Expression operator + (Expression a,
     }
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      b->IsLeaf() && b->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && b->IsLeaf()
+    && b->GetOpType() == CONST)
   {
     // a, b are numbers - add them
     ret.SetToCopyOf(a);
@@ -1629,10 +1643,9 @@ Expression operator + (Expression a,
     ret->SetExponent(1.0);
     return ret;
   }
-  else if (a->IsLeaf() && a->GetOpType() == VAR &&
-           b->IsLeaf() && b->GetOpType() == VAR &&
-           a->GetVarIndex() == b->GetVarIndex() &&
-           a->GetExponent() == b->GetExponent())
+  else if (a->IsLeaf() && a->GetOpType() == VAR && b->IsLeaf()
+    && b->GetOpType() == VAR && a->GetVarIndex() == b->GetVarIndex()
+    && a->GetExponent() == b->GetExponent())
   {
     // a, b are the same variable - add coefficients
     ret.SetToCopyOf(a);
@@ -1670,12 +1683,12 @@ Expression operator + (Expression a,
       // b is a variable
       for (i = 0; i < ret->GetSize(); i++)
       {
-        if (ret->GetNode(i)->IsLeaf() && ret->GetNode(i)->GetOpType() == VAR &&
-            b->GetVarIndex() == ret->GetNode(i)->GetVarIndex() &&
-            b->GetExponent() == ret->GetNode(i)->GetExponent())
+        if (ret->GetNode(i)->IsLeaf() && ret->GetNode(i)->GetOpType() == VAR
+          && b->GetVarIndex() == ret->GetNode(i)->GetVarIndex()
+          && b->GetExponent() == ret->GetNode(i)->GetExponent())
         {
-          double tc = ret->GetNode(i)->GetCoeff() +
-                      b->GetCoeff() / ret->GetCoeff();
+          double tc = ret->GetNode(i)->GetCoeff()
+            + b->GetCoeff() / ret->GetCoeff();
           // warning: tc could be zero, but it would be cumbersome
           // to simplify it here - do it in SimplifyConstant
           ret->GetNode(i)->SetCoeff(tc);
@@ -1693,8 +1706,8 @@ Expression operator + (Expression a,
         {
           // found one, add coefficients - notice, as above, coeff could
           // be zero, but deal with that case in SimplifyConstant
-          ret->GetNode(i)->SetCoeff(ret->GetNode(i)->GetCoeff()
-                                    + b->GetCoeff());
+          ret->GetNode(i)->SetCoeff(
+            ret->GetNode(i)->GetCoeff() + b->GetCoeff());
           couldsimplify = true;
           break;
         }
@@ -1739,15 +1752,13 @@ Expression operator + (Expression a,
   }
 }
 
-
 // product
-Expression operator * (Expression a,
-                       Expression t)
+Expression operator *(Expression a, Expression t)
 {
   Expression ret;
   // make a preliminary check
-  if (a->GetCoeff() == 0 || t->GetCoeff() == 0 ||
-      a->HasValue(0) || t->HasValue(0))
+  if (a->GetCoeff() == 0 || t->GetCoeff() == 0 || a->HasValue(0)
+    || t->HasValue(0))
   {
     Expression zero(0.0);
     return zero;
@@ -1770,8 +1781,8 @@ Expression operator * (Expression a,
     return ret;
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      t->IsLeaf() && t->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && t->IsLeaf()
+    && t->GetOpType() == CONST)
   {
     // a, t are numbers - multiply them
     ret.SetToCopyOf(a);
@@ -1780,9 +1791,8 @@ Expression operator * (Expression a,
     ret->SetExponent(1.0);
     return ret;
   }
-  else if (a->IsLeaf() && a->GetOpType() == VAR &&
-           t->IsLeaf() && t->GetOpType() == VAR &&
-           a->GetVarIndex() == t->GetVarIndex())
+  else if (a->IsLeaf() && a->GetOpType() == VAR && t->IsLeaf()
+    && t->GetOpType() == VAR && a->GetVarIndex() == t->GetVarIndex())
   {
     // a, t are the same variable - multiply coefficients
     // and add exponents
@@ -1820,8 +1830,8 @@ Expression operator * (Expression a,
       for (i = 0; i < ret->GetSize(); i++)
       {
         tmp = ret->GetNode(i);
-        if (tmp->IsLeaf() && tmp->GetOpType() == VAR &&
-            t->GetVarIndex() == tmp->GetVarIndex())
+        if (tmp->IsLeaf() && tmp->GetOpType() == VAR
+          && t->GetVarIndex() == tmp->GetVarIndex())
         {
           // found same variable in a, multiply coeffs and add exponents
           tmp->SetCoeff(tmp->GetCoeff() * t->GetCoeff());
@@ -1873,8 +1883,7 @@ Expression operator * (Expression a,
 }
 
 // fractions:
-Expression operator / (Expression a,
-                       Expression t)
+Expression operator /(Expression a, Expression t)
 {
   Expression ret;
   // make a preliminary check
@@ -1909,8 +1918,8 @@ Expression operator / (Expression a,
     return one;
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      t->IsLeaf() && t->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && t->IsLeaf()
+    && t->GetOpType() == CONST)
   {
     // a, t are numbers - divide them
     if (t->GetValue() == 0)
@@ -1947,8 +1956,8 @@ Expression operator / (Expression a,
     ret->DistributeCoeffOverSum();
     return ret;
   }
-  else if (a->IsVariable() && t->IsVariable() &&
-           a->GetVarIndex() == t->GetVarIndex())
+  else if (a->IsVariable() && t->IsVariable()
+    && a->GetVarIndex() == t->GetVarIndex())
   {
     // cx^e / dx^f = (c/d)x^(e-f)
     ret.SetToCopyOf(a);
@@ -1997,8 +2006,8 @@ Expression operator / (Expression a,
     Int i;
     for (i = 0; i < ret->GetSize(); i++)
     {
-      if (ret->GetNode(i)->GetOpType() == VAR &&
-          at->GetVarIndex() == ret->GetNode(i)->GetVarIndex())
+      if (ret->GetNode(i)->GetOpType() == VAR
+        && at->GetVarIndex() == ret->GetNode(i)->GetVarIndex())
       {
         double te = at->GetExponent() - ret->GetNode(i)->GetExponent();
         if (fabs(te) < Ev3NearZero())
@@ -2060,8 +2069,8 @@ Expression operator / (Expression a,
     Int i;
     for (i = 0; i < ret->GetSize(); i++)
     {
-      if (ret->GetNode(i)->GetOpType() == VAR &&
-          bt->GetVarIndex() == ret->GetNode(i)->GetVarIndex())
+      if (ret->GetNode(i)->GetOpType() == VAR
+        && bt->GetVarIndex() == ret->GetNode(i)->GetVarIndex())
       {
         double te = ret->GetNode(i)->GetExponent() - bt->GetExponent();
         if (fabs(te) < Ev3NearZero())
@@ -2141,17 +2150,17 @@ Expression operator / (Expression a,
     bool isdenominatorempty = false;
     int szi = at->GetSize();
     int szj = bt->GetSize();
-    while(!isnumeratorempty && !isdenominatorempty && i < szi)
+    while (!isnumeratorempty && !isdenominatorempty && i < szi)
     {
       j = 0;
-      while(!isnumeratorempty && !isdenominatorempty && j < szj)
+      while (!isnumeratorempty && !isdenominatorempty && j < szj)
       {
         if (at->GetNode(i)->IsEqualTo(bt->GetNode(j)))
         {
           // found like terms i and j
           at->DeleteNode(i);
           szi--;
-          if(szi == 0)
+          if (szi == 0)
           {
             isnumeratorempty = true;
             at->One();
@@ -2215,26 +2224,25 @@ Expression operator / (Expression a,
 }
 
 // unary minus:
-Expression operator - (Expression a)
+Expression operator -(Expression a)
 {
   Expression ret;
   ret.SetToCopyOf(a);
   if (ret->IsLeaf() && ret->GetOpType() == CONST)
   {
-    ret->SetValue(- ret->GetValue());
+    ret->SetValue(-ret->GetValue());
     ret->SetCoeff(1.0);
     ret->SetExponent(1.0);
   }
   else
   {
-    ret->SetCoeff(- ret->GetCoeff());
+    ret->SetCoeff(-ret->GetCoeff());
   }
   return ret;
 }
 
 // binary minus:
-Expression operator - (Expression a,
-                       Expression b)
+Expression operator -(Expression a, Expression b)
 {
   Expression ret;
   if (a->HasValue(0))
@@ -2249,8 +2257,7 @@ Expression operator - (Expression a,
 }
 
 // power:
-Expression operator ^ (Expression a,
-                       Expression t)
+Expression operator ^(Expression a, Expression t)
 {
   // make a preliminary check
   Expression ret;
@@ -2285,8 +2292,8 @@ Expression operator ^ (Expression a,
     return one;
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      t->IsLeaf() && t->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && t->IsLeaf()
+    && t->GetOpType() == CONST)
   {
     // constant to constant
     ret.SetToCopyOf(a);
@@ -2295,8 +2302,8 @@ Expression operator ^ (Expression a,
     ret->SetExponent(1.0);
     return ret;
   }
-  else if (a->IsLeaf() && a->GetOpType() == VAR &&
-           t->IsLeaf() && t->GetOpType() == CONST)
+  else if (a->IsLeaf() && a->GetOpType() == VAR && t->IsLeaf()
+    && t->GetOpType() == CONST)
   {
     // variable to constant
     ret.SetToCopyOf(a);
@@ -3229,8 +3236,7 @@ Expression Coth(Expression a)
 /***************** expression creation (affects arguments) ***********/
 
 // sums:
-Expression SumLink(Expression a,
-                   Expression b)
+Expression SumLink(Expression a, Expression b)
 {
   // make a preliminary check
   if (a->GetCoeff() == 0 || a->HasValue(0))
@@ -3250,8 +3256,8 @@ Expression SumLink(Expression a,
       return a;
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      b->IsLeaf() && b->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && b->IsLeaf()
+    && b->GetOpType() == CONST)
   {
     // a, b are numbers - add them
     a->SetValue(a->GetValue() + b->GetValue());
@@ -3259,10 +3265,9 @@ Expression SumLink(Expression a,
     a->SetExponent(1.0);
     return a;
   }
-  else if (a->IsLeaf() && a->GetOpType() == VAR &&
-           b->IsLeaf() && b->GetOpType() == VAR &&
-           a->GetVarIndex() == b->GetVarIndex() &&
-           a->GetExponent() == b->GetExponent())
+  else if (a->IsLeaf() && a->GetOpType() == VAR && b->IsLeaf()
+    && b->GetOpType() == VAR && a->GetVarIndex() == b->GetVarIndex()
+    && a->GetExponent() == b->GetExponent())
   {
     // a, b are the same variable - add coefficients
     a->SetCoeff(a->GetCoeff() + b->GetCoeff());
@@ -3298,9 +3303,9 @@ Expression SumLink(Expression a,
       // b is a variable
       for (i = 0; i < a->GetSize(); i++)
       {
-        if (a->GetNode(i)->IsLeaf() && a->GetNode(i)->GetOpType() == VAR &&
-            b->GetVarIndex() == a->GetNode(i)->GetVarIndex() &&
-            b->GetExponent() == a->GetNode(i)->GetExponent())
+        if (a->GetNode(i)->IsLeaf() && a->GetNode(i)->GetOpType() == VAR
+          && b->GetVarIndex() == a->GetNode(i)->GetVarIndex()
+          && b->GetExponent() == a->GetNode(i)->GetExponent())
         {
           double tc = a->GetNode(i)->GetCoeff() + b->GetCoeff() / a->GetCoeff();
           // warning: tc could be zero, but it would be cumbersome
@@ -3356,7 +3361,6 @@ Expression SumLink(Expression a,
     // all other cases - make new node on top of the addends
     Expression ret;
 
-
     ret->SetOpType(SUM);
     ret->SetCoeff(1.0);
     ret->SetExponent(1.0);
@@ -3367,14 +3371,12 @@ Expression SumLink(Expression a,
   }
 }
 
-
 // product
-Expression ProductLink(Expression a,
-                       Expression t)
+Expression ProductLink(Expression a, Expression t)
 {
   // make a preliminary check
-  if (a->GetCoeff() == 0 || t->GetCoeff() == 0 ||
-      a->HasValue(0) || t->HasValue(0))
+  if (a->GetCoeff() == 0 || t->GetCoeff() == 0 || a->HasValue(0)
+    || t->HasValue(0))
   {
     Expression zero(0.0);
     return zero;
@@ -3393,8 +3395,8 @@ Expression ProductLink(Expression a,
     return power2;
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      t->IsLeaf() && t->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && t->IsLeaf()
+    && t->GetOpType() == CONST)
   {
     // a, t are numbers - multiply them
     a->SetValue(a->GetValue() * t->GetValue());
@@ -3402,9 +3404,8 @@ Expression ProductLink(Expression a,
     a->SetExponent(1.0);
     return a;
   }
-  else if (a->IsLeaf() && a->GetOpType() == VAR &&
-           t->IsLeaf() && t->GetOpType() == VAR &&
-           a->GetVarIndex() == t->GetVarIndex())
+  else if (a->IsLeaf() && a->GetOpType() == VAR && t->IsLeaf()
+    && t->GetOpType() == VAR && a->GetVarIndex() == t->GetVarIndex())
   {
     // a, t are the same variable - multiply coefficients
     // and add exponents
@@ -3438,8 +3439,8 @@ Expression ProductLink(Expression a,
       for (i = 0; i < a->GetSize(); i++)
       {
         tmp = a->GetNode(i);
-        if (tmp->IsLeaf() && tmp->GetOpType() == VAR &&
-            t->GetVarIndex() == tmp->GetVarIndex())
+        if (tmp->IsLeaf() && tmp->GetOpType() == VAR
+          && t->GetVarIndex() == tmp->GetVarIndex())
         {
           // found same variable in a, multiply coeffs and add exponents
           tmp->SetCoeff(tmp->GetCoeff() * t->GetCoeff());
@@ -3491,8 +3492,7 @@ Expression ProductLink(Expression a,
 }
 
 // fractions:
-Expression FractionLink(Expression a,
-                        Expression t)
+Expression FractionLink(Expression a, Expression t)
 {
   // make a preliminary check
   if (t->GetCoeff() == 0)
@@ -3523,8 +3523,8 @@ Expression FractionLink(Expression a,
     return one;
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      t->IsLeaf() && t->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && t->IsLeaf()
+    && t->GetOpType() == CONST)
   {
     // a, t are numbers - divide them
     if (t->GetValue() == 0)
@@ -3558,8 +3558,8 @@ Expression FractionLink(Expression a,
     a->DistributeCoeffOverSum();
     return a;
   }
-  else if (a->IsVariable() && t->IsVariable() &&
-           a->GetVarIndex() == t->GetVarIndex())
+  else if (a->IsVariable() && t->IsVariable()
+    && a->GetVarIndex() == t->GetVarIndex())
   {
     // cx^e / dx^f = (c/d)x^(e-f)
     double te = a->GetExponent() - t->GetExponent();
@@ -3604,8 +3604,8 @@ Expression FractionLink(Expression a,
     Int i;
     for (i = 0; i < t->GetSize(); i++)
     {
-      if (t->GetNode(i)->GetOpType() == VAR &&
-          a->GetVarIndex() == t->GetNode(i)->GetVarIndex())
+      if (t->GetNode(i)->GetOpType() == VAR
+        && a->GetVarIndex() == t->GetNode(i)->GetVarIndex())
       {
         double te = a->GetExponent() - t->GetNode(i)->GetExponent();
         if (fabs(te) < Ev3NearZero())
@@ -3664,8 +3664,8 @@ Expression FractionLink(Expression a,
     Int i;
     for (i = 0; i < a->GetSize(); i++)
     {
-      if (a->GetNode(i)->GetOpType() == VAR &&
-          t->GetVarIndex() == a->GetNode(i)->GetVarIndex())
+      if (a->GetNode(i)->GetOpType() == VAR
+        && t->GetVarIndex() == a->GetNode(i)->GetVarIndex())
       {
         double te = a->GetNode(i)->GetExponent() - t->GetExponent();
         if (fabs(te) < Ev3NearZero())
@@ -3715,7 +3715,8 @@ Expression FractionLink(Expression a,
     t->ConsolidateProductCoeffs();
     // denominator
     if (fabs(t->GetCoeff()) < Ev3NearZero())
-      throw ErrDivideByZero(21, "Expression Building", "FractionLink", "t->GetCoeff()", "Divisor cannot be zero", HELPURL, NONE);
+      throw ErrDivideByZero(21, "Expression Building", "FractionLink",
+        "t->GetCoeff()", "Divisor cannot be zero", HELPURL, NONE);
 
     if (fabs(a->GetCoeff()) < Ev3NearZero())
     {
@@ -3732,17 +3733,17 @@ Expression FractionLink(Expression a,
     bool isdenominatorempty = false;
     int szi = a->GetSize();
     int szj = t->GetSize();
-    while(!isnumeratorempty && !isdenominatorempty && i < szi)
+    while (!isnumeratorempty && !isdenominatorempty && i < szi)
     {
       j = 0;
-      while(!isnumeratorempty && !isdenominatorempty && j < szj)
+      while (!isnumeratorempty && !isdenominatorempty && j < szj)
       {
         if (a->GetNode(i)->IsEqualTo(t->GetNode(j)))
         {
           // found like terms i and j
           a->DeleteNode(i);
           szi--;
-          if(szi == 0)
+          if (szi == 0)
           {
             isnumeratorempty = true;
             a->One();
@@ -3808,20 +3809,19 @@ Expression MinusLink(Expression a)
 {
   if (a->IsLeaf() && a->GetOpType() == CONST)
   {
-    a->SetValue(- a->GetValue());
+    a->SetValue(-a->GetValue());
     a->SetCoeff(1.0);
     a->SetExponent(1.0);
   }
   else
   {
-    a->SetCoeff(- a->GetCoeff());
+    a->SetCoeff(-a->GetCoeff());
   }
   return a;
 }
 
 // binary minus:
-Expression DifferenceLink(Expression a,
-                          Expression b)
+Expression DifferenceLink(Expression a, Expression b)
 {
   if (a->HasValue(0))
     return MinusLink(b);
@@ -3831,8 +3831,7 @@ Expression DifferenceLink(Expression a,
 }
 
 // power:
-Expression PowerLink(Expression a,
-                     Expression t)
+Expression PowerLink(Expression a, Expression t)
 {
   // make a preliminary check
   if (a->GetCoeff() == 0)
@@ -3865,8 +3864,8 @@ Expression PowerLink(Expression a,
     return one;
   }
   // go for it
-  if (a->IsLeaf() && a->GetOpType() == CONST &&
-      t->IsLeaf() && t->GetOpType() == CONST)
+  if (a->IsLeaf() && a->GetOpType() == CONST && t->IsLeaf()
+    && t->GetOpType() == CONST)
   {
     // constant to constant
     a->SetValue(pow(a->GetValue(), t->GetValue()));
@@ -3874,8 +3873,8 @@ Expression PowerLink(Expression a,
     a->SetExponent(1.0);
     return a;
   }
-  else if ((fabs(a->GetCoeff()) == 1.0) && a->IsLeaf() && (a->GetOpType() == VAR) &&
-           t->IsLeaf() && (t->GetOpType() == CONST))
+  else if ((fabs(a->GetCoeff()) == 1.0) && a->IsLeaf()
+    && (a->GetOpType() == VAR) && t->IsLeaf() && (t->GetOpType() == CONST))
   {
     // variable to constant
     a->SetExponent(a->GetExponent() * t->GetValue());
@@ -3984,7 +3983,8 @@ Expression AsinLink(Expression a)
 Expression AcosLink(Expression a)
 {
   if (a->IsLessThan(-1.0) || a->IsGreaterThan(1.0))
-    throw ErrNotPermitted(0, "Expression Building", "AcosLink", "value <-1|>1", "acos(<-1|>1) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "AcosLink", "value <-1|>1",
+      "acos(<-1|>1) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4119,7 +4119,8 @@ Expression AsinhLink(Expression a)
 Expression AcoshLink(Expression a)
 {
   if (a->IsLessThan(1.0))
-    throw ErrNotPermitted(0, "Expression Building", "AcoshLink", "value < 1", "acosh(<1) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "AcoshLink", "value < 1",
+      "acosh(<1) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4144,7 +4145,8 @@ Expression AcoshLink(Expression a)
 Expression AtanhLink(Expression a)
 {
   if (a->IsLessThan(-1.0) || a->IsGreaterThan(1.0))
-    throw ErrNotPermitted(0, "Expression Building", "AtanhLink", "value <-1|>1", "atanh(<-1|>1) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "AtanhLink", "value <-1|>1",
+      "atanh(<-1|>1) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4170,10 +4172,12 @@ Expression Log2Link(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
-    throw ErrNotPermitted(0, "Expression Building", "Log2Link", "IsZero()", "log2(0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "Log2Link", "IsZero()",
+      "log2(0) is undefined", HELPURL);
 
   if (a->IsLessThan(0))
-    throw ErrNotPermitted(0, "Expression Building", "Log2Link", "value <= 0", "log2(<=0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "Log2Link", "value <= 0",
+      "log2(<=0) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4201,10 +4205,12 @@ Expression Log10Link(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
-    throw ErrNotPermitted(0, "Expression Building", "Log10Link", "IsZero()", "log10(0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "Log10Link", "IsZero()",
+      "log10(0) is undefined", HELPURL);
 
   if (a->IsLessThan(0))
-    throw ErrNotPermitted(0, "Expression Building", "Log10Link", "value <= 0", "log10(<=0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "Log10Link", "value <= 0",
+      "log10(<=0) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4232,10 +4238,12 @@ Expression LogLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
-    throw ErrNotPermitted(0, "Expression Building", "LogLink", "IsZero()", "log(0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "LogLink", "IsZero()",
+      "log(0) is undefined", HELPURL);
 
   if (a->IsLessThan(0))
-    throw ErrNotPermitted(0, "Expression Building", "LogLink", "value <= 0", "log(<=0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "LogLink", "value <= 0",
+      "log(<=0) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4263,10 +4271,12 @@ Expression LnLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
-    throw ErrNotPermitted(0, "Expression Building", "LnLink", "IsZero()", "ln(0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "LnLink", "IsZero()",
+      "ln(0) is undefined", HELPURL);
 
   if (a->IsLessThan(0))
-    throw ErrNotPermitted(0, "Expression Building", "LnLink", "value <= 0", "ln(<=0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "LnLink", "value <= 0",
+      "ln(<=0) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4293,7 +4303,8 @@ Expression LnLink(Expression a)
 Expression LngammaLink(Expression a)
 {
   if (a->IsLessThan(0.0))
-    throw ErrNotPermitted(0, "Expression Building", "LngammaLink", "value < 0", "lngamma(<0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "LngammaLink", "value < 0",
+      "lngamma(<0) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4407,7 +4418,8 @@ Expression SqrtLink(Expression a)
 {
   // make a preliminary check
   if (a->IsLessThan(0) && !a->HasValue(0))
-    throw ErrNotPermitted(0, "Expression Building", "SqrtLink", "value < 0", "sqrt(<0) is complex, can't do", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "SqrtLink", "value < 0",
+      "sqrt(<0) is complex, can't do", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4612,7 +4624,8 @@ Expression CotLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
-    throw ErrNotPermitted(0, "Expression Building", "CotLink", "IsZero()", "cot(0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "CotLink", "IsZero()",
+      "cot(0) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4640,7 +4653,8 @@ Expression CothLink(Expression a)
 {
   // make a preliminary check
   if (a->IsZero())
-    throw ErrNotPermitted(0, "Expression Building", "CothLink", "IsZero()", "coth(0) is undefined", HELPURL);
+    throw ErrNotPermitted(0, "Expression Building", "CothLink", "IsZero()",
+      "coth(0) is undefined", HELPURL);
 
   // go for it
   if (a->IsLeaf() && a->GetOpType() == CONST)
@@ -4663,7 +4677,6 @@ Expression CothLink(Expression a)
     return ret;
   }
 }
-
 
 /***************** differentiation ******************/
 
@@ -4689,7 +4702,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
       {
         // safety check
         std::cerr << "Expression::Diff: warning: this node should "
-                  << "not diff to zero\n";
+          << "not diff to zero\n";
         return zero;
       }
       else
@@ -4728,18 +4741,18 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
       if (sz == 0)
       {
         throw ErrNotPermitted(10, "Expression", "Diff", "GetSize() == 0",
-                              "non-leaf node can't have size 0", HELPURL);
+          "non-leaf node can't have size 0", HELPURL);
       }
       Int i, j;
       Expression ret(0.0);
       Expression tmp(1.0);
       Expression tmp2(1.0);
       Expression two(2.0);
-      switch(op)
+      switch (op)
       {
         case SUM:
           ret = Diff(a->GetNode(0), vi); // f_0'
-          for(i = 1; i < sz; i++)
+          for (i = 1; i < sz; i++)
           {
             tmp = Diff(a->GetNode(i), vi);
             if (!tmp->IsZero())
@@ -4750,7 +4763,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           break;
         case DIFFERENCE:
           ret = Diff(a->GetNode(0), vi);  // f_0'
-          for(i = 1; i < sz; i++)
+          for (i = 1; i < sz; i++)
           {
             tmp = Diff(a->GetNode(i), vi);
             if (!tmp->IsZero())
@@ -4764,24 +4777,24 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // warn about product with one operand
             std::cerr << "Expression::Diff: warning: product with 1 operand "
-                      << "should not occur\n";
+              << "should not occur\n";
           }
           ret = Diff(a->GetNode(0), vi);  // f_0'
           if (!ret->IsZero())
           {
-            for(j = 1; j < sz; j++)
+            for (j = 1; j < sz; j++)
             {
               // get copies, not references
               ret = ret * a->GetCopyOfNode(j); // ... * f_i[i!=0]
             }
           }
           tmp->One(); // reset temporary to 1.0
-          for(i = 1; i < sz; i++)
+          for (i = 1; i < sz; i++)
           {
             tmp = Diff(a->GetNode(i), vi); // tmp = f_i'
             if (!tmp->IsZero())
             {
-              for(j = 0; j < sz; j++)
+              for (j = 0; j < sz; j++)
               {
                 if (j != i)
                 {
@@ -4799,16 +4812,15 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there are exactly two operands
             throw ErrNotPermitted(11, "Expression", "Diff", "GetSize() != 2",
-                                  "fraction must have exactly 2 operands",
-                                  HELPURL);
+              "fraction must have exactly 2 operands",
+              HELPURL);
           }
           if (a->GetNode(1)->IsZero())
           {
             // check denominator is not zero
             throw ErrDivideByZero(20, "Expression", "Diff",
-                                  "GetNode(1)->IsZero()",
-                                  "cannot divide by zero", HELPURL,
-                                  a->GetNode(1)->ToString());
+              "GetNode(1)->IsZero()", "cannot divide by zero", HELPURL,
+              a->GetNode(1)->ToString());
           }
           tmp->One();
           ret = Diff(a->GetNode(0), vi); // f'
@@ -4822,7 +4834,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           if (!tmp2->IsZero())
           {
             tmp = tmp * tmp2;  // tmp = fg'
-            ret = ret - tmp.Copy() / (a->GetCopyOfNode(1) ^ two);  // f'/g - fg'/g^2
+            ret = ret - tmp.Copy() / (a->GetCopyOfNode(1) ^ two); // f'/g - fg'/g^2
           }
           // can dispense from using copy here - tmp is not used thereafter
           // and when tmp is deleted, its subnodes are not automatically
@@ -4833,8 +4845,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there are exactly two operands
             throw ErrNotPermitted(12, "Expression", "Diff", "GetSize() != 2",
-                                  "power must have exactly 2 operands",
-                                  HELPURL);
+              "power must have exactly 2 operands",
+              HELPURL);
           }
           // check exponent
           if (a->GetNode(1)->IsZero())
@@ -4865,7 +4877,7 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
               tmp = a->GetCopyOfNode(0);     // f
               tmp = tmp ^ a->GetCopyOfNode(1);  // f^c
               tmp->GetNode(1)->ConsolidateValue();
-              tmp->SetCoeff(tmp->GetCoeff() * tmp->GetNode(1)->GetValue());//cf^c
+              tmp->SetCoeff(tmp->GetCoeff() * tmp->GetNode(1)->GetValue()); //cf^c
               tmp->GetNode(1)->SetValue(tmp->GetNode(1)->GetValue() - 1); //cf^(c-1)
               // can dispense from using copy here - Diff returns copies anyway.
               // when temporary is deleted, its subnodes are not automatically
@@ -4899,29 +4911,29 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(13, "Expression", "Diff", "GetSize() != 1",
-                                  "unary minus must have exactly 1 operand",
-                                  HELPURL);
+              "unary minus must have exactly 1 operand",
+              HELPURL);
           }
           ret = Diff(a->GetNode(0), vi);
-          ret->SetCoeff(- ret->GetCoeff());
+          ret->SetCoeff(-ret->GetCoeff());
           break;
         case SIN:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(17, "Expression", "Diff", "GetSize() != 1",
-                                  "sin must have exactly 1 operand",
-                                  HELPURL);
+              "sin must have exactly 1 operand",
+              HELPURL);
           }
-          ret = Diff(a->GetNode(0), vi) * Cos(a->GetCopyOfNode(0));  // f' cos(f)
+          ret = Diff(a->GetNode(0), vi) * Cos(a->GetCopyOfNode(0)); // f' cos(f)
           break;
         case COS:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(18, "Expression", "Diff", "GetSize() != 1",
-                                  "cos must have exactly 1 operand",
-                                  HELPURL);
+              "cos must have exactly 1 operand",
+              HELPURL);
           }
           ret = -Diff(a->GetNode(0), vi) * Sin(a->GetCopyOfNode(0)); // -f'sin(f)
           break;
@@ -4930,8 +4942,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(19, "Expression", "Diff", "GetSize() != 1",
-                                  "tan must have exactly 1 operand",
-                                  HELPURL);
+              "tan must have exactly 1 operand",
+              HELPURL);
           }
           ret = a.Copy();  // tan(f)
           ret->SetCoeff(1.0);
@@ -4945,8 +4957,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(17, "Expression", "Diff", "GetSize() != 1",
-                                  "asin must have exactly 1 operand",
-                                  HELPURL);
+              "asin must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = ret ^ two;
@@ -4959,8 +4971,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(18, "Expression", "Diff", "GetSize() != 1",
-                                  "acos must have exactly 1 operand",
-                                  HELPURL);
+              "acos must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = ret ^ two;
@@ -4973,8 +4985,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(19, "Expression", "Diff", "GetSize() != 1",
-                                  "atan must have exactly 1 operand",
-                                  HELPURL);
+              "atan must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = ret ^ two;
@@ -4987,18 +4999,18 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(17, "Expression", "Diff", "GetSize() != 1",
-                                  "sinh must have exactly 1 operand",
-                                  HELPURL);
+              "sinh must have exactly 1 operand",
+              HELPURL);
           }
-          ret = Diff(a->GetNode(0), vi) * Cosh(a->GetCopyOfNode(0));  // f' cosh(f)
+          ret = Diff(a->GetNode(0), vi) * Cosh(a->GetCopyOfNode(0)); // f' cosh(f)
           break;
         case COSH:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(18, "Expression", "Diff", "GetSize() != 1",
-                                  "cosh must have exactly 1 operand",
-                                  HELPURL);
+              "cosh must have exactly 1 operand",
+              HELPURL);
           }
           ret = Diff(a->GetNode(0), vi) * Sinh(a->GetCopyOfNode(0)); // f'sinh(f)
           break;
@@ -5007,8 +5019,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(19, "Expression", "Diff", "GetSize() != 1",
-                                  "tanh must have exactly 1 operand",
-                                  HELPURL);
+              "tanh must have exactly 1 operand",
+              HELPURL);
           }
           ret = a.Copy();
           ret->SetCoeff(1.0);
@@ -5022,8 +5034,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(17, "Expression", "Diff", "GetSize() != 1",
-                                  "asinh must have exactly 1 operand",
-                                  HELPURL);
+              "asinh must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = ret ^ two;
@@ -5036,8 +5048,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(18, "Expression", "Diff", "GetSize() != 1",
-                                  "acosh must have exactly 1 operand",
-                                  HELPURL);
+              "acosh must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = ret ^ two;
@@ -5050,8 +5062,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(19, "Expression", "Diff", "GetSize() != 1",
-                                  "atanh must have exactly 1 operand",
-                                  HELPURL);
+              "atanh must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = ret ^ two;
@@ -5064,34 +5076,34 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(14, "Expression", "Diff", "GetSize() != 1",
-                                  "log2 must have exactly 1 operand",
-                                  HELPURL);
+              "log2 must have exactly 1 operand",
+              HELPURL);
           }
           if (a->GetNode(0)->IsLessThan(0))
           {
             throw ErrNotPermitted(15, "Expression", "Diff", "arg <= 0",
-                                  "log2 argument must be symbolic or positive",
-                                  HELPURL);
+              "log2 argument must be symbolic or positive",
+              HELPURL);
           }
           ret = Diff(a->GetNode(0), vi);
-          ret = ret / (Expression(M_LN2) * a->GetCopyOfNode(0));  // f'/(log(2)f)
+          ret = ret / (Expression(M_LN2) * a->GetCopyOfNode(0)); // f'/(log(2)f)
           break;
         case LOG10:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(14, "Expression", "Diff", "GetSize() != 1",
-                                  "log10 must have exactly 1 operand",
-                                  HELPURL);
+              "log10 must have exactly 1 operand",
+              HELPURL);
           }
           if (a->GetNode(0)->IsLessThan(0))
           {
             throw ErrNotPermitted(15, "Expression", "Diff", "arg <= 0",
-                                  "log10 argument must be symbolic or positive",
-                                  HELPURL);
+              "log10 argument must be symbolic or positive",
+              HELPURL);
           }
           ret = Diff(a->GetNode(0), vi);
-          ret = ret / (Expression(M_LN10) * a->GetCopyOfNode(0));  // f'/(log(10)f)
+          ret = ret / (Expression(M_LN10) * a->GetCopyOfNode(0)); // f'/(log(10)f)
           break;
         case LOG:
         case LN:
@@ -5099,14 +5111,14 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(14, "Expression", "Diff", "GetSize() != 1",
-                                  "log (ln) must have exactly 1 operand",
-                                  HELPURL);
+              "log (ln) must have exactly 1 operand",
+              HELPURL);
           }
           if (a->GetNode(0)->IsLessThan(0))
           {
             throw ErrNotPermitted(15, "Expression", "Diff", "arg <= 0",
-                                  "log (ln) argument must be symbolic or positive",
-                                  HELPURL);
+              "log (ln) argument must be symbolic or positive",
+              HELPURL);
           }
           ret = Diff(a->GetNode(0), vi);
           ret = ret / a->GetCopyOfNode(0);  // f'/f
@@ -5116,8 +5128,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "exp must have exactly 1 operand",
-                                  HELPURL);
+              "exp must have exactly 1 operand",
+              HELPURL);
           }
           ret = Diff(a->GetNode(0), vi) * Exp(a->GetCopyOfNode(0));  // f'exp(f)
           break;
@@ -5126,54 +5138,58 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "erf must have exactly 1 operand",
-                                  HELPURL);
+              "erf must have exactly 1 operand",
+              HELPURL);
           }
-          ret = Expression(M_2_SQRTPI) * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
+          ret = Expression(M_2_SQRTPI) * Diff(a->GetCopyOfNode(0), vi)
+            * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
           break;
         case ERFC:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "erfc must have exactly 1 operand",
-                                  HELPURL);
+              "erfc must have exactly 1 operand",
+              HELPURL);
           }
-          ret = Expression(-M_2_SQRTPI) * Diff(a->GetCopyOfNode(0), vi) * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
+          ret = Expression(-M_2_SQRTPI) * Diff(a->GetCopyOfNode(0), vi)
+            * Exp(-(a->GetCopyOfNode(0) ^ two)); // (2/sqrt(pi)) f'e^(-f^2)
           break;
         case SQRT:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(19, "Expression", "Diff", "GetSize() != 1",
-                                  "sqrt must have exactly 1 operand",
-                                  HELPURL);
+              "sqrt must have exactly 1 operand",
+              HELPURL);
           }
           if (a->GetNode(0)->IsLessThan(0))
           {
             throw ErrNotPermitted(15, "Expression", "Diff", "arg < 0",
-                                  "sqrt argument must be symbolic or positive",
-                                  HELPURL);
+              "sqrt argument must be symbolic or positive",
+              HELPURL);
           }
-          ret = Expression(0.5) * Diff(a->GetNode(0), vi) / Sqrt(a->GetCopyOfNode(0)); // 1/2 * f' / sqrt(f)
+          ret = Expression(0.5) * Diff(a->GetNode(0), vi)
+            / Sqrt(a->GetCopyOfNode(0)); // 1/2 * f' / sqrt(f)
           break;
         case CBRT:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "cbrt must have exactly 1 operand",
-                                  HELPURL);
+              "cbrt must have exactly 1 operand",
+              HELPURL);
           }
-          ret = Expression(1.0 / 3.0) * Diff(a->GetNode(0), vi) / (a->GetCopyOfNode(0) ^ Expression(2.0 / 3.0)); // (1/3) f' / f^(2/3)
+          ret = Expression(1.0 / 3.0) * Diff(a->GetNode(0), vi)
+            / (a->GetCopyOfNode(0) ^ Expression(2.0 / 3.0)); // (1/3) f' / f^(2/3)
           break;
         case BESSELJ0:
           if (sz != 1)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "besselJ0 must have exactly 1 operand",
-                                  HELPURL);
+              "besselJ0 must have exactly 1 operand",
+              HELPURL);
           }
           ret = -Diff(a->GetNode(0), vi) * BesselJ1(a->GetCopyOfNode(0)); // -f'besselJ1(f)
           break;
@@ -5182,8 +5198,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "besselJ1 must have exactly 1 operand",
-                                  HELPURL);
+              "besselJ1 must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = BesselJ0(ret) - BesselJ1(ret) / ret;
@@ -5194,8 +5210,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "besselY0 must have exactly 1 operand",
-                                  HELPURL);
+              "besselY0 must have exactly 1 operand",
+              HELPURL);
           }
           ret = -Diff(a->GetNode(0), vi) * BesselY1(a->GetCopyOfNode(0)); // -f'besselY1(f)
           break;
@@ -5204,8 +5220,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "besselY1 must have exactly 1 operand",
-                                  HELPURL);
+              "besselY1 must have exactly 1 operand",
+              HELPURL);
           }
           ret = a->GetCopyOfNode(0);
           ret = BesselY0(ret) - BesselY1(ret) / ret;
@@ -5217,8 +5233,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "sign (rint) must have exactly 1 operand",
-                                  HELPURL);
+              "sign (rint) must have exactly 1 operand",
+              HELPURL);
           }
           ret = zero; // 0
           break;
@@ -5227,8 +5243,8 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(16, "Expression", "Diff", "GetSize() != 1",
-                                  "abs must have exactly 1 operand",
-                                  HELPURL);
+              "abs must have exactly 1 operand",
+              HELPURL);
           }
           ret = Diff(a->GetNode(0), vi) * Sign(a->GetCopyOfNode(0)); // f'sign(f)
           break;
@@ -5237,12 +5253,12 @@ Expression DiffNoSimplify(const Expression& ac, Int vi)
           {
             // check that there is exactly one operand
             throw ErrNotPermitted(14, "Expression", "Diff", "GetSize() != 1",
-                                  "log must have exactly 1 operand",
-                                  HELPURL);
+              "log must have exactly 1 operand",
+              HELPURL);
           }
           throw ErrNotPermitted(16, "Expression", "Diff", "not implemented",
-                                "The derivative of the function is not implemented.",
-                                HELPURL);
+            "The derivative of the function is not implemented.",
+            HELPURL);
           break;
       }
       ret->SetCoeff(ret->GetCoeff() * opcoeff);
@@ -5265,7 +5281,7 @@ bool TrigSimp(Expression a)
   bool bret = false;
   bool ischanged = false;
   // first, recurse over all subnodes of a
-  for(i = 0; i < a->GetSize(); i++)
+  for (i = 0; i < a->GetSize(); i++)
   {
     ischanged = TrigSimp(a->GetNode(i));
     if (!bret && ischanged)
@@ -5286,23 +5302,23 @@ bool TrigSimp(Expression a)
       // cycle over subnodes
       if (a->GetNode(i)->GetOpType() == POWER)
       {
-        if (a->GetNode(i)->GetNode(0)->GetOpType() == SIN &&
-            a->GetNode(i)->GetNode(1)->HasValue(2))
+        if (a->GetNode(i)->GetNode(0)->GetOpType() == SIN
+          && a->GetNode(i)->GetNode(1)->HasValue(2))
           sinpos = i;
       }
       if (a->GetNode(i)->GetOpType() == POWER)
       {
-        if (a->GetNode(i)->GetNode(0)->GetOpType() == COS &&
-            a->GetNode(i)->GetNode(1)->HasValue(2))
+        if (a->GetNode(i)->GetNode(0)->GetOpType() == COS
+          && a->GetNode(i)->GetNode(1)->HasValue(2))
           cospos = i;
       }
-      if (a->GetNode(i)->GetOpType() == SIN &&
-          a->GetNode(i)->GetExponent() == 2)
+      if (a->GetNode(i)->GetOpType() == SIN
+        && a->GetNode(i)->GetExponent() == 2)
       {
         sinpossimple = i;
       }
-      if (a->GetNode(i)->GetOpType() == COS &&
-          a->GetNode(i)->GetExponent() == 2)
+      if (a->GetNode(i)->GetOpType() == COS
+        && a->GetNode(i)->GetExponent() == 2)
       {
         cospossimple = i;
       }
@@ -5314,9 +5330,9 @@ bool TrigSimp(Expression a)
       double sincoeff = a->GetNode(cospos)->GetCoeff();
 
       // found both, check their arguments
-      if ((coscoeff == sincoeff) &&
-          a->GetNode(sinpos)->GetNode(0)->GetNode(0)->IsEqualTo
-          (a->GetNode(cospos)->GetNode(0)->GetNode(0)))
+      if ((coscoeff == sincoeff)
+        && a->GetNode(sinpos)->GetNode(0)->GetNode(0)->IsEqualTo(
+          a->GetNode(cospos)->GetNode(0)->GetNode(0)))
       {
         ret++; // augment simplification counter
         bret = true;
@@ -5367,9 +5383,9 @@ bool TrigSimp(Expression a)
       double coscoeff = a->GetNode(sinpossimple)->GetCoeff();
       double sincoeff = a->GetNode(cospossimple)->GetCoeff();
 
-      if ((coscoeff == sincoeff) &&
-          a->GetNode(sinpossimple)->GetNode(0)->IsEqualTo
-          (a->GetNode(cospossimple)->GetNode(0)))
+      if ((coscoeff == sincoeff)
+        && a->GetNode(sinpossimple)->GetNode(0)->IsEqualTo(
+          a->GetNode(cospossimple)->GetNode(0)))
       {
         ret++;
         bret = true;
@@ -5427,7 +5443,7 @@ bool Simplify(Expression* a)
   bool changedflag = false;
   bool ret = false;
   bool goonflag = true;
-  while(goonflag)
+  while (goonflag)
   {
     goonflag = false;
     (*a)->ConsolidateProductCoeffs();
@@ -5514,7 +5530,7 @@ bool SimplifyConstant(Expression* a)
     {
       // simplify this operand as a whole
       ops = (*a)->GetNode(i)->GetOpType();
-      switch(op)
+      switch (op)
       {
         case SUM:
           if (ops == CONST)
@@ -5586,16 +5602,14 @@ bool SimplifyConstant(Expression* a)
           {
             i++;
           }
-          if (sz >= 2 && (*a)->GetNode(0)->IsConstant() &&
-              (*a)->GetNode(1)->IsConstant())
+          if (sz >= 2 && (*a)->GetNode(0)->IsConstant()
+            && (*a)->GetNode(1)->IsConstant())
           {
             double d = (*a)->GetNode(1)->GetValue();
             if (d == 0)
             {
               throw ErrDivideByZero(23, "Expression", "SimplifyConstant",
-                                    "d==0",
-                                    "cannot divide by zero", HELPURL,
-                                    (*a)->ToString());
+                "d==0", "cannot divide by zero", HELPURL, (*a)->ToString());
             }
             ret = true;
             a->SetTo((*a)->GetNode(0));
@@ -5606,8 +5620,8 @@ bool SimplifyConstant(Expression* a)
           }
           break;
         case POWER:
-          if (sz >= 2 && (*a)->GetNode(0)->IsConstant() &&
-              (*a)->GetNode(1)->IsConstant())
+          if (sz >= 2 && (*a)->GetNode(0)->IsConstant()
+            && (*a)->GetNode(1)->IsConstant())
           {
             double d = (*a)->GetNode(1)->GetValue();
             ret = true;
@@ -5629,8 +5643,7 @@ bool SimplifyConstant(Expression* a)
             if (d <= 0)
             {
               throw ErrNotPermitted(24, "Expression", "SimplifyConstant",
-                                    "d<=0",
-                                    "log of nonpositive not allowed", HELPURL);
+                "d<=0", "log of nonpositive not allowed", HELPURL);
             }
             ret = true;
             a->SetTo((*a)->GetNode(0));
@@ -5795,8 +5808,7 @@ bool SimplifyConstant(Expression* a)
             if (d <= 0)
             {
               throw ErrNotPermitted(25, "Expression", "SimplifyConstant",
-                                    "d<=0",
-                                    "sqrt of nonpositive not allowed", HELPURL);
+                "d<=0", "sqrt of nonpositive not allowed", HELPURL);
             }
             ret = true;
             a->SetTo((*a)->GetNode(0));
@@ -5834,7 +5846,7 @@ bool SimplifyRecursive(Expression* a)
     int op = (*a)->GetOpType();
     Expression t1, t2;
     int i, j;
-    for(i = 0; i < (*a)->GetSize(); i++)
+    for (i = 0; i < (*a)->GetSize(); i++)
     {
       ischanged = SimplifyRecursive((*a)->GetNodePtr(i));
       if (!ret && ischanged)
@@ -5842,7 +5854,7 @@ bool SimplifyRecursive(Expression* a)
     }
     int status = -1;
     int prestatus = -1;
-    double consolidated[4] = {0, 0, 0, 0};
+    double consolidated[4] = { 0, 0, 0, 0 };
     double expon = 0;
     double preexpon = 0;
     double c = 0;
@@ -5856,11 +5868,11 @@ bool SimplifyRecursive(Expression* a)
     int sz = (*a)->GetSize();
     Expression one(1.0);
 
-    switch(op)
+    switch (op)
     {
       case SUM:
         i = 0;
-        while(i < sz)
+        while (i < sz)
         {
           // work out which status we're in
           if ((*a)->GetNode(i)->IsConstant())
@@ -5872,14 +5884,14 @@ bool SimplifyRecursive(Expression* a)
             // constant
             status = 0;
           }
-          else if ((*a)->GetNode(i)->IsVariable() &&
-                   (*a)->GetNode(i)->GetExponent() == 1)
+          else if ((*a)->GetNode(i)->IsVariable()
+            && (*a)->GetNode(i)->GetExponent() == 1)
           {
             // variable
             status = 1;
           }
-          else if ((*a)->GetNode(i)->IsVariable() &&
-                   (*a)->GetNode(i)->GetExponent() != 1)
+          else if ((*a)->GetNode(i)->IsVariable()
+            && (*a)->GetNode(i)->GetExponent() != 1)
           {
             // variable raised to power
             status = 2;
@@ -5976,7 +5988,7 @@ bool SimplifyRecursive(Expression* a)
             firstvarindex = i;
             consolidated[status] = c;
             j = i + 1;
-            while(j < sz)
+            while (j < sz)
             {
               if ((*a)->GetNode(i)->IsEqualToNoCoeff((*a)->GetNode(j)))
               {
@@ -6015,7 +6027,7 @@ bool SimplifyRecursive(Expression* a)
         prevarindex = -1;
         consolidated[0] = 1;
         expon = 0;
-        while(i < sz)
+        while (i < sz)
         {
           if ((*a)->GetNode(i)->IsVariable())
           {
@@ -6068,7 +6080,7 @@ bool SimplifyRecursive(Expression* a)
           // try to simplify denominator by one of numerator factors
           if ((*a)->GetNode(0)->GetOpType() == PRODUCT)
           {
-            for(j = 0; j < (*a)->GetNode(0)->GetSize(); j++)
+            for (j = 0; j < (*a)->GetNode(0)->GetSize(); j++)
             {
               if ((*a)->GetNode(1)->IsEqualTo((*a)->GetNode(0)->GetNode(j)))
               {
@@ -6085,7 +6097,7 @@ bool SimplifyRecursive(Expression* a)
           // do the opposite
           if (sz > 0 && (*a)->GetNode(1)->GetOpType() == PRODUCT)
           {
-            for(j = 0; j < (*a)->GetNode(1)->GetSize(); j++)
+            for (j = 0; j < (*a)->GetNode(1)->GetSize(); j++)
             {
               if ((*a)->GetNode(0)->IsEqualTo((*a)->GetNode(1)->GetNode(j)))
               {
@@ -6097,8 +6109,8 @@ bool SimplifyRecursive(Expression* a)
               }
             }
           }
-          if (sz > 0 && (*a)->GetNode(0)->GetOpType() == PRODUCT &&
-              (*a)->GetNode(1)->GetOpType() == PRODUCT)
+          if (sz > 0 && (*a)->GetNode(0)->GetOpType() == PRODUCT
+            && (*a)->GetNode(1)->GetOpType() == PRODUCT)
           {
             // both num and denom. are products, try and find common factors
             int k = 0;
@@ -6111,8 +6123,8 @@ bool SimplifyRecursive(Expression* a)
               k = 0;
               while (k < sz2)
               {
-                if ((*a)->GetNode(0)->GetNode(j)->IsEqualTo
-                    ((*a)->GetNode(1)->GetNode(k)))
+                if ((*a)->GetNode(0)->GetNode(j)->IsEqualTo(
+                  (*a)->GetNode(1)->GetNode(k)))
                 {
                   (*a)->GetNode(0)->DeleteNode(j);
                   (*a)->GetNode(1)->DeleteNode(k);
@@ -6155,9 +6167,8 @@ bool SimplifyRecursive(Expression* a)
         sz = 0;
         break;
       case POWER:
-        if (sz == 2 &&
-            (*a)->GetNode(0)->IsVariable() &&
-            (*a)->GetNode(1)->IsConstant())
+        if (sz == 2 && (*a)->GetNode(0)->IsVariable()
+          && (*a)->GetNode(1)->IsConstant())
         {
           // case var^const, transform in variable with an exponent
           expon = (*a)->GetNode(1)->GetValue();
@@ -6182,8 +6193,8 @@ bool DifferenceToSum(Expression* a)
   double d = 0., e = 0.;
   if (!(*a)->IsLeaf())
   {
-    if (((*a)->GetOpType() == SUM || (*a)->GetOpType() == DIFFERENCE) &&
-        (*a)->GetSize() == 1)
+    if (((*a)->GetOpType() == SUM || (*a)->GetOpType() == DIFFERENCE)
+      && (*a)->GetSize() == 1)
     {
       DifferenceToSum((*a)->GetNodePtr(0));
       // replace a with its child
@@ -6194,10 +6205,10 @@ bool DifferenceToSum(Expression* a)
     {
       int i;
       (*a)->SetOpType(SUM);
-      for(i = 1; i < (*a)->GetSize(); i++)
+      for (i = 1; i < (*a)->GetSize(); i++)
       {
         // start from node 1 not 0 because a difference is +op0 -op1 -op2 ...
-        (*a)->GetNode(i)->SetCoeff(- (*a)->GetNode(i)->GetCoeff());
+        (*a)->GetNode(i)->SetCoeff(-(*a)->GetNode(i)->GetCoeff());
       }
     }
     else if ((*a)->GetOpType() == MINUS)
@@ -6216,7 +6227,7 @@ bool DifferenceToSum(Expression* a)
       {
         // replace a with its child and adjust coeff
         a->SetTo((*a)->GetNode(0));
-        (*a)->SetCoeff(- (*a)->GetCoeff() * d); // since exponent is odd, -
+        (*a)->SetCoeff(-(*a)->GetCoeff() * d); // since exponent is odd, -
         (*a)->SetExponent((*a)->GetExponent() * e);
         ret = true;
       }
@@ -6238,8 +6249,7 @@ bool DifferenceToSum(Expression* a)
 class NodeOrderSum
 {
 public:
-  int operator() (const Expression& a,
-                  const Expression& b)
+  int operator()(const Expression& a, const Expression& b)
   {
     if (a->IsConstant() && !b->IsConstant())
     {
@@ -6287,8 +6297,7 @@ public:
 class NodeOrder
 {
 public:
-  int operator() (const Expression& a,
-                  const Expression& b)
+  int operator()(const Expression& a, const Expression& b)
   {
     if (a->IsConstant() && !b->IsConstant())
     {
@@ -6330,11 +6339,11 @@ public:
 bool ReorderNodes(Expression* a)
 {
   bool ret = false;
-  if (!(*a)->IsLeaf() && (*a)->GetSize() > 1 &&
-      ((*a)->GetOpType() == SUM || (*a)->GetOpType() == PRODUCT))
+  if (!(*a)->IsLeaf() && (*a)->GetSize() > 1
+    && ((*a)->GetOpType() == SUM || (*a)->GetOpType() == PRODUCT))
   {
     int i;
-    for(i = 0; i < (*a)->GetSize(); i++)
+    for (i = 0; i < (*a)->GetSize(); i++)
     {
       ReorderNodes((*a)->GetNodePtr(i));
     }
@@ -6343,12 +6352,12 @@ bool ReorderNodes(Expression* a)
     if ((*a)->GetOpType() == SUM)
     {
       sort(((*a)->GetNodeVectorPtr())->begin(),
-           ((*a)->GetNodeVectorPtr())->end(), NodeOrderSum());
+        ((*a)->GetNodeVectorPtr())->end(), NodeOrderSum());
     }
     else
     {
       sort(((*a)->GetNodeVectorPtr())->begin(),
-           ((*a)->GetNodeVectorPtr())->end(), NodeOrder());
+        ((*a)->GetNodeVectorPtr())->end(), NodeOrder());
     }
   }
   return ret;
@@ -6380,7 +6389,7 @@ bool CompactLinearPartRecursive(Expression* a)
   int sz = (*a)->GetSize();
   if ((*a)->GetOpType() == SUM)
   {
-    while(i < sz)
+    while (i < sz)
     {
       ischanged = CompactLinearPartRecursive((*a)->GetNodePtr(i));
       if (!ret && ischanged)
@@ -6389,15 +6398,15 @@ bool CompactLinearPartRecursive(Expression* a)
       {
         ret = true;
         double ci = (*a)->GetNode(i)->GetCoeff();
-        for(j = 0; j < (*a)->GetNode(i)->GetSize(); j++)
+        for (j = 0; j < (*a)->GetNode(i)->GetSize(); j++)
         {
           Expression nodej((*a)->GetNode(i)->GetNode(j));
           nodej->SetCoeff(nodej->GetCoeff() * ci);
           (*a)->AddNode(nodej);
-          ++ sz;// we added a node
+          ++sz;    // we added a node
         }
         (*a)->DeleteNode(i);
-        -- sz; // we have deleted a node
+        --sz; // we have deleted a node
         // we don't need to increase i, since we have deleted the i-th node
         // the next node is still the i-th node
         if (sz == 1)
@@ -6416,7 +6425,6 @@ bool CompactLinearPartRecursive(Expression* a)
   return ret;
 }
 
-
 // deals with cases like *(*(x,y), z) --> *(x,y,z)
 bool CompactProducts(Expression* a)
 {
@@ -6425,7 +6433,7 @@ bool CompactProducts(Expression* a)
   int i, j;
   if ((*a)->GetOpType() == PRODUCT)
   {
-    for(i = 0; i < (*a)->GetSize(); i++)
+    for (i = 0; i < (*a)->GetSize(); i++)
     {
       ischanged = CompactProducts((*a)->GetNodePtr(i));
       if (!ret && ischanged)
@@ -6433,7 +6441,7 @@ bool CompactProducts(Expression* a)
       if ((*a)->GetNode(i)->GetOpType() == PRODUCT)
       {
         ret = true;
-        for(j = 0; j < (*a)->GetNode(i)->GetSize(); j++)
+        for (j = 0; j < (*a)->GetNode(i)->GetSize(); j++)
         {
           (*a)->AddNode((*a)->GetNode(i)->GetNode(j));
         }
@@ -6452,7 +6460,7 @@ bool CompactProducts(Expression* a)
   else
   {
     // not a product, recurse
-    for(i = 0; i < (*a)->GetSize(); i++)
+    for (i = 0; i < (*a)->GetSize(); i++)
     {
       ischanged = CompactProducts((*a)->GetNodePtr(i));
       if (!ret && ischanged)
@@ -6466,8 +6474,7 @@ bool CompactProducts(Expression* a)
 }
 
 // generic simplification on a copy of the expression
-Expression SimplifyCopy(Expression* a,
-                        bool & ischanged)
+Expression SimplifyCopy(Expression* a, bool & ischanged)
 {
   Expression b;
   b = (*a).Copy();
@@ -6480,12 +6487,11 @@ Expression SimplifyCopy(Expression* a,
 void RecursiveDestroy(Expression* a)
 {
   int i;
-  for(i = 0; i < (*a)->GetSize(); i++)
+  for (i = 0; i < (*a)->GetSize(); i++)
   {
     RecursiveDestroy((*a)->GetNodePtr(i));
   }
   a->Destroy();
 }
-
 
 } /* namespace Ev3 */

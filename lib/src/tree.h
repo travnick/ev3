@@ -1,6 +1,6 @@
 /**********************************************************************
  * Author:      Leo Liberti                                            *
- * Name:        tree.hxx                                               *
+ * Name:        tree.h                                                 *
  * Source:      GNU C++                                                *
  * Purpose:     template for tree construction                         *
  * History:     010517 0.0 work started                                *
@@ -8,8 +8,7 @@
                Common Public License.
 ***********************************************************************/
 
-#ifndef __EV3TREEH__
-#define __EV3TREEH__
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -88,7 +87,7 @@ public:
   }
 
   // copy assignment: does NOT copy, it just references.
-  Pointer<NodeType>& operator = (const Pointer<NodeType>& t)
+  Pointer<NodeType>& operator =(const Pointer<NodeType>& t)
   {
     SetTo(t);
     return *this;
@@ -98,7 +97,7 @@ public:
   // 1. this is a copy of pointer
   void SetToCopyOf(const Pointer<NodeType>& t)
   {
-    if ( (node != t.node) || ((node == t.node) && ncount && (*ncount == 1)) )
+    if ((node != t.node) || ((node == t.node) && ncount && (*ncount == 1)))
     {
       Destroy();
     }
@@ -155,7 +154,7 @@ public:
   }
 
   // check for equality
-  bool operator == (const Pointer<NodeType>& t)
+  bool operator ==(const Pointer<NodeType>& t)
   {
     if (node == t.node)
     {
@@ -188,17 +187,19 @@ protected:
 public:
 
   // constructor
-  Tree() { }
+  Tree()
+  {
+  }
 
   // destructor
   ~Tree()
   {
     /* // SIGSEGVs -- investigate or bear the memleak
-       int sz = nodes.size();
-       for(int i = 0; i < sz; i++) {
-       nodes[i].Destroy();
-       }
-    */
+     int sz = nodes.size();
+     for(int i = 0; i < sz; i++) {
+     nodes[i].Destroy();
+     }
+     */
     DeleteAllNodes();
   }
 
@@ -248,13 +249,13 @@ public:
     if (nodes.size() == 0)
     {
       throw ErrNotPermitted(30, "Tree", "GetNode", "nodes.size()==0",
-                            "vector of nodes is empty", HELPURL);
+        "vector of nodes is empty", HELPURL);
     }
-    if (i < (Int)nodes.size())
+    if (i < (Int) nodes.size())
       return nodes[i];
     else
       throw ErrNotPermitted(32, "Tree", "GetNode", "i>=nodes.size()",
-                            "not enough nodes in vector", HELPURL);
+        "not enough nodes in vector", HELPURL);
   }
 
   // get a subnode
@@ -263,13 +264,13 @@ public:
     if (nodes.size() == 0)
     {
       throw ErrNotPermitted(33, "Tree", "GetNodePtr", "nodes.size()==0",
-                            "vector of nodes is empty", HELPURL);
+        "vector of nodes is empty", HELPURL);
     }
-    if (i < (Int)nodes.size())
+    if (i < (Int) nodes.size())
       return &(nodes[i]);
     else
       throw ErrNotPermitted(34, "Tree", "GetNodePtr", "i>=nodes.size()",
-                            "not enough nodes in vector", HELPURL);
+        "not enough nodes in vector", HELPURL);
   }
 
   // get a copy of subnode
@@ -279,12 +280,12 @@ public:
     if (nodes.size() == 0)
     {
       throw ErrNotPermitted(31, "Tree", "GetNode", "nodes.size()==0",
-                            "vector of nodes is empty", HELPURL);
+        "vector of nodes is empty", HELPURL);
     }
     if (j >= (Int) nodes.size())
     {
       throw ErrNotPermitted(35, "Tree", "GetCopyOfNode", "i>=nodes.size()",
-                            "not enough nodes in vector", HELPURL);
+        "not enough nodes in vector", HELPURL);
     }
     Pointer<NodeType> ret;
     ret.SetToCopyOf(nodes[j]);
@@ -298,7 +299,7 @@ public:
   }
 
   // compare two trees
-  bool operator == (const Tree<NodeType>& t) const
+  bool operator ==(const Tree<NodeType>& t) const
   {
     if (this == &t)
     {
@@ -312,7 +313,7 @@ public:
       if (s == t.GetSize())
       {
         Int i;
-        for(i = 0; i < s; i++)
+        for (i = 0; i < s; i++)
         {
           if (!(GetNode(i) == t.GetNode(i)))
             return false;
@@ -327,5 +328,3 @@ public:
 };
 
 } /* namespace Ev3 */
-
-#endif /* __EV3TREEHXX__ */
