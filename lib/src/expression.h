@@ -65,20 +65,20 @@ public:
   ~BasicExpression();
 
   // BasicExpression class methods:
-  void Debug (void) const;
+  void Debug () const;
 
   // prints to a string
-  std::string ToString(void) const;
+  std::string ToString() const;
 
   // output is a tree
   std::string PrintTree(const int blanks,
                         const int tabs) const;
 
   // sets an expression to zero (deleting all existing subnodes)
-  void Zero(void);
+  void Zero();
 
   // sets an expression to one (deleting all existing subnodes)
-  void One(void);
+  void One();
 
   // is expression this == expression t?
   // (note that this half-replicates Tree::operator==,
@@ -102,7 +102,7 @@ public:
   bool IsEqualByOperator(const int theoplabel) const;
 
   // this returns the number of variables in the expression
-  int NumberOfVariables(void) const;
+  int NumberOfVariables() const;
   int NumberOfVariables(int & maxvi) const;
 
   // whether expression depends on variable
@@ -117,16 +117,16 @@ public:
   // resulting global coeff is zero, delete all nodes and set
   // this to zero constant.
   // don't do anything on other operators
-  void ConsolidateProductCoeffs(void);
+  void ConsolidateProductCoeffs();
 
   // in a sum or product, if coeff of sum operand is not 1, distribute it
   // to the operands and set whole coeff to 1
-  void DistributeCoeffOverSum(void);
-  void DistributeCoeffOverProduct(void);
+  void DistributeCoeffOverSum();
+  void DistributeCoeffOverProduct();
 
   // enforce constant dependencies (added for MORON - see ../PROGNOTES)
   // this only acts on the proper leaf nodes
-  void EnforceDependency(void);
+  void EnforceDependency();
 
   // substitute a variable with a constant
   void VariableToConstant(const int varindex,
@@ -176,7 +176,7 @@ public:
 
   // distribute products over sums - returns true if changed
   // (re-call until false)
-  bool DistributeProductsOverSums(void);
+  bool DistributeProductsOverSums();
 
   // find variable indices in an expression
   void GetVarIndices(std::vector<int> & vidx);
@@ -190,12 +190,12 @@ public:
   std::string FindVariableName(int vi);
 
   // is this expression linear?
-  bool IsLinear(void) const;
+  bool IsLinear() const;
 
   // is this expression a quadratic product of variables?
   // If yes, return the product type: PRODUCT, POWER or VAR
   bool IsQuadratic(int & prodtype) const;
-  bool IsQuadratic(void) const;
+  bool IsQuadratic() const;
 
   // return info about the linear part (assumes Simplify() has already been
   // called on this) - return false if expression has no linear part
@@ -216,23 +216,23 @@ public:
                          double & c);
 
   // get the linear part - x in x+y+y^2
-  Expression GetLinearPart(void);
+  Expression GetLinearPart();
 
   // get the pure linar part - x+y in x+y+y^2
-  Expression GetPureLinearPart(void);
+  Expression GetPureLinearPart();
 
   // get the nonlinear part - nonlin(y) in expr(x,y) = lin(x) + nonlin(y)
-  Expression GetNonlinearPart(void);
+  Expression GetNonlinearPart();
 
   // get the purely nonlinear part - eg. y^2 in x+y+y^2
-  Expression GetPureNonlinearPart(void);
+  Expression GetPureNonlinearPart();
 
   // return the additive constant of the expression
-  double GetConstantPart(void);
+  double GetConstantPart();
 
   // return the additive constant of the expression and remove it from the
   // expression itself
-  double RemoveAdditiveConstant(void);
+  double RemoveAdditiveConstant();
 };
 
 std::ostream & operator<< (std::ostream & out, const BasicExpression & expr);

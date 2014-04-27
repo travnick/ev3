@@ -34,8 +34,8 @@ enum OperatorType
 };
 
 // utility functions
-extern double Ev3NearZero(void);
-extern double Ev3Infinity(void);
+extern double Ev3NearZero();
+extern double Ev3Infinity();
 
 } /* namespace Ev3 */
 

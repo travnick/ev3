@@ -113,7 +113,7 @@ public:
     ncount = new Int(1);
   }
   // 2. returns a copy of this
-  Pointer<NodeType> Copy(void) const
+  Pointer<NodeType> Copy() const
   {
     Pointer<NodeType> ret(true); // uninitialized
     ret.SetToCopyOf(*this);
@@ -121,7 +121,7 @@ public:
   }
 
   // destructor
-  void Destroy(void)
+  void Destroy()
   {
     if (ncount)
     {
@@ -149,7 +149,7 @@ public:
     return node;
   }
 
-  NodeType GetPointee(void) const
+  NodeType GetPointee() const
   {
     return *node;
   }
@@ -231,13 +231,13 @@ public:
   // but GCC3.2 issues warnings against it, says it's deprecated.
   // I really don't see how, but still... Never mind, do it this
   // way. It's only ever used in Expression::ReorderNodes() anyway
-  std::vector<Pointer<NodeType> >* GetNodeVectorPtr(void)
+  std::vector<Pointer<NodeType> >* GetNodeVectorPtr()
   {
     return &nodes;
   }
 
   // delete all subnodes
-  void DeleteAllNodes(void)
+  void DeleteAllNodes()
   {
     nodes.erase(nodes.begin(), nodes.end());
   }
@@ -292,7 +292,7 @@ public:
   }
 
   // get the size of nodes
-  Int GetSize(void) const
+  Int GetSize() const
   {
     return nodes.size();
   }

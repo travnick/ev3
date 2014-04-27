@@ -13,6 +13,6 @@ namespace Ev3
 bool is_integer(const double);
 bool is_even(const double);
 bool is_odd(const double);
-double Ev3NearZero(void);
-double Ev3Infinity(void);
+double Ev3NearZero();
+double Ev3Infinity();
 } /* namespace Ev3 */

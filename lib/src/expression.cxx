@@ -71,13 +71,13 @@ bool is_odd(double a)
   return false;
 }
 
-double Ev3NearZero(void)
+double Ev3NearZero()
 {
   // returns a very small positive value
   return 1 / LARGE;
 }
 
-double Ev3Infinity(void)
+double Ev3Infinity()
 {
   // returns a very large positive value
   return LARGE;
@@ -134,7 +134,7 @@ BasicExpression::~BasicExpression() { }
 // BasicExpression class methods:
 
 
-void BasicExpression::Debug (void) const
+void BasicExpression::Debug () const
 {
   Int s = GetSize();
   std::cerr << "BasicExpression: Debug:\n";
@@ -144,7 +144,7 @@ void BasicExpression::Debug (void) const
   for (Int i = 0; i < s; i++) std::cerr << "\tnode " << i << ": " << GetNode(i)->GetOpType() << std::endl;
 }
 
-void BasicExpression::Zero(void)
+void BasicExpression::Zero()
 {
   // -- segvs (?)
   for(int i = 0; i < GetSize(); i++) RecursiveDestroy(GetNodePtr(i));
@@ -155,7 +155,7 @@ void BasicExpression::Zero(void)
   SetOpType(CONST);
 }
 
-void BasicExpression::One(void)
+void BasicExpression::One()
 {
   // -- segvs (?)
   for(int i = 0; i < GetSize(); i++) RecursiveDestroy(GetNodePtr(i));
@@ -367,7 +367,7 @@ std::ostream & operator<< (std::ostream & outbuf, const BasicExpression & expr)
 }
 
 
-std::string BasicExpression::ToString(void) const
+std::string BasicExpression::ToString() const
 {
   std::stringstream outbuf;
   outbuf << *this;
@@ -704,7 +704,7 @@ int BasicExpression::DependsLinearlyOnVariable(Int vi) const
   }
 }
 
-void BasicExpression::ConsolidateProductCoeffs(void)
+void BasicExpression::ConsolidateProductCoeffs()
 {
   if (GetOpType() == PRODUCT)
   {
@@ -726,7 +726,7 @@ void BasicExpression::ConsolidateProductCoeffs(void)
   }
 }
 
-void BasicExpression::DistributeCoeffOverSum(void)
+void BasicExpression::DistributeCoeffOverSum()
 {
   if (GetOpType() == SUM)
   {
@@ -744,7 +744,7 @@ void BasicExpression::DistributeCoeffOverSum(void)
   }
 }
 
-void BasicExpression::DistributeCoeffOverProduct(void)
+void BasicExpression::DistributeCoeffOverProduct()
 {
   if (GetOpType() == PRODUCT)
   {
@@ -759,7 +759,7 @@ void BasicExpression::DistributeCoeffOverProduct(void)
 
 // enforce constant dependencies (added for MORON - see ../PROGNOTES)
 // this only acts on the proper leaf nodes
-void BasicExpression::EnforceDependency(void)
+void BasicExpression::EnforceDependency()
 {
   if (IsLeaf())
   {
@@ -1055,7 +1055,7 @@ void BasicExpression::ResetVarNames(const std::string & vn,
 }
 
 
-bool BasicExpression::DistributeProductsOverSums(void)
+bool BasicExpression::DistributeProductsOverSums()
 {
   // recursive part
   bool ret = false;
@@ -1162,7 +1162,7 @@ std::string BasicExpression::FindVariableName(int vi)
 }
 
 // is this expression linear?
-bool BasicExpression::IsLinear(void) const
+bool BasicExpression::IsLinear() const
 {
   if (IsVariable())
   {
@@ -1212,7 +1212,7 @@ bool BasicExpression::IsQuadratic(int& prodtype) const
   }
   return ret;
 }
-bool BasicExpression::IsQuadratic(void) const
+bool BasicExpression::IsQuadratic() const
 {
   int ret = 0;
   return IsQuadratic(ret);
@@ -1366,7 +1366,7 @@ bool BasicExpression::GetPureLinearInfo(std::vector<double> & lincoeff,
 }
 
 // get the linear part - x in x+y+y^2
-Expression BasicExpression::GetLinearPart(void)
+Expression BasicExpression::GetLinearPart()
 {
   std::vector<double> lincoeff;
   std::vector<int> linvi;
@@ -1398,7 +1398,7 @@ Expression BasicExpression::GetLinearPart(void)
 }
 
 // get the pure linar part - x+y in x+y+y^2
-Expression BasicExpression::GetPureLinearPart(void)
+Expression BasicExpression::GetPureLinearPart()
 {
   std::vector<double> lincoeff;
   std::vector<int> linvi;
@@ -1427,7 +1427,7 @@ Expression BasicExpression::GetPureLinearPart(void)
 }
 
 // get the nonlinear part - nonlin(y) in expr(x,y) = lin(x) + nonlin(y)
-Expression BasicExpression::GetNonlinearPart(void)
+Expression BasicExpression::GetNonlinearPart()
 {
   Expression ret(GetPureNonlinearPart());
   std::vector<double> linval;
@@ -1454,7 +1454,7 @@ Expression BasicExpression::GetNonlinearPart(void)
 
 
 // get the purely nonlinear part - e.g. only y^2 in x+y+y^2
-Expression BasicExpression::GetPureNonlinearPart(void)
+Expression BasicExpression::GetPureNonlinearPart()
 {
   Expression ret(0.0);
   if (!IsLeaf())
@@ -1507,7 +1507,7 @@ Expression BasicExpression::GetPureNonlinearPart(void)
 }
 
 // get value of additive constant
-double BasicExpression::GetConstantPart(void)
+double BasicExpression::GetConstantPart()
 {
   double ret = 0;
   if (IsConstant())
@@ -1542,7 +1542,7 @@ double BasicExpression::GetConstantPart(void)
 }
 
 // doesn't deal with additive constants in PLUS/MINUS operands
-double BasicExpression::RemoveAdditiveConstant(void)
+double BasicExpression::RemoveAdditiveConstant()
 {
   double ret = 0;
   if (IsConstant())

@@ -72,29 +72,29 @@ public:
   // Operand class methods:
 
   // prints to a string
-  std::string ToString(void) const;
+  std::string ToString() const;
 
   // get operator type
-  int GetOpType(void) const;
+  int GetOpType() const;
 
   // get constant value - in CONSTs it multiplies by coefficient and
   // raises to exponent
-  double GetValue(void) const;
+  double GetValue() const;
 
   // just get the value, in all cases
-  double GetSimpleValue(void) const;
+  double GetSimpleValue() const;
 
   // get variable index
-  Int GetVarIndex(void) const;
+  Int GetVarIndex() const;
 
   // get variable name
-  std::string GetVarName(void) const;
+  std::string GetVarName() const;
 
   // get the coefficient
-  double GetCoeff(void) const;
+  double GetCoeff() const;
 
   // get the exponent
-  double GetExponent(void) const;
+  double GetExponent() const;
 
   // set operator type
   void SetOpType(const int t);
@@ -120,16 +120,16 @@ public:
                               double** depvalue);
 
   // is operand a constant?
-  bool IsConstant(void) const;
+  bool IsConstant() const;
 
   // is operand a variable?
-  bool IsVariable(void) const;
+  bool IsVariable() const;
 
   // is operand a leaf node?
-  bool IsLeaf(void) const;
+  bool IsLeaf() const;
 
   // is operand a zero constant?
-  bool IsZero(void) const;
+  bool IsZero() const;
 
   // is operand a constant == v?
   bool HasValue(double v) const;
@@ -141,10 +141,10 @@ public:
   bool IsGreaterThan(double v) const;
 
   // set value = coefficient * value ^ exponent
-  void ConsolidateValue(void);
+  void ConsolidateValue();
 
   // enforce constant dependencies (added for MORON - see ../PROGNOTES)
-  void EnforceDependencyOnOperand(void);
+  void EnforceDependencyOnOperand();
 
   // is operand this == operand t?
   bool operator == (const Operand & t);

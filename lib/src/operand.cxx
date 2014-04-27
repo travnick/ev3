@@ -181,7 +181,7 @@ std::ostream & operator<< (std::ostream & outbuf, const Operand & operand)
   return outbuf;
 }
 
-std::string Operand::ToString(void) const
+std::string Operand::ToString() const
 {
   std::stringstream outbuf;
   outbuf << *this;
@@ -189,14 +189,14 @@ std::string Operand::ToString(void) const
 }
 
 // get operator type
-int Operand::GetOpType(void) const
+int Operand::GetOpType() const
 {
   return oplabel_;
 }
 
 // get constant value - in CONSTs, multiply by coeff. and raise
 // to exponent, first
-double Operand::GetValue(void) const
+double Operand::GetValue() const
 {
   if ((oplabel_ == CONST) && (dependency_ == 0))
   {
@@ -209,20 +209,20 @@ double Operand::GetValue(void) const
 }
 
 // just get the value in any case
-double Operand::GetSimpleValue(void) const
+double Operand::GetSimpleValue() const
 {
   if ((dependency_ == 1) && depconstant_) return *depconstant_;
   return constant_;
 }
 
 // get variable index
-Int Operand::GetVarIndex(void) const
+Int Operand::GetVarIndex() const
 {
   return varindex_;
 }
 
 // get variable name
-std::string Operand::GetVarName(void) const
+std::string Operand::GetVarName() const
 {
   return varname_;
 }
@@ -255,19 +255,19 @@ void Operand::SetVarName(const std::string & vn)
 }
 
 // is operand a constant?
-bool Operand::IsConstant(void) const
+bool Operand::IsConstant() const
 {
   return (GetOpType() == CONST);
 }
 
 // is operand a variable?
-bool Operand::IsVariable(void) const
+bool Operand::IsVariable() const
 {
   return (GetOpType() == VAR);
 }
 
 // is operand a leaf node?
-bool Operand::IsLeaf(void) const
+bool Operand::IsLeaf() const
 {
   return (IsConstant() || IsVariable());
 }
@@ -277,7 +277,7 @@ void Operand::SetCoeff(const double coeff)
   coefficient_ = coeff;
 }
 
-double Operand::GetCoeff(void) const
+double Operand::GetCoeff() const
 {
   if ((dependency_ == 2) && depcoefficient_) return *depcoefficient_;
   else return coefficient_;
@@ -288,7 +288,7 @@ void Operand::SetExponent(const double expon)
   exponent_ = expon;
 }
 
-double Operand::GetExponent(void) const
+double Operand::GetExponent() const
 {
   if ((dependency_ == 3) && depexponent_) return *depexponent_;
   else return exponent_;
@@ -312,7 +312,7 @@ void Operand::SetDependencyOnOperand(const int whichconstant,
   }
 }
 
-void Operand::EnforceDependencyOnOperand(void)
+void Operand::EnforceDependencyOnOperand()
 {
   switch(dependency_)
   {
@@ -328,7 +328,7 @@ void Operand::EnforceDependencyOnOperand(void)
   }
 }
 
-void Operand::ConsolidateValue(void)
+void Operand::ConsolidateValue()
 {
   SetValue(GetValue());
   SetCoeff(1.0);
@@ -336,7 +336,7 @@ void Operand::ConsolidateValue(void)
 }
 
 // is operand a zero constant?
-bool Operand::IsZero(void) const
+bool Operand::IsZero() const
 {
   if (GetOpType() == CONST) return (fabs(GetValue()) < Ev3NearZero());
   return false;
