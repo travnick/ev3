@@ -92,7 +92,6 @@ bool ExpressionParser::IsVariableName(const std::string & vname)
 Expression ExpressionParser::Parse(const char* buf,
                                    int & nerrors)
 {
-
   curr_tok_ = PEV3PRINT;
   Expression ret;
   input_ = new std::stringstream(buf);

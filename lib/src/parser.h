@@ -13,11 +13,12 @@ Common Public License.
 #ifndef __EV3PARSERH__
 #define __EV3PARSERH__
 
-// includes
-#include <iostream>  // I/O
-#include <string>    // strings
-#include <map>       // map
+#define _USE_MATH_DEFINES
+
+#include <iostream>
+#include <map>
 #include <cmath>
+#include <limits>
 
 #include "expression.h"
 
@@ -33,9 +34,9 @@ enum Token_value
 };
 
 // constants
-const double PEV3infinity = 1.0e300;
-#define PEV3PI 3.1415926535897932385
-#define PEV3E 2.7182818284590452354
+const double PEV3infinity = std::numeric_limits<double>::infinity();
+#define PEV3PI M_PI
+#define PEV3E M_E
 #define PEV3NOVARIABLE -1
 #define PEV3UNKNOWNVAR -2
 
